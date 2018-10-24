@@ -1,0 +1,451 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ///////////////////////////////////////////////////////////////////////////////
+    JObject info = (JObject)ViewBag.info;
+   // string mmmmmm = info.ToString();
+    string BOOK_ID, BOOK_CODE, TXNAME, SEO_NAME, AVATAR, AUTHOR_NAME, PUB_NAME, PRICE, CONTENT, STAR, TOTAL_STAR, ISVIEW, KEYWORKS, TXURLCATION, CATE_NAME, contentsms, PRICE_COVER, CATE_CODE;
+    if (info != null)
+    {
+        BOOK_ID = info["BOOK_ID"].ToString();
+        BOOK_CODE = info["BOOK_CODE"].ToString();
+        TXNAME = info["TXNAME"].ToString();
+        SEO_NAME = info["SEO_NAME"].ToString();
+        AVATAR = info["AVATAR"].ToString();
+        AUTHOR_NAME = info["AUTHOR_NAME"].ToString();
+        if (AUTHOR_NAME.Length > 25)
+        {
+            AUTHOR_NAME = AUTHOR_NAME.Substring(0, 22) + "...";
+        }
+        PUB_NAME = info["PUB_NAME"].ToString();
+        PRICE_COVER = Common.formatCuryment(info["PRICE_COVER"].ToString());
+        PRICE = Common.formatCuryment(info["PRICE"].ToString());
+        CONTENT = info["CONTENT"].ToString();
+        STAR = info["STAR"].ToString();
+        TOTAL_STAR = Convert.ToInt32(info["TOTAL_STAR1"].ToString()) + Convert.ToInt32(info["TOTAL_STAR2"].ToString()) + Convert.ToInt32(info["TOTAL_STAR3"].ToString()) + Convert.ToInt32(info["TOTAL_STAR4"].ToString()) + Convert.ToInt32(info["TOTAL_STAR5"].ToString()).ToString();
+        TXURLCATION = MakeLink.MakeLinkEBook(TXNAME, BOOK_ID,ViewBag.btyles);
+        KEYWORKS = info["KEYWORKS"].ToString();
+        ISVIEW = info["ISVIEW"].ToString();
+        CATE_NAME = info["CATE_NAME"].ToString();
+        CATE_CODE = info["CATE_CODE"].ToString();
+    }
+    else
+    {
+        BOOK_ID = BOOK_CODE = TXNAME = AVATAR = AUTHOR_NAME = PUB_NAME = PRICE = CONTENT = STAR = SEO_NAME = KEYWORKS = CATE_NAME = TOTAL_STAR = PRICE_COVER = CATE_CODE = "";
+        TXURLCATION = "/";
+        ISVIEW = "0";
+    }
+    string EREA="";
+    string btnReadTitle = "Đọc thử";
+    string counts = "Lượt đọc";
+    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+    {
+        if (info["BTYPE"].ToString() == "TEXT")
+        {
+            btnReadTitle = "Đọc";
+            counts = "Lượt đọc";
+             EREA= MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "AUDIO")
+        {
+            counts = "Lượt Nghe";
+            btnReadTitle = "Nghe";
+            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "VIDEO")
+        {
+            counts = "Lượt xem";
+            btnReadTitle = "Xem";
+            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "IMAGE")
+        {
+            counts = "Lượt đọc";
+            btnReadTitle = "Đọc ";
+            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+        }
+        
+    }
+    else
+    {
+        if (info["BTYPE"].ToString() == "TEXT")
+        {
+            counts = "Lượt đọc";
+            btnReadTitle = "Đọc thử";
+            EREA = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "AUDIO")
+        {
+            counts = "Lượt nghe";
+            btnReadTitle = "Nghe thử";
+            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "VIDEO")
+        {
+            counts = "Lượt xem";
+            btnReadTitle = "Xem ";
+            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+        }
+        if (info["BTYPE"].ToString() == "IMAGE")
+        {
+            counts = "Lượt đọc";
+            btnReadTitle = "Đọc";
+            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+        }
+        
+    }
+    contentsms = "[Afun] Gioi thieu cuon sach (" + SEO_NAME + "), chi tiet xem tai: " + TXURLCATION;
+    //////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME+"-Ebook afun.vn";
+    ViewBag.Description = KEYWORKS;
+    ViewBag.Keywords = KEYWORKS;
+    ViewBag.Images = MakeLink.url_image(AVATAR,"","","1");
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURLCATION;
+    
+                /////////////////////////////////////////////////////////////////////////////////////////////
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/sach-dien-tu">Sách điện tử</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@MakeLink.MakeCateEbook(CATE_NAME, CATE_CODE)"><span class="active">@CATE_NAME</span></a>
+    </div>
+</div>
+<div class="p10">
+    <div class="content_main">
+        <div class="book_view">
+            @if (info != null)
+            {
+                <div class="book">
+                    <img src="@AVATAR" class="big_thumb" alt="@TXNAME">
+                    <div class="nd_view">
+                        <div class="title_a">
+                            @TXNAME
+                        </div>
+                        <div class="nd">
+                            <div>
+                                Tác giả: <span>@AUTHOR_NAME
+                                </span>
+                            </div>
+                            <div>
+                                Giá bìa: <span class="line_through">@PRICE_COVER</span>
+                            </div>
+                            <div>
+                                Giá bán: <span class="red">@PRICE</span>
+                            </div>
+                            <div>
+                                @counts <span class="red">@ISVIEW
+                                </span>
+                            </div>
+                            <div class="danhgia">
+                                Đánh giá:
+
+                                @if (Session["LoginName"] != null)
+                                {
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= Convert.ToInt32(STAR))
+                                        {
+                                    <input class="star4" type="radio" name="saon" value="@i" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                    <input class="star4" type="radio" name="saon" value="@i" />
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= Convert.ToInt32(STAR))
+                                        {
+                                    <input class="starnologin" type="radio" name="saon" value="@i" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                    <input class="starnologin" type="radio" name="saon" value="@i" />
+                                        }
+                                    }
+                                }
+                                <span class="red">(@TOTAL_STAR)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="author list_star">
+                        Để mua sách này, soạn tin nhắn: <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["CPBuy"].ToString() @BOOK_CODE</b> gửi
+                        <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["telViettel"].ToString()</b>
+                    </div>
+                    <div class="f_clear"></div>
+                    <div class="chiase f_l" style="margin-right: 20px;">
+                        <i>Chia sẻ</i>
+                          <a href="https://www.facebook.com/sharer/sharer.php?src=bm&u=@Html.Raw(HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURLCATION))&t=@Html.Raw(HttpUtility.UrlEncode(TXNAME))&v=2.4&appId=1424657094531373" target="_blank" title="Chia sẻ qua Facebook">
+                            <img src="/Content/images/detail_icon_fb.png" alt="Share facebook"></a>
+                        <a href="https://plus.google.com/share?url=@Html.Raw(HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURLCATION))" target="_blank" title="Chia sẻ qua G+">
+                            <img src="/Content/images/icon_g.png" alt="Share mail"></a>
+                       
+                        @if (Session["LoginName"] != null)
+                        {
+                            if((int)ViewBag.Like !=0){
+                             <a href="javascript:addlikebook(@BOOK_ID,'1');" title="Sách yêu thích">
+                                <img src="/Content/images/detail_icon_like.png" alt="Sách yêu thích"></a>
+                            }else{
+                                 <a href="javascript:addlikebook(@BOOK_ID,'0');" title="Bỏ  yêu thích">
+                                    <img src="/Content/images/detail_icon_like_hover.png" alt="Bỏ yêu thích"></a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="/dang-nhap.html" title="Sách yêu thích">
+                                <img src="/Content/images/detail_icon_like.png" alt="Sách yêu thích"></a>
+                        }
+                    </div>
+                    <div class="chiase f_l">
+                        <i>Tải ứng dụng</i>
+
+                        <a href="/Home/DownloadApp/2" title="tải android">
+                            <img src="/Content/images/icon_android.png" alt="Hệ điều hành Android"></a>
+
+                        <a href="/Home/DownloadApp/1" title="tải ios">
+                            <img src="/Content/images/icon_apple.png" alt="Hệ điều hành IOS"></a>
+
+
+                    </div>
+                    <div class="f_clear"></div>
+                    <div class="btn_book">
+                        <div>
+                            <a href="@EREA">
+                                <input type="button" class="yellow_btn btn_read" value="@btnReadTitle"></a>
+                        </div>
+                        <div>
+                            @if((int)ViewBag.buy !=1){
+                            <a href="/acc/buybox/@BOOK_ID" title="Mua">
+                                <input type="button" class="blue_btn btn_buy" value="Mua"></a>
+                            }else{
+                             <a href="#" title="Mua">
+                                <input type="button" class="blue_btn btn_buy" value="Đã Mua"></a>
+                            }
+                        </div>
+                        <div>
+                            <a href="/acc/giffbox/@BOOK_ID" title="Tặng">
+                                <input type="button" class="gray_btn btn_giff" value="Tặng"></a>
+                        </div>
+                        @*
+                        <div>
+                            <a href="/acc/rentbox/1" title="Thuê">
+                                <input type="button" class="gray_btn" value="Thuê"></a>
+                        </div>*@
+                    </div>
+                    <div class="book_detail">
+                        <div class="title_detail">
+                            <span>Tóm tắt</span>
+                        </div>
+                        <div class="nd_book_detail">
+                          
+                       @Html.Raw(HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(CONTENT))))
+                        </div>
+                        @*<a href="/sach-dien-tu.html" class="readmore">Xem thêm</a>*@
+                    </div>
+                   
+                     @Html.Partial("_CommentBook")
+                </div>
+            }
+        </div>
+
+          <div class="book_same">
+            <div class="title_box tab_more">
+                    <a href="#" class="tab9 active" rel="cate">Cùng thể loại</a> 
+                    <a href="#" class="tab9" rel="author">Cùng tác giả</a>
+            </div> 
+            <div class="content_dv content-book" id="author" style="display:none;" >
+             <ul>
+                @foreach (var item in (JArray)ViewBag.ma_author)
+                {
+                    string TXURL, TXURL_READ, TXURL_BUY;
+
+                    BOOK_ID = item["BOOK_ID"].ToString();
+                    TXNAME = item["TXNAME"].ToString();
+                    AVATAR = item["AVATAR"].ToString();
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                    EREA = MakeLink.MakeLinkERead(item["TXNAME"].ToString(), item["BOOK_ID"].ToString());
+                    string btysd = "1";
+                    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                    {
+                        if (item["BTYPE"].ToString() == "TEXT")
+                        {
+                            btysd = "1";
+                            btnReadTitle = "Đọc";
+                            EREA = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "AUDIO")
+                        {
+                            btysd = "2";
+                            btnReadTitle = "Nghe";
+                            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "VIDEO")
+                        {
+                            btysd = "4";
+                            btnReadTitle = "Xem";
+                            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "IMAGE")
+                        {
+                            btysd = "3";
+                            btnReadTitle = "Đọc ";
+                            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+                        }
+
+                    }
+                    else
+                    {
+                        if (item["BTYPE"].ToString() == "TEXT")
+                        {
+                            btysd = "1";
+                            btnReadTitle = "Đọc thử";
+                            EREA = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "AUDIO")
+                        {
+                            btysd = "2";
+                            btnReadTitle = "Nghe thử";
+                            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "VIDEO")
+                        {
+                            btysd = "4";
+                            btnReadTitle = "Xem ";
+                            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "IMAGE")
+                        {
+                            btysd = "3";
+                            btnReadTitle = "Đọc";
+                            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+                        }
+
+                    }
+                    string TXURL_re = MakeLink.MakeLinkEBook(TXNAME, BOOK_ID, btysd);
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PUB_NAME = item["PUB_NAME"].ToString();
+                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_READ = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_BUY = "/acc/buybox/" + BOOK_ID;
+                    <li>
+                        <a href="@TXURL_re" title="@TXNAME">
+                            <span class="thumb_img thumb_video">
+                                <img src="@AVATAR" alt="@TXNAME">
+                                <i class="icon_video"></i>
+                            </span>
+                            <div class="info_book">
+                                <div class="title_book">@TXNAME</div>
+                                <div class="price_book">@PRICE</div>
+                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                            </div>
+                        </a>
+                        <div class="button_book">
+                            <a href="@EREA" title="@btnReadTitle">
+                                <input type="button" value="@btnReadTitle" class="yellow_btn btn_read"></a>
+                            <a href="@TXURL_BUY" title="Mua">
+                                <input type="button" value="Mua" class="blue_btn btn_buy"></a>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+                 </div>
+            <div class="content_dv content-book" id="cate">
+             <ul>
+                @foreach (var item in (JArray)ViewBag.ma_cate)
+                {
+                    string TXURL, TXURL_READ, TXURL_BUY;
+
+                    BOOK_ID = item["BOOK_ID"].ToString();
+                    TXNAME = item["TXNAME"].ToString();
+                    AVATAR = item["AVATAR"].ToString();
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+
+                    PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                    
+                    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                    {
+                        if (item["BTYPE"].ToString() == "TEXT")
+                        {
+                            btnReadTitle = "Đọc";
+                            EREA = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "AUDIO")
+                        {
+                            btnReadTitle = "Nghe";
+                            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "VIDEO")
+                        {
+                            btnReadTitle = "Xem";
+                            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "IMAGE")
+                        {
+                            btnReadTitle = "Đọc ";
+                            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+                        }
+
+                    }
+                    else
+                    {
+                        if (item["BTYPE"].ToString() == "TEXT")
+                        {
+                            btnReadTitle = "Đọc thử";
+                            EREA = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "AUDIO")
+                        {
+                            btnReadTitle = "Nghe thử";
+                            EREA = MakeLink.MakeLinkREADBook_audio(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "VIDEO")
+                        {
+                            btnReadTitle = "Xem ";
+                            EREA = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                        }
+                        if (item["BTYPE"].ToString() == "IMAGE")
+                        {
+                            btnReadTitle = "Đọc";
+                            EREA = MakeLink.MakeLinkREADBook_image(TXNAME, BOOK_ID);
+                        }
+
+                    }
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PUB_NAME = item["PUB_NAME"].ToString();
+                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_READ = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_BUY = "/acc/buybox/" + BOOK_ID;
+                    <li>
+                        <a href="@EREA" title="@TXNAME">
+                            <span class="thumb_img thumb_video">
+                                <img src="@AVATAR" alt="@TXNAME">
+                                <i class="icon_video"></i>
+                            </span>
+                            <div class="info_book">
+                                <div class="title_book">@TXNAME</div>
+                                <div class="price_book">@PRICE</div>
+                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                            </div>
+                        </a>
+                        <div class="button_book">
+                            <a href="@TXURL_READ" title="@btnReadTitle">
+                                <input type="button" value="@btnReadTitle" class="yellow_btn btn_read"></a>
+                            <a href="@TXURL_BUY" title="Mua">
+                                <input type="button" value="Mua" class="blue_btn btn_buy"></a>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+                 </div>
+
+        </div>
+        
+    </div>
+</div>

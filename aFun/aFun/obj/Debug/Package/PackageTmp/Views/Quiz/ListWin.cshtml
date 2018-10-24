@@ -1,0 +1,66 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Danh sách trúng thưởng - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    /////////////////////////////////////////////////////////////////////////////
+    string phonep, point, datewin;
+    phonep = datewin=point= "";
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+       <div class="tab">
+            <div><a href="/trac-nghiem/"><i class="icon-coffee"></i>Chơi game</a></div>
+            <div><a href="/trac-nghiem/the-le.html"><i class="icon-info-sign"></i>Thể lệ</a></div>
+            <div class="active"><a href="/trac-nghiem/danh-sach-trung-thuong.html"><i class="icon-sitemap"></i>Ds trúng thưởng</a></div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            <span>Danh sách người trúng thưởng các tháng: </span>
+                            <div class="table">
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Thuê bao</th>
+                                        <th>Trúng thưởng tháng</th>
+                                        <th>Điểm</th>
+                                    </tr>
+                                    @if (ViewBag.ma != null)
+                                    {
+                                        int i = 1;
+                                        foreach (var item in (JArray)ViewBag.ma)
+                                        {
+                                            phonep = item["USER_NAME"].ToString();
+                                            datewin = item["RECV_DATE"].ToString();
+                                            point = item["USER_POINT"].ToString();
+                                            if (!string.IsNullOrEmpty(datewin) && datewin.Length >= 3)
+                                            {
+                                                datewin = datewin.Substring(3);
+                                            }
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@phonep</td>
+                                            <td>@datewin</td>
+                                            <td>@point</td>
+                                        </tr>
+                                            i++;
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

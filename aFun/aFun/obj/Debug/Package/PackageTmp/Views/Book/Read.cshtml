@@ -1,0 +1,317 @@
+﻿@using System.Data;
+@using aFun.Models;
+@using System.Text;
+@using HtmlAgilityPack;
+@using System.Collections.Generic;
+@using Newtonsoft.Json.Linq;
+@{
+    Layout = null;
+    string bookid = "0";
+    string i_pageitem = "3";
+    string chapname = "";
+    string bookname = "";
+    string clschap = "";
+    string url_info = "/";
+    JArray ma = (JArray)ViewBag.ma;
+    JObject info = (JObject)ViewBag.info;
+    if (info != null)
+    {
+        bookid = info["BOOK_ID"].ToString();
+        bookname = info["TXNAME"].ToString();
+        chapname = ViewBag.namechapter;
+        url_info = MakeLink.MakeLinkEBook(bookname, bookid,"1");
+    }
+    if (ViewBag.i_pageitem != null)
+    {
+        i_pageitem = ViewBag.i_pageitem.ToString();
+    }
+    ViewBag.Title = bookname;
+    if (bookid!=""){
+        TempData["bookid"] = bookid;
+        Session["BOOK_DUM"] = bookid;
+    }else{
+        TempData["bookid"] = 1;
+        Session["BOOK_DUM"] = 1;
+    }
+    //Session["re_url"] = Request.UrlReferrer.ToString();
+    int n = 0;
+    
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="MobileOptimized" content="100" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    @*
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">*@
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="<apple-to></apple-to>uch-fullscreen" content="yes">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="title" content="@ViewBag.Title">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="ROBOTS" content="index, follow">
+    <meta http-equiv="refresh" content="900">
+    <meta property="og:image" content="@ViewBag.Images">
+    <meta property="og:description" content="@ViewBag.Description">
+    <link rel="image_src" href="@ViewBag.Images">
+    @*
+    <link rel="canonical" href="@ViewBag.UrlWeb">*@
+    <link rel="alternate" media="handheld" href="@ViewBag.UrlWap">
+    <meta property="fb:admins" content="100000">
+    <meta name="author" content="afun.vn">
+    <link rel="author" href="https://plus.google.com/u/0/11011">
+    <meta name="copyright" content="Copyright © 2010 by afun.vn">
+    <meta name="abstract" content="Đọc sách online">
+    <meta name="distribution" content="Global">
+    <meta name="revisit-after" content="1 days">
+    <meta name="rating" content="general">
+    <link rel="stylesheet" href="/Content/css/style.css" />
+    <link rel="stylesheet" href="/Content/css/docsach.css" />
+    @*
+    <script src="/Content/js/jquery-1.11.0.min.js" type="text/javascript"></script>*@
+    <script src="/Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+    <link href="/Content/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        var over = 0;
+        
+        $(window).load(function () {
+            var value = 0;
+            // run code
+            var time = 0;
+            var min = 0;
+            var max = $("#slider_max").val();
+           // var value = $("#slider_value").val();
+            loadData(value);
+
+            $(".slider_first").click(function () {
+                loadData(0);
+            });
+
+            $(".slider_last").click(function () {
+                loadData(max - 1);
+                over = max - 1;
+            });
+            $(".slider_previous").click(function () {
+                var currentpage = $("#slider_value").val();
+                //if (currentpage <= min) return;
+                var currentChapter = $("#currentChapter").val();
+                if ((currentChapter > 0 && currentpage >= 0) || (currentChapter == 0 && currentpage > 0)) {
+                    currentpage--;
+                    loadData(currentpage);
+                    over = currentpage;
+                }
+            });
+
+            $(".slider_next").click(function () {
+                var currentpage = $("#slider_value").val();
+                currentpage++;
+                loadData(currentpage);
+                over = currentpage;
+
+            });
+
+            function loadData(value) {
+                var totalchapter = $("#totalChapter").val();
+                var bookId = $("#bookId").val();
+                var currentChapter = $("#currentChapter").val();
+                var max = $("#slider_max").val();
+                var bookpaging = document.getElementById('bookpaging');
+                var readdm = $('#readdm').val();
+                console.log("readdm" + readdm + " {totalchapter " + totalchapter);
+
+                if (readdm == 1 && value > max && totalchapter == 0) {
+
+                    msgboxread(bookId);
+                    return false;
+                }
+                console.log("MDK:  {currentChapter " + currentChapter);
+
+                if (value >= max && currentChapter <= totalchapter - 1) {
+                    currentChapter++;
+                    bookpaging.selectedIndex = currentChapter;
+                    value = 0;
+                    getTotalPart(currentChapter);
+                }
+                if (value < 0 && currentChapter > 0) {
+                    currentChapter--;
+                    bookpaging.selectedIndex = currentChapter;
+                    value = 0;
+                    getTotalPart(currentChapter);
+                }
+
+                var urlRequest = '/book/getcontentpart/?id=' + bookId + '&part=' + value + '&currentChapter=' + currentChapter + '';
+                $("#slider_value").val(value);
+                $("#currentChapter").val(currentChapter);
+                $.get(urlRequest, function (data) {
+                    // can use 'data' in here...
+                    $("#Result").html(data);
+                });
+            }
+
+            function getTotalPart(currentChapter) {
+                var bookId = $("#bookId").val();
+                var urlRequest = '/book/gettotalpart/?id=' + bookId + '&currentChapter=' + currentChapter;
+                $.get(urlRequest, function (data) {
+                    // can use 'data' in here...
+                    max = data;
+                    $("#slider_max").val(data);
+
+                });
+            }
+
+        });
+        var Ttime = 0;
+        window.onload = function () { myVar = setTimeout(function () { Ttime++; }, 1000); };
+
+                
+        function savebookmark(ower) {
+            var page = $("#slider_value").val();
+            var bookid = $('#bookId').val();
+            var p = $("#currentChapter").val();
+            var overs = ower;
+            var timer_l = Ttime+"#@n";
+            $.post("/Book/Updatemarkbook", { bookId: bookid, p: p, page: page, ower: overs, time: timer_l },
+                    function (data) {
+                        if (data.success == 1) {
+                            alert("Quý khách đã đánh dấu thành công trang sách này!");
+                        }
+                        else {
+                            alert("Quý khách vui lòng Mua sách để sử dụng chức năng này!");
+                        }
+                    });
+
+        }
+
+        function msgbox(bookid) {
+            var comfirmBox;
+            comfirmBox = confirm('Quý khách đang đọc  thử. Để đọc tiếp cuốn sách quý khách vui lòng đăng nhập hoặc mua cuốn sách. ');
+            if (comfirmBox == true) {
+                window.location = '/acc/buybox/' + bookid;
+            }
+            return false;
+        }
+
+        function msgboxread(bookid) {
+            if ($("#dlgMsgBox").length == 0) {
+                // ajax load
+                $('#divMsgbox').load("/Home/OpenMsgBox");
+            } else {
+                $("#dlgMsgBox").dialog("open");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="docsach">
+
+            <div class="content_docsach">
+                <div id="Result">
+                </div>
+            </div>
+            <br>
+            @{ string totalItem = "0"; string stotalPages = i_pageitem = "0"; string si_pageIndexs = "0"; string de = "1";
+                if (Session["LoginName"] !=null)
+                {
+                    totalItem = ViewBag.totalItem+"";
+                    i_pageitem = ViewBag.i_pageitem + "";
+                    stotalPages = ViewBag.totalPage + "";
+                    si_pageIndexs = ViewBag.i_pageIndex + "";
+                    de = ViewBag.Demo;
+                  
+                }
+                }
+            <div class="header_docsach footer_doc">
+                <input type="hidden" name ="slider_max" id="slider_max" value = "@ViewBag.totalItem" />
+                <input type="hidden" name="slider_value" id="slider_value" value="@ViewBag.i_pageitem" />
+                <input type="hidden" id="bookId" value="@bookid" />
+                <input type="hidden" id="totalChapter" value="@stotalPages" />
+                <input type="hidden" id="currentChapter" value="@si_pageIndexs" />
+                <input type="hidden" id="readdm"  value="@de" />
+
+                <ul>
+                    <li><a href="/" title="Về trang chủ">
+                        <img src="/Content/images/docsach_icon_home.png" alt="Trang chủ"></a></li>
+                    <li>
+                        <img class="icon_dup slider_previous" src="/Content/images/white_prev.png" alt="Trang trước" title="Trang trước" /></li>
+                    <li>
+                        <img class="icon_dup slider_next" src="/Content/images/white_next.png" alt="Trang tiếp" title="Trang tiếp" /></li>
+                    <li>
+                        @if (ViewBag.Demo == null)
+                        {
+                            <select id="bookpaging" name="bookpaging" class="listchap"
+                                onchange="location =this.options[this.selectedIndex].value;">
+                                @if (ma != null && ma.Count > 0)
+                                {
+
+                                    n = ma.Count;
+                                    for (int i = 1; i <= n; i++)
+                                    {
+                                        string urlpage = MakeLink.MakeLinkEReadPage(bookname, bookid) + "-trang-" + i + ".html";
+                                        string namepage = ma[i - 1]["CNAME"].ToString();
+                                        if (namepage == ViewBag.namechapter)
+                                        {
+                                            clschap = "selected";
+                                        }
+                                        else
+                                        {
+                                            clschap = "";
+                                        }
+                                    <option value="@urlpage" @clschap>@namepage</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="#">--- Chọn chương--- </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <select id="bookpaging" name="bookpaging" class="listchap" onchange="msgboxread('1');">
+                                @if (ma != null && ma.Count > 0)
+                                {
+                                    n = ma.Count;
+                                    for (int i = 1; i <= n; i++)
+                                    {
+                                        string urlpage = MakeLink.MakeLinkEReadPage(bookname, bookid) + "-trang-" + i + ".html";
+                                        string namepage = ma[i - 1]["CNAME"].ToString();
+                                        if (namepage == ViewBag.namechapter)
+                                        {
+                                            clschap = "selected";
+                                        }
+                                        else
+                                        {
+                                            clschap = "";
+                                        }
+                                    <option value="@urlpage" @clschap>@namepage</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="#">--- Chọn chương--- </option>
+                                }
+                            </select>
+                        }
+                    </li>
+                    @if (Session["LoginName"] != null)
+                    {
+                        <li><a href="javascript:savebookmark('');" title="Đánh dấu trang">
+                            <img src="/Content/images/docsach_icon_save.png" alt="danh dau trang"></a></li>
+                    }
+                    <li><a href="@url_info" title="Trang chi tiết">
+                        <img class="icon_dup3" src="/Content/images/white_exit.png" alt="Thoát" /></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id='divMsgbox'>
+    </div>
+</body>
+</html>

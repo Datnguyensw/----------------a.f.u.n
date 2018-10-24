@@ -1,0 +1,151 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.PackgeAccModel
+@{
+    ViewBag.Title = "Đăng ký/Hủy nhận sms - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    int i;
+    string names = "Đăng ký";
+    string namecode = "";
+    string classser = "bgorange";
+    string cuphap = "";
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div class="active"><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-edit"></i>Gói dịch vụ</a></div>
+            @if (Session["msisdn"] == null)
+            {
+                <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+            }
+        </div>
+        <div class="tab_2">
+            <ul class="tabs">
+                <li><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-info-sign"></i>Đăng ký/Hủy gói </a>
+                    <div class="trigger">
+                    </div>
+                </li>
+                <li class="active">
+                    <div class="trigger">
+                    </div>
+                    <a href="#tt"><i class="icon-calendar"></i>Đăng ký/Hủy nhận
+                        SMS</a> </li>
+            </ul>
+        </div>
+        <div class="content_box">
+            <div class="tin tab_content" id="tt">
+                <div class="list_dv_dk">
+                    <span><strong>Đăng ký/Hủy nhận sms</strong></span>
+                    <div id="lblmessage">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.Status))</div>
+                    <ul>
+                        @for (i = 0; i < Model.ListPackge.Count; i++)
+                        {
+                            if (Model.ListPackge[i].Checked == true && Model.ListPackge[i].REMAIN >= 0)
+                            {
+                                names = "Hủy";
+                                namecode = "HU" + Model.ListPackge[i].ID;
+                                classser = "bggray";
+                            }
+                            else if (Model.ListPackge[i].Checked == true && Model.ListPackge[i].REMAIN < 0)
+                            {
+                                names = "Gia hạn";
+                                namecode = "GH" + Model.ListPackge[i].ID;
+                                classser = "bgorange";
+                            }
+                            else
+                            {
+                                names = "Đăng ký";
+                                namecode = "DK" + Model.ListPackge[i].ID;
+                                classser = "bgorange";
+                            }
+                            <li>
+                                <div class="checkpack">
+                                    @Html.CheckBoxFor(x => x.ListPackge[i].Checked, Model.ListPackge[i].ID)
+                                    <a href="/acc/InfoPackge" title="Kích vào đây để xem chi tiết thông tin gói"><span>@Model.ListPackge[i].Text</span></a>
+                                    @Html.HiddenFor(x => x.ListPackge[i].ID)
+                                    @Html.HiddenFor(x => x.ListPackge[i].Text)
+                                </div>
+                                @if (Model.ListPackge[i].REMAIN < 0 && Model.ListPackge[i].Checked == true)
+                                {
+                                    <a class="bgno">Hết hạn</a> 
+                                }
+                                else
+                                {
+                                    <a class="@classser" data-toogle="@namecode"  onclick="updatepackge(this);">@names</a> 
+                                }
+                            </li>
+                        }
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div>
+                    <span class="ip f_left">Nhập mã xác nhận <span class="red">(bắt buộc) </span></span>
+                    <br />
+                    <br />
+                </div>
+                <div>
+                    @Html.TextBox("CaptchaValue", "", new { @class = "captcha", @required = "required" })
+                    <img src='/Captcha/Show' alt="" class="captcha_img" id="captcha_img" />
+                    <a class="ic-refresh refeshcaptcha"></a>
+
+                    <div class="clear"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>
+<script type="text/javascript">
+
+    function updatepackge(id) {
+        var value = $(id).attr('data-toogle');
+        var tran = value.substr(0, 2);
+        var captcha = $("#CaptchaValue").val();
+        if (captcha == '') {
+            $("#lblmessage").html('<span class="red">Quý khách chưa nhập mã xác nhận.</span>');
+        }
+        else {
+            $(id).prop('onclick', null);
+            $.post('/Acc/ResmsAdd', { id: value, CaptchaValue: captcha },
+            function (data) {
+                if (data == "0") {
+                    if (tran == "DK") {
+                        $("#lblmessage").html('<span class="mess_sucess">Đăng ký nhận sms thành công.</span>');
+                    } else {
+                        $("#lblmessage").html('<span class="mess_sucess">Hủy nhận sms thành công.</span>');
+                    }
+                } else if (data == "108") {
+                    $("#lblmessage").html('<span class="mess_error">Tài khoản không đủ tiền.</span>');
+                } else if (data == "-2") {
+                    $("#lblmessage").html('<span class="mess_error">Chưa nhập mã xác nhận.</span>');
+                } else if (data == "-5") {
+                    $("#lblmessage").html('<span class="mess_error">Mã xác nhận không chính xác.</span>');
+                } else if (data == "107") {
+                    $("#lblmessage").html('<span class="mess_error">Thuê bao quý khách không phải là thuê bao của Viettel.</span>');
+                } else if (data == "1101") {
+                    $("#lblmessage").html('<span class="mess_error">Gói cước này quý khách đã đăng ký.</span>');
+                } else if (data == "1102") {
+                    $("#lblmessage").html('<span class="mess_error">Giao dịch thất bại.</span>');
+                } else {
+                    if (tran == "DK") {
+                        $("#lblmessage").html('<span class="mess_error">Đăng ký nhận sms thất bại.</span>');
+                    } else {
+                        $("#lblmessage").html('<span class="message_error">Hủy nhận sms thất bại.</span>');
+                    }
+                }
+                var t = setInterval(function () {
+                    clearInterval(t);
+                    document.location.reload(true);
+                }, 3000);
+            });
+        }
+    }
+
+</script>

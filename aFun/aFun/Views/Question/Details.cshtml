@@ -1,0 +1,73 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string AUTO_ID, TXNAME, USER_REPLY, REQUEST_TIME, REPLY_TIME, CONTENTS, TXURL, ISVIEW, USER_NAME, TXREPLY;
+    int i = 0;
+    AUTO_ID = TXNAME = REQUEST_TIME = USER_REPLY = REPLY_TIME = TXURL = CONTENTS = TXURL = USER_NAME = TXREPLY = "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.mo;
+    AUTO_ID = mo["AUTO_ID"].ToString();
+    TXNAME = mo["TITLE"].ToString();
+    USER_NAME = mo["USER_NAME"].ToString();
+    CONTENTS = mo["TXCONTENT"].ToString();
+    TXREPLY = mo["TXREPLY"].ToString();
+    USER_REPLY = mo["USER_REPLY"].ToString();
+    REPLY_TIME = mo["REPLY_TIME"].ToString();
+    REQUEST_TIME = mo["REQUEST_TIME"].ToString();
+    TXURL = MakeLink.MakeQA(TXNAME, AUTO_ID);
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = "";
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+                        ///////////////////////////////////////////////////////////////////////////////
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="title_box_dv">
+            <a href="/hoi-dap"><i class="icon-indent-right"></i>Hỏi - Đáp</a>
+        </div>
+        <div class="content_dv">
+            <div class="content_box">
+                <div class="nd_vb detail">
+                    <span class="title_tin"><strong>@TXNAME</strong></span>
+                    <br />
+                    <div><span class="title_tin">Người hỏi: @USER_NAME</span> (ngày @REQUEST_TIME)</div>
+                    @Html.Raw(HttpUtility.HtmlDecode(CONTENTS))
+                    <div><span class="title_tin">Chuyên gia trả lời: @USER_REPLY</span> (ngày @REPLY_TIME.ToString())</div>
+                    @Html.Raw(HttpUtility.HtmlDecode(TXREPLY.ToString()))
+                </div>
+                <div class="f_clear"></div>
+                @if (ViewBag.listQaOther != null)
+                {
+                    <div class="tinkhac">
+                        <div class="title_tin">Câu hỏi khác</div>
+                        <ul>
+                            @foreach (var itemother in ma_other)
+                            {
+                                AUTO_ID = itemother["AUTO_ID"].ToString();
+                                TXNAME = itemother["TITLE"].ToString();
+                                if (TXNAME.Length > 45)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                                }
+                                TXURL = MakeLink.MakeQA(TXNAME, AUTO_ID);
+
+                                <li>
+                                    <a href="@TXURL"><span class="title_tin"><i class="icon-question-sign"></i>@TXNAME</span></a>
+
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>
+

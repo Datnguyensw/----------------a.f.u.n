@@ -1,0 +1,56 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.LoginAccModel
+@{
+    ViewBag.Title = "Đăng nhập - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "afun.vn";
+    ViewBag.Images = "http://afun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://afun.vn/";
+    ViewBag.UrlWap = "http://m.afun.vn/";
+                                    ///////////////////////////////////////////////////////////////////////////////
+
+}
+<div class="content_dv">
+    <div class="box_dv">
+
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            <span>Hệ thống không nhận diện được số điện thoại của bạn. Bạn hãy truy cập bằng 3G để có thể sử dụng tốt nhất các dịch vụ của <span class="red"><strong>aFun</strong></span>. Nếu bạn truy cập bằng <span class="red"><strong>wifi</strong></span> hãy vui lòng đăng nhập tại đây:</span>
+
+                            <div class="form">
+                                @Html.ValidationSummary()
+                                @using (Html.BeginForm())
+                                {
+                                    
+                                    @Html.AntiForgeryToken()         
+                                    <div>
+                                        <span class="ip">Số điện thoại</span>
+                                        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "text" })
+                                    </div>
+                                    <div>
+                                        <span class="ip">Mật khẩu</span>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "text", AUTOCOMPLETE = "off" })
+                                    </div>
+                                    <div class="dn">
+                                        <input type="submit" value="Đăng nhập" class="btn_blue" />
+                                        <a class="qmk" href="/quen-mat-khau.html">Quên mật khẩu</a>
+                                    </div>
+             
+                                    <div class="mt0">
+                                        <span class="f11">Nếu chưa có tài khoản, bạn có thể đăng ký tại đây:</span>
+                                        <input type="button" onclick="window.location.href = '/dang-ky.html'" class="btn" value="Đăng ký" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

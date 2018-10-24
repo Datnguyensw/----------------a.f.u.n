@@ -1,0 +1,51 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JObject info = (JObject)ViewBag.info;
+    string AUTO_ID, TXNAME, TXURLCATION, CONTENTS;
+    AUTO_ID = TXNAME = TXURLCATION = CONTENTS = "";
+    try
+    {
+        CONTENTS = info["TXDESC"].ToString();
+        string LinkLocalserver = System.Configuration.ConfigurationManager.AppSettings["LinkServerLocal"].ToString();
+        string LinkReadClient = System.Configuration.ConfigurationManager.AppSettings["LinkReadClient"].ToString();
+        if (System.Configuration.ConfigurationManager.AppSettings["ConfigLinkLocal"].ToString() == "1")
+        {
+            CONTENTS = CONTENTS.Replace(LinkReadClient, LinkLocalserver);
+        }
+        if (!string.IsNullOrEmpty(CONTENTS))
+        {
+            CONTENTS = Core.CallService2(CONTENTS);
+        }
+        else
+        {
+            CONTENTS = @"<p>Nội dung đang cập nhât...</p>";
+        }
+    }
+    catch
+    {
+        CONTENTS = @"<p>Nội dung đang cập nhât...</p>";
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Thể lệ - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "";
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURLCATION;
+                ///////////////////////////////////////////////////////////////////////////////
+    
+}
+<div class="content_dv">
+    <div class="box_dv">
+         <div class="tab">
+            <div><a href="/trac-nghiem/"><i class="icon-coffee"></i>Chơi game</a></div>
+            <div class="active"><a href="/trac-nghiem/the-le.html"><i class="icon-info-sign"></i>Thể lệ</a></div>
+            <div><a href="/trac-nghiem/danh-sach-trung-thuong.html"><i class="icon-sitemap"></i>Ds trúng thưởng</a></div>
+        </div>
+        <div class="content_box">
+            @Html.Raw(HttpUtility.HtmlDecode(CONTENTS))
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

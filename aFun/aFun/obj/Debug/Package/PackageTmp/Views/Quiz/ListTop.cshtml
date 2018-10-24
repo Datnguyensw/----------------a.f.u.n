@@ -1,0 +1,65 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Bảng xếp hạng - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    /////////////////////////////////////////////////////////////////////////////
+    string phonep, phonepnew;
+    phonep = phonep = "";
+    
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/trac-nghiem"><i class="icon-coffee"></i>Chơi game</a></div>
+            <div><a href="/trac-nghiem/thong-tin-nguoi-choi.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div class="active"><a href="/trac-nghiem/bang-xep-hang.html"><i class="icon-sitemap"></i>BXH</a></div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                          <span>Đến thời điểm <span class="red"><strong>@DateTime.Now.ToString("hh:mmm:ss") ngày @DateTime.Now.ToString("dd/MM/yyyy")</strong></span> top 10 thuê bao có điểm chơi cao nhất</span>
+                            <div class="table">
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Thuê bao</th>
+                                        <th>Điểm</th>
+                                    </tr>
+                                    @if (ViewBag.ma != null)
+                                    {
+                                        int i = 1;
+                                        foreach (var item in (JArray)ViewBag.ma)
+                                        {
+                                            phonep = item["USER_NAME"].ToString(); ;
+                                            //if (phonep.Length == 10)
+                                            //{
+                                            //    phonepnew = phonep.Replace(phonep.Substring(4, 4), "xxxx");
+                                            //}
+                                            //else
+                                            //{ phonepnew = phonep.Replace(phonep.Substring(4, 4), "xxxx"); }
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@phonep</td>
+                                            <td>@item["CURRENT_POINT"].ToString()</td>
+                                        </tr>
+                                            i++;
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

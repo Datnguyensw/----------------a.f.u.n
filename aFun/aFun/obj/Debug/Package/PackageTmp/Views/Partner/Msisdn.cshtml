@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Đăng ký gói dịch vu - aFun";
+}
+<script src="/Content/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script src="/Content/js/jquery-ui-1.8.2.js" type="text/javascript"></script>
+<input type="hidden" value="@ViewBag.reUrl" id="regurl"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var reurl = $("#regurl").val();
+        if (reurl.length > 0) {
+            document.location.href = reurl;
+        } else {
+            document.location.href = "/";
+        }
+    });
+</script>
+

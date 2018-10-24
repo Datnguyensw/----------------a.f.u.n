@@ -1,0 +1,66 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listdata = (JArray)ViewBag.ma;
+    string AUTO_ID, TXNAME, AVATAR, SHORT_DESC, CONTENTS, LAST_DATE, CATE_NAME, CATE_CODE, TXURL, PURL, TXRES, ISVIEW;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = TXRES = PURL = "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.mo;
+    AUTO_ID = mo["LAW_ID"].ToString();
+    TXNAME = mo["TXNAME"].ToString();
+    if (TXNAME.Length > 65)
+    {
+        TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+    }
+    CATE_NAME = mo["CATE_NAME"].ToString();
+    CATE_CODE = mo["CATE_CODE"].ToString();
+    AVATAR = mo["AVATAR"].ToString();
+    SHORT_DESC = mo["CONTENT"].ToString();
+    //LAST_DATE = mo["CREATE_DATE"].ToString();
+    ISVIEW = mo["ISVIEW"].ToString();
+    TXURL = MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, AUTO_ID);
+    PURL = MakeLink.MakeCateLaw(CATE_NAME, CATE_CODE);
+    TXRES = "/";
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+                ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/" title="Về trang chủ">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/van-ban" title="Văn bản">Văn bản</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@PURL" title="@CATE_NAME">@CATE_NAME</a>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv vb">
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_vb">
+                    <span class="title_tin"><strong>@TXNAME</strong></span>
+                    <em>(Trích)</em>
+                    <br />
+                    @Html.Raw(HttpUtility.HtmlDecode(SHORT_DESC.ToString()))
+                </div>
+                <a href="@MakeLink.MakeLinkLawRead(CATE_NAME, TXNAME, AUTO_ID)" title="Đọc tiếp">
+                    <div class="btn_xemthem">
+                        <i class="icon-arrow-right"><span>Đọc tiếp</span></i>
+                    </div>
+                </a>
+                <br />
+                <a href="/Law/Download/@AUTO_ID">
+                    <div class="btn_xemthem">
+                        <i class="icon-download-alt"><span>Tải về</span></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

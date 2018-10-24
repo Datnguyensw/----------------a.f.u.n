@@ -1,0 +1,134 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Sách điện tử - afun.vn";
+    ViewBag.Description = "Sách điện tử - afun.vn";
+    ViewBag.Keywords = "Sách điện tử, sach dien tu, afun.vn";
+    ViewBag.Images = "http://afun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://afun.vn/";
+    ViewBag.UrlWap = "http://m.afun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    int i = 0;
+    string cls_active = "";
+    string BOOKTAB, BOOKOTHER;
+    BOOKOTHER = BOOKTAB  = "";
+    BOOKTAB = "THÊM";
+    string TAB_URLPAGER = "/";
+    JArray ma = (JArray)ViewBag.ma;
+    string btnReadTitle = "Đọc thử";
+   
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Sách điện tử</span>
+    </div>
+</div>
+@if (ViewBag.ORDER != null && ma.Count > 0)
+{
+    <div class="tab cate_tab">
+        <ul>
+            @foreach (var item in (JArray)ViewBag.ORDER)
+            {
+                string TAB_KEY, TAB_NAME, TAB_TYPE, TAB_URL;
+                TAB_KEY = item["KEY"].ToString();
+                TAB_NAME = item["NAME"].ToString();
+                TAB_TYPE = item["TYPE"].ToString();
+                TAB_URL = "/";
+                TAB_URL = MakeLink.MakeTabEbook(TAB_NAME, TAB_TYPE);
+                if (TAB_TYPE == (string)ViewBag.TAB_DEFAULT)
+                {
+                    cls_active = "active";
+                    if (i >= 3)
+                    {
+                        BOOKTAB = TAB_NAME;
+                    }
+                    TAB_URLPAGER = TAB_URL;
+                }
+                else
+                {
+                    cls_active = "";
+                }
+
+                if (i < 3)
+                {
+                <li><a href="@TAB_URL" class="@cls_active">@TAB_NAME</a></li>
+                }else
+                {
+                    BOOKOTHER += @"<li><a href='"+TAB_URL+"'>"+TAB_NAME+"</a></li>";
+                }
+                i++;
+            }
+            <li><a class="hd-btn-showstate @cls_active" data-dropdown="#dropdown-state">@BOOKTAB <span class="select_icon">
+                <img src="/Content/images/select.png"></span></a></li>
+        </ul>
+    </div>
+    <div id="dropdown-state" class="dropdown dropdown-tip dropdown-anchor-right">
+        <ul class="dropdown-menu">
+            @Html.Raw(HttpUtility.HtmlDecode(BOOKOTHER))
+        </ul>
+    </div>
+}
+<div class="p10">
+    @if (ma != null && ma.Count > 0)
+    {
+        <div class="content_main">
+            <ul>
+                @foreach (var item in (JArray)ViewBag.ma)
+                {
+                    string BOOK_ID, TXNAME, TXURL, TXURL_READ, TXURL_BUY, AVATAR, AUTHOR_NAME, PUBLISHER_NAME, PRICE;
+                    BOOK_ID = item["BOOK_ID"].ToString();
+                    TXNAME = item["TXNAME"].ToString();
+                    if (TXNAME != null && TXNAME.Length > 65)
+                    {
+                        TXNAME = TXNAME.Substring(0, 65) + "...";
+                    }
+                    AVATAR = item["AVATAR"].ToString();
+                    PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                    {
+                        btnReadTitle = "Đọc";
+                    }
+                    else
+                    {
+                        btnReadTitle = "Đọc thử";
+                    }
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PUBLISHER_NAME = item["PUB_NAME"].ToString();
+                    TXURL = MakeLink.MakeLinkEBook(TXNAME, BOOK_ID);
+                    TXURL_READ = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                    TXURL_BUY = "/acc/buybox/" + BOOK_ID;
+                    <li>
+                        <a href="@TXURL" title="@TXNAME">
+                            <span class="thumb_img">
+                                <img src="@AVATAR" alt="@TXNAME"></span>
+                            <div class="info_book">
+                                <div class="title_book">@TXNAME</div>
+                                <div class="price_book"><span class="black">Giá bán: </span>@PRICE</div>
+                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                            </div>
+                        </a>
+                        <div class="button_book">
+                             <a href="@TXURL_READ" title="@btnReadTitle">
+                                <input type="button" value="@btnReadTitle" class="yellow_btn btn_read"></a>
+                            <a href="@TXURL_BUY" title="Mua">
+                                <input type="button" value="Mua" class="blue_btn btn_buy"></a>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="content_main">
+            <p style="height: 50px; line-height: 50px;">Nội dung đang cập nhât...</p>
+        </div>
+    }
+</div>
+@if (ViewBag.ma != null && ViewBag.TotalRecord > 10)
+{
+    @Html.Partial("_Pager", new aFun.Models.MyPage { NameURL = TAB_URLPAGER, PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+}
+@Html.Partial("_Category")

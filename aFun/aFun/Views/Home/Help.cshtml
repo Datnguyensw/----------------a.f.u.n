@@ -1,0 +1,53 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JObject info = (JObject)ViewBag.info;
+    string AUTO_ID, TXNAME, TXURLCATION, CONTENTS;
+    AUTO_ID = TXNAME = TXURLCATION = CONTENTS = "";
+    try
+    {
+        CONTENTS = info["TXDESC"].ToString();
+        if (System.Configuration.ConfigurationManager.AppSettings["ConfigLinkLocal"].ToString() == "1")
+        {
+            CONTENTS = CONTENTS.Replace(System.Configuration.ConfigurationManager.AppSettings["LinkReadClient"].ToString(), System.Configuration.ConfigurationManager.AppSettings["LinkServerLocal"].ToString());
+        }
+        if (!string.IsNullOrEmpty(CONTENTS))
+        {
+            CONTENTS = Core.CallService2(CONTENTS);
+        }
+        else
+        {
+            CONTENTS = @"<p>Nội dung đang cập nhât...</p>";
+        }
+    }
+    catch
+    {
+        CONTENTS = @"<p>Nội dung đang cập nhât...</p>";
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Hướng dẫn - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "";
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURLCATION;
+    ///////////////////////////////////////////////////////////////////////////////
+    
+}
+
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Hướng dẫn</span>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_dv">
+            <div class="content_box">
+                 @Html.Raw(HttpUtility.HtmlDecode(CONTENTS))
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

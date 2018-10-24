@@ -1,0 +1,276 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;//cate_gory
+    JArray cate_lid = (JArray)ViewBag.cate_gory;//cate_gory//parent
+    JArray item_cate = (JArray)ViewBag.item_cate;//cate_gory//parent list_oder
+    JArray listorder = (JArray)ViewBag.list_oder;//cate_gory//parent list_oder
+    JObject ALMODER = (JObject)ViewBag.list_arr;//cate_gory//parent list_oder ma_news//ma_arr_video
+    JObject ALMODER_video = (JObject)ViewBag.ma_arr_video;//cate_gory//parent list_oder ma_news//ma_arr_video
+    JArray lis_ma_news = (JArray)ViewBag.ma_news_;//cate_gory//parent list_oder ma_news
+    string PCODE, PNAME, PURL;
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, isservice, lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = isservice = lbl_ishot = "";
+    ISVIEW = "0";
+    PURL = "/";
+    //JObject mo_fix = MyControllers.GetTopLaw(Core.TXVIDEO);
+    //mo_fix = JObject.Parse(mo_fix["Body"]["Data"].ToString());
+    //JArray ma_new = JArray.Parse(mo_fix["NEW"].ToString());
+    //JArray ma_hot = JArray.Parse(mo_fix["HOT"].ToString());
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Pháp Luật - aFun";
+    ViewBag.Description = "Pháp Luật - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+    int lc = 0, lb = 0;
+}
+<div class="hello">
+    <div class="breadcum">
+        <div class="p5">
+            <a href="/">
+                <i class="icon-home"></i>
+            </a>
+            <img class="arrow" alt="arrow" src="Content/images/icon_arrow.png">
+            <span class="active"><a href="/van-ban"> Pháp Luật</a></span>
+        </div>
+    </div>
+
+    <div class="tab5 cate_tab" style="">
+        <ul class="tab5-news">
+            @foreach (var ca in item_cate)
+            { //active3
+                string acv = "";
+                if (lc == 0) { acv = "active6"; }
+                string txname = ca["NAME"].ToString();
+                string rel = ca["KEY"].ToString();
+                    
+                <li><a href="#" class="tab6 @acv" rel="@rel" >@txname </a></li>
+                lc++;
+            }
+        </ul>
+    </div>
+</div>
+@foreach (var ca in item_cate)
+{
+    string style = "display:none";
+    if (lb == 0) { style = "display:block"; }
+    if (ca["KEY"].ToString() == "5")
+    {
+        string ID = ca["KEY"].ToString();
+    <div class="content_dv content-news" id="@ID" style="@style" >
+
+        @foreach (var lss in lis_ma_news)
+        {
+            string id = lss["CATE_CODE"].ToString();
+            JObject get_category = MyControllers.get_3050(0, 6, id);
+            get_category = JObject.Parse(get_category["Body"]["Data"].ToString());
+            JArray LAW = JArray.Parse(get_category["NEW"].ToString());
+
+            string Url = MakeLink.Make_cate_Law_news_n1(lss["TXNAME"].ToString(), lss["CATE_CODE"].ToString());
+            string bdhasd = LAW.ToString();
+            <div class="box_dv">
+                <div class="title_box_dv">
+                    <a href="@Url" id="icon_clip">@lss["TXNAME"].ToString()</a>
+                    <div class="btn_xemthem">
+                        <a href="@Url"><span>Xem thêm &raquo;</span></a>
+                    </div>
+                </div>
+
+                <div class="content_box">
+                    <div class="p10">
+                        <div class="tin" id="" style="">
+                            <ul>
+                                @try
+                                {
+                                    foreach (var laws in LAW)
+                                    {
+                                        AUTO_ID = laws["AUTO_ID"].ToString();
+                                        TXNAME = laws["TXNAME"].ToString();
+                                        if (TXNAME.Length > 45)
+                                        {
+                                            TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                                        }
+                                        CATE_NAME = laws["CATE_NAME"].ToString();
+                                        CATE_CODE = laws["CATE_CODE"].ToString();
+                                        AVATAR = laws["AVATAR"].ToString();
+                                        SHORT_DESC = laws["SHORT_DESC"].ToString();
+                                        if (SHORT_DESC.Length > 75)
+                                        {
+                                            SHORT_DESC = SHORT_DESC.Substring(0, 75).ToString() + "...";
+                                        }
+
+                                    
+                                        TXURL = "/phap-luat/" + MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);  //MakeLink.MakeLinkLaw(lss["TXNAME"].ToString(), TXNAME, laws["LAW_ID"].ToString());
+                                    <li>
+                                        <a href="@TXURL">
+                                            <img src="@laws["AVATAR"].ToString()" alt="@laws["TXNAME"].ToString()"/></a>
+                                        <a href="@TXURL"><span class="title_tin">@TXNAME</span></a>
+                                        <span class="detail_tin">@laws["SHORT_DESC"].ToString()</span>
+                                    </li>
+                                    }
+                                }
+                                catch (Exception)
+                                { 
+                                    <li>
+                                        <a href="#">
+                                            <img src="" alt="" /></a>
+                                        <a href="#"><span class="title_tin">Load....</span></a>
+                                        <span class="detail_tin">Load....</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>    
+       
+        }
+
+
+    </div>
+    
+    }
+    
+    if (ca["KEY"].ToString() == "6")
+    {
+        int tyle = 1;
+    <div class="content_dv content-news" id="@ca["KEY"].ToString()" style="@style" >
+        @foreach (var ls in listorder)
+        {
+            string asd = ALMODER.ToString();
+            string key = ls["KEY"].ToString();
+            int t = Int32.Parse(key);
+            
+            string Urls = MakeLink.Make_cate_Law_video_n1(ls["NAME"].ToString(), "0", ca["NAME"].ToString(), t+"");
+            JArray LAW = JArray.Parse(ALMODER_video["" + key + ""].ToString());
+            <div class="box_dv">
+                <div class="title_box_dv">
+                    <a href="@Urls" id="icon_clip"> @ls["NAME"].ToString()</a>
+                    <div class="btn_xemthem">
+                        <a href="@Urls"><span>Xem thêm &raquo;</span></a>
+                    </div>
+                </div>
+                <div class="content_box">
+                    <div class="p10">
+                        <div class="tin">
+                            <ul>
+                                @try
+                                {
+                                    
+                                    foreach (var law in LAW)
+                                    {
+                                        if (@law["TXNAME"].ToString()!="")
+                                        {
+                                            TXNAME = law["TXNAME"].ToString();
+                                            if (TXNAME.Length > 55)
+                                            {
+                                                TXNAME = TXNAME.Substring(0, 55).ToString() + "...";
+                                            }
+                                            TXURL = MakeLink.Make_go_Video_law(@ls["NAME"].ToString(), TXNAME, @law["AUTO_ID"].ToString());
+                                    <li>
+                                        <a href="#">
+                                            <!--<span class="video"></span>-->
+                                        </a>
+                                        <div class="round_img">
+                                            <a href="@TXURL" rel="@law["TXNAME"].ToString()">
+                                                <img class="tin_clip" src="@law["AVATAR"].ToString()" alt="@law["TXNAME"].ToString()"/>
+                                            </a>
+                                        </div>
+                                        <a href="@TXURL"><span class="title_tin">@TXNAME</span></a>
+                                        <span class="detail_tin">
+                                            <span class="date"><i class="icon-time"></i>Ngày đăng: @law["LAST_DATE"].ToString()</span>
+                                            <span class="time"><i class="icon-play-circle"></i>@law["ISVIEW"].ToString() lượt xem</span>
+                                        </span>
+                                        <div class="button_book">
+                                           
+                                            <a href="@TXURL" title="Xem ">
+                                                <input value="Xem " class="yellow_btn btn_read" type="button"></a>
+                                           
+                                        </div>
+                                    </li>
+                                        } else{
+                                            <li>dang cap nhat</li>
+                                        }
+                                    }
+                                  
+                                }
+                                catch (Exception)
+                                {
+                                }
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>  
+            tyle++;  
+        }
+      
+    </div>
+    <div/>
+    }
+
+    if (ca["KEY"].ToString() == "7")
+    {
+
+string id = @ca["KEY"].ToString();
+       
+    <div class="content_dv content-news" id="@id" style="@style" >
+
+        @foreach (var ls in cate_lid)
+        {
+
+            JObject get_category = MyControllers.get_3014(0, 6, "ALL", "0003", "7", 1);
+            get_category = JObject.Parse(get_category["Body"]["Data"].ToString());
+            string asdasd = get_category.ToString();
+            JArray LAWVANBAN = JArray.Parse(get_category["LAW"].ToString());
+            string url_r = MakeLink.Make_go_law("văn bản", ls["TXNAME"].ToString(), ls["CATE_CODE"].ToString());
+            <div class="box_dv">
+
+                <div class="title_box_dv">
+                    <a href="@url_r" id="icon_clip">@ls["TXNAME"].ToString()</a>
+                    <div class="btn_xemthem">
+                        <a href="@url_r"><span>Xem thêm &raquo;</span></a>
+                    </div>
+                </div>
+                <div class="content_box">
+                    <div class="p10">
+                        <div class="tin">
+                            <ul>
+                                @try
+                                {
+                                    foreach (var law in LAWVANBAN)
+                                    {
+                                        TXNAME = law["TXNAME"].ToString();
+                                        if (TXNAME.Length > 65)
+                                        {
+                                            TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                        }
+                                        string url_rsD = MakeLink.MakeLinkLaw(ls["TXNAME"].ToString(), TXNAME, law["LAW_ID"].ToString());  
+                                    <li>
+                                        <a href="@url_rsD"><span class="title_tin"><i class="icon-align-left"></i>@law["TXNAME"].ToString()</span></a>
+                                    </li>
+                                    }
+                                }
+                                catch (Exception e) { }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>    
+        }
+
+
+    </div>
+    
+    }
+    lb++;
+}
+
+

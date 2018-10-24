@@ -1,0 +1,66 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;
+    string AUTO_ID, TXNAME, TXURL;
+    int i = 0;
+    AUTO_ID = TXNAME = TXURL = "";
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Hỏi đáp - aFun";
+    ViewBag.Description = "Hỏi đáp - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    JArray ma = (JArray)ViewBag.ma;
+}
+<div class="content_dv">
+    <div class="box_dv vb">
+        <div class="title_box_dv">
+            <a href="/"><i class="icon-question-sign"></i>Hỏi đáp</a>
+        </div>
+        <div class="content_box">
+            <div class="tin hd t_center">
+                <span>Đặt câu hỏi chuyên gia sẽ trả lời và gửi lên hệ thống </span>
+                <a href="/hoi-dap/dat-cau-hoi.html">.
+            	<div class="btn_dk">
+                    <span>Đặt câu hỏi</span>
+                </div>
+                </a>
+            </div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <ul>
+                    @if (ma != null)
+                    {
+                        foreach (var itmeall in ma)
+                        {
+                            AUTO_ID = itmeall["AUTO_ID"].ToString();
+                            TXNAME = itmeall["TITLE"].ToString();
+                            if (TXNAME.Length > 65)
+                            {
+                                TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                            }
+                            TXURL = MakeLink.MakeQA(TXNAME, AUTO_ID);
+
+                        <li>
+                            <a href="@TXURL"><span class="title_tin"><i class="icon-question-sign"></i>@TXNAME</span></a>
+                            <div class="tl"><a href="@TXURL"><i class="icon-arrow-right"></i>Xem câu trả lời</a></div>
+                        </li>
+                        }
+                    }
+                    else
+                    {
+                        <li>Dữ liệu đang cập nhât...</li>
+                    }
+                </ul>
+                @if (ma != null && ViewBag.TotalRecord > 10)
+                {
+                    @Html.Partial("_Pager", new aFun.Models.MyPage { NameURL = "/hoi-dap/cau-hoi", PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+                }
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

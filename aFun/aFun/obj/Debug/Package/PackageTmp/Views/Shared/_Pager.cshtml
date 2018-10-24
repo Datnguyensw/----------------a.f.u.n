@@ -1,0 +1,57 @@
+﻿@model aFun.Models.MyPage 
+
+@{
+    string url_prev = "#";
+    string url_next = "#";
+    string url_pagFist = "#";
+    string url_pagLast = "#";
+    int TotalPage = 0;
+    int TotalRecord = 0;
+    int CurrentPage = 1;
+    string FullLink = "";
+
+    //  FullLink = Model.NameURL + "-" + Model.PageParameter + "-";
+    //ViewBag.URL_PAGEn2 = "/" + ma[0]["CATE_NAME"].ToString() + "-list-" + ma[0]["CATE_NAME"].ToString() + ".html";
+    //ViewBag.URL_PAGEn1 = "/van-ban/trang";
+    FullLink = ViewBag.URL_PAGEn1;
+    int _page = Convert.ToInt32(ViewBag._tpage);
+    if(_page==0){
+        _page = 10;
+    }
+    CurrentPage = Model.PageCurrent;
+
+    TotalRecord = Model.TotalRecord;
+
+    int sodu = (int)TotalRecord % _page;
+    int tal =(TotalRecord/_page)+1;
+    if (sodu == 0)
+    {
+        TotalPage = (int)TotalRecord / _page;
+    }
+    else
+    {
+        TotalPage = (int)(TotalRecord / _page) + 1;
+    }
+
+    url_pagFist = FullLink + 1 + ViewBag.URL_PAGEn2;
+    url_pagLast = FullLink + TotalPage + ViewBag.URL_PAGEn2;
+    url_prev = FullLink + (CurrentPage - 1) + ViewBag.URL_PAGEn2;
+    url_next = FullLink + (CurrentPage + 1) + ViewBag.URL_PAGEn2;
+}
+ <div class="page">
+        @if (CurrentPage > 1)
+        {
+            <a href="@url_pagFist">Đầu</a> 
+            <a href="@url_prev">@((CurrentPage - 1).ToString("00"))</a>
+        }
+        @if (TotalPage>1)
+        {
+        <a class="current" href="#">@CurrentPage.ToString("00")</a>
+        }
+        @if (CurrentPage < TotalPage)
+        {
+             <a href="@url_next">@((CurrentPage + 1).ToString("00"))</a>
+             <a href="@url_pagLast">Cuối</a>    
+        }
+     <a>Tổng @tal trang</a>
+    </div>

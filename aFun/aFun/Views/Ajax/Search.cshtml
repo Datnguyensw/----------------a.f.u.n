@@ -1,0 +1,249 @@
+﻿@using System.Data;
+@using aFun.Models;
+@using System.Text;
+@using HtmlAgilityPack;
+@using System.Collections.Generic;
+@using Newtonsoft.Json.Linq;
+@{   Layout = null;
+     JArray ls_alaw = ViewBag.aLaw;//= slaw;
+     JArray ls_anew = ViewBag.anew;// = snew;
+     JArray ls_abook = ViewBag.abook;// = sbook;
+     JArray ls_avideoth = ViewBag.avideoth;// = svideo_TH;
+     JArray ls_avideo = ViewBag.avideo;// = svideo;
+}
+<div style="background-color: #fff">
+    <div class="content_dv">
+        @if (ls_abook.Count > 0)
+        {
+            <div class="box_dv_search">
+                <div class="title_row"><i class="icon-search"></i> Sách điện tử </div>
+                <div class="content_box">
+                    <div class="p10">
+                        <div class="content_main" id="contentbook_0" style="">
+                            <ul>
+                                @foreach (var item in ls_abook)
+                                {
+                                 string AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                                 //string PUBLISHER_NAME = item["PUBLISHER_NAME"].ToString();
+                                 string AUTO_ID = item["BOOK_ID"].ToString();
+                                 string TXNAME = item["TXNAME"].ToString();
+
+                                    string TXURL_READ = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                    if (TXNAME.Length > 45)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                                    }
+
+                                    string PRICE = item["PRICE"].ToString();
+                                    string CATE_NAME = item["CATE_NAME"].ToString();
+                                    string BOOK_CODE = item["BOOK_CODE"].ToString();
+                                    string AVATAR = item["AVATAR"].ToString();
+                                    string TXURL = "";
+
+                                    string btyusss = "";
+
+                                    PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                                    string btnReadTitle = "";
+                                    string bo_buy = "Mua";
+                                    if (PRICE == "Miễn phí" || PRICE == "0")
+                                    {
+                                        bo_buy = "";
+                                    }
+
+                                    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                                    {
+                                        if (item["BTYPE"].ToString() == "TEXT")
+                                        {
+                                            btyusss = "1";
+                                            btnReadTitle = "Đọc";
+                                            TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "AUDIO")
+                                        {
+                                            btyusss = "2";
+                                            btnReadTitle = "Nghe";
+                                            TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "VIDEO")
+                                        {
+                                            btyusss = "4";
+                                            btnReadTitle = "Xem";
+                                            TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "IMAGE")
+                                        {
+                                            btyusss = "3";
+                                            btnReadTitle = "Đọc ";
+                                            TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (item["BTYPE"].ToString() == "TEXT")
+                                        {
+                                            btyusss = "1";
+                                            btnReadTitle = "Đọc thử";
+                                            TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "AUDIO")
+                                        {
+                                            btyusss = "2";
+                                            btnReadTitle = "Nghe thử";
+                                            TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "VIDEO")
+                                        {
+                                            btyusss = "4";
+                                            btnReadTitle = "Xem ";
+                                            TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                        }
+                                        if (item["BTYPE"].ToString() == "IMAGE")
+                                        {
+                                            btyusss = "3";
+                                            btnReadTitle = "Đọc";
+                                            TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                        }
+                                    }
+                                    string TXURL_re = MakeLink.MakeLinkEBook(TXNAME, AUTO_ID, btyusss);
+                          
+                            
+                                    <li>
+                                        <a href="@TXURL_re" title="@TXNAME">
+                                            <span class="thumb_search">
+                                                <img src="@AVATAR" alt="@TXNAME"></span>
+                                            <div class="info_book">
+                                                <div class="title_book">@TXNAME</div>
+                                                <div class="price_book"><span class="black">Giá bán:</span> @PRICE</div>
+                                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                                            </div>
+                                        </a>
+                                       @* <div class="button_book">
+                                            <a href="/acc/buybox/@AUTO_ID" title="Mua">
+                                                <input value="Mua" class="blue_btn btn_buy" type="button"></a>
+                                            <a href="@TXURL" title="@btnReadTitle">
+                                                <input value="@btnReadTitle" class="yellow_btn btn_read" type="button"></a>
+                                            <a href="/acc/giffbox/@AUTO_ID" title="Mua">
+                                                <input value="Tặng" class="btn_giff btn_buy" type="Tặng"></a>
+                                        </div>*@
+                                    </li>
+                                }
+                            </ul>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+        @if (ls_alaw.Count > 0)
+        {
+            <div class="box_dv_search">
+                <div class="title_row"><i class="icon-search"></i> van ban </div>
+                <div class="content_box">
+                         <div class="p10">
+                        <div class="tin">
+                            <ul>
+                                @try
+                                {
+                                    foreach (var law in ls_alaw)
+                                    {
+                                     string   TXNAME = law["TXNAME"].ToString();
+                                        if (TXNAME.Length > 55)
+                                        {
+                                            TXNAME = TXNAME.Substring(0, 55).ToString() + "...";
+                                        }
+                                        string url_rsD = MakeLink.MakeLinkLaw("search", TXNAME, law["LAW_ID"].ToString());  
+                                    <li>
+                                        <a href="@url_rsD"><span class="title_tin"><i class="icon-align-left"></i>@TXNAME</span></a>
+                                    </li>
+                                    }
+                                }
+                                catch (Exception e) { }
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ls_avideo.Count > 0)
+        {
+            <div class="box_dv_search">
+                <div class="title_row"><i class="icon-search"></i> video Pháp luật </div>
+                <div class="content_box">
+                     <div class="tin">
+                    <ul>
+                        @foreach (var item in ls_avideo)
+                        {
+                           string AUTO_ID = item["LAW_ID"].ToString();
+                           string TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                            }
+                            string CATE_NAME = item["CATE_NAME"].ToString();
+                            string CATE_CODE = item["CATE_CODE"].ToString();
+                            string AVATAR = item["AVATAR"].ToString();
+                            string SHORT_DESC = item["SHORT_DESC"].ToString();
+                            string TXURL = MakeLink.Make_go_Video_law(CATE_NAME, TXNAME, AUTO_ID);
+                             //TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                            
+                            <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img_search">
+                                        <img class="tin_clip_search" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME</span></a>
+                                
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div style="clear: both;"></div>
+                </div>
+            </div>
+        }
+        @if (ls_avideoth.Count > 0)
+        {
+            <div class="box_dv_search">
+                <div class="title_row"><i class="icon-search"></i> video tổng  hợp </div>
+                <div class="content_box">
+                     <div class="tin">
+                    <ul>
+                        @foreach (var item in ls_avideoth)
+                        {
+                           string AUTO_ID = item["LAW_ID"].ToString();
+                           string TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                            }
+                            string CATE_NAME = item["CATE_NAME"].ToString();
+                            string CATE_CODE = item["CATE_CODE"].ToString();
+                            string AVATAR = item["AVATAR"].ToString();
+                            string SHORT_DESC = item["SHORT_DESC"].ToString();
+                          
+                            string TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                            
+                            <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img_search">
+                                        <img class="tin_clip_search" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME</span></a>
+                                
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div style="clear: both;"></div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿@model aFun.Models.RegisterAccModel
+@{ViewBag.Title = "Đăng ký";}
+@using (Html.BeginForm())
+{ 
+    <div class="content_dv">
+        <div class="box_dv">
+            <div class="tab">
+                <div><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+                <div class="active"><a href="/dang-ky.html"><i class="icon-edit"></i>Đăng ký dịch vụ</a></div>
+                <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    <div class="nd_cn">
+                        <div class="dangky">
+                            <div class="dk_wifi">
+                                <span>Dấu <span class="red">* </span>là thông tin bắt buộc bạn phải điền để nhận xác thực của aFun </span>
+                                <div class="form">
+                                    @Html.ValidationSummary()
+                                     @Html.AntiForgeryToken() 
+                                    <div>
+                                        <span class="ip">Số điện thoại <span class="red">*</span></span>
+                                        @Html.TextBoxFor(x => x.MobileNumber, new { @class = "text",@placeholder="Số điện thoại Viettel", @required = "required"})
+                                    </div>
+                                    <div>
+                                        <span class="ip">Mật khẩu <span class="red">*</span></span>
+                                        @Html.PasswordFor(x => x.Password, new { @class = "text",@placeholder="Mật khẩu  phải ít nhất 6 ký tự", @required = "required" })
+                                    </div>
+                                    <div>
+                                        <span class="ip">Nhập lại mật khẩu <span class="red">*</span></span>
+                                        @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "text",@required = "required" })
+                                    </div>
+                                     <div>
+                                        <img src='/Captcha/Show' alt="" class="captcha_img" id="captcha_img" />
+                                        <a class="ic-refresh refeshcaptcha"></a>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.CaptchaValue, new { @class = "text", @placeholder = "Mã chống spam",@required = "required" })
+                                    </div>
+                                    <span>Hệ thống sẽ tự động gửi 1 mã code vào số điện thoại mà bạn đã đăng ký.</span>
+                                    <div class="dn">
+                                        <input type="submit" name="btnUpdate" class="btn_blue" value="Đăng ký" />
+                                        <a href="/"><input type="button" value="Hủy bỏ" class="btn_gray"></a>
+                                    </div>
+                                    <div class="dk_mes">
+                                        <div>Quý khách cũng có thể thao tác bằng SMS như sau:</div>
+                                        <div>- Gói Luật tổng hợp: Miễn phí xem tất cả nội dung dịch vụ như: video clip, audio, văn bản pháp luật, tình huống pháp luật... qua kênh wap, app của dịch vụ.</div>
+                                        <div>+ Đăng ký dịch vụ soạn: <span class="blue_less"><strong>DK LTH gửi @aFun.Models.Core.headerphone</strong></span> (1.000 đồng/1 ngày, miễn phí ngày đầu đối với KH đăng ký lần đầu tiên). Gói dịch vụ sẽ tự động gia hạn.</div>
+                                        <div>+ Hủy dịch vụ: <span class="blue_less"><strong>HUY LTH gửi @aFun.Models.Core.headerphone</strong></span></div>
+                                        <div>- Gói Trắc nghiệm pháp luật: giúp Quý khách tiếp cận với pháp luật một cách đơn giản thông qua hình thức tham gia trả lời các câu hỏi trắc nghiệm về luật đồng thời có cơ hội trúng giải thưởng hấp dẫn của chương trình.
+                                        </div>
+                                        <div>+ Đăng ký dịch vụ: <span class="blue_less"><strong>DK TN gửi @aFun.Models.Core.headerphone</strong></span> (2.000đồng/1ngày, miễn phí ngày đầu đối với KH đăng ký lần đầu tiên). Gói dịch vụ sẽ tự động gia hạn.</div>
+                                        <div>
+                                            + Hủy dịch vụ: <span class="blue_less"><strong>HUY TN gửi @aFun.Models.Core.headerphone</strong></span>
+                                        </div>
+                                        <span>Sau khi đăng ký hoàn tất hệ thống sẽ gửi mật khẩu về cho bạn và bạn có thể đăng nhập theo số điện thoại của bạn và mật khẩu đã được gửi về.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_Link")
+    </div>
+}

@@ -1,0 +1,103 @@
+﻿@model aFun.Models.SearchObjectModel
+@using Newtonsoft.Json.Linq;
+@{
+    ViewBag.Title = "Tìm kiếm";
+    string AUTO_ID, TXNAME, TXURL, AVATAR, TITLE, CTYPE, MOD_CODE, CATE_CODE, CATE_NAME;
+    JArray list_news = new JArray();
+    
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="title_box_dv">
+            <a href=""><i class="icon-search"></i>Tìm kiếm</a>
+        </div>
+        <div class="content_box search" id="BoxSearch">
+            <div class="tin">
+                <div class="form nua">
+                   @using (Html.BeginForm())
+                          {
+                            @Html.AntiForgeryToken() 
+                        	<div>
+                                <span class="ip">Cụm từ </span>
+                              @*  <input type="text" class="text" placeholder="Nhập từ bạn cần tìm" />*@
+                                @Html.TextBoxFor(m => m.keyword, Model.keyword, new { @class = "text", placeholder = "Nhập từ quý khách cần tìm" })
+                            </div>
+                             <div>
+            	                <span class="ip">Từ ngày</span>
+                                @*<input type="text" class="text datepicker" placeholder="Chọn ngày"/>*@
+                                @Html.TextBoxFor(m => m.StartDate, new { @class = "text datepicker", placeholder = "Chọn ngày" })
+                            </div>
+                            <div>
+                                <span class="ip">Đến ngày</span>
+                                @*<input type="text" class="text datepicker" placeholder="Chọn ngày"/>*@
+                                @Html.TextBoxFor(m => m.EndDate, new { @class = "text datepicker", placeholder = "Chọn ngày" })
+                            </div>
+                            @*<div>
+                            <span class="ip">Thời điểm áp dụng </span>
+                            @Html.DropDownListFor(m => m.listTimes, Model.listTimes)
+                            </div>*@
+                            <div>
+                                <span class="ip">Loại văn bản </span>
+                                @Html.DropDownListFor(x => x.listDoctype,Model.listDoctype)
+                            </div>
+                            <div>
+                                <span class="ip">CQ ban hành </span>
+                                 @Html.DropDownListFor(m => m.listIssusers,Model.listIssusers)
+                            </div>
+                            <div>
+                                <span class="ip">Lĩnh vực </span>
+                                @Html.DropDownListFor(m => m.listCate,Model.listCate)
+                            </div>
+                            <!-- Hiển thị khi chọn vào list Thủ tục tố tụng -->
+                            
+                            <div class="dn">
+                            	<input type="submit" name="btnsearch" class="btn_blue" value="Tìm kiếm">
+                                <input type="reset" class="btn_gray" value="Hủy bỏ">
+                            </div>
+                          }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="title_box_dv clear">
+            <span><i class="icon-search"></i>Kết quả tìm kiếm</span>
+        </div>
+        <div class="content_box" id="ResultSearch">
+            <div class="tin">
+                @if (ViewBag.ma_ser != null)
+                {
+                    list_news = (JArray)ViewBag.ma_ser;
+                    AUTO_ID = TXNAME = TXURL = AVATAR = TITLE = CTYPE = MOD_CODE = CATE_CODE = CATE_NAME = "";
+                    <ul>
+                        @foreach (var item in list_news)
+                        {
+                            AUTO_ID = item["LAW_ID"].ToString();
+                            TXNAME = item["TXNAME"] == null ? "" : item["TXNAME"].ToString();
+                            CATE_CODE = item["CATE_CODE"] == null ? "" : item["CATE_CODE"].ToString();
+                            CATE_NAME = item["CATE_NAME"] == null ? "" : item["CATE_NAME"].ToString();
+                            //MOD_CODE = item["MOD_CODE"] == null ? "" : item["MOD_CODE"].ToString();
+                            TXURL = aFun.Models.MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, AUTO_ID);
+                             <li>
+                                    <a href="@TXURL"><span class="title_tin"><i class="icon-align-left"></i>@TXNAME</span></a>
+                                </li>
+                        }
+                    </ul>
+                   
+                    
+                    
+                }
+                else
+                {
+                    <p>Dữ liệu không tìm thấy...</p>
+                }
+               
+            </div>
+
+        </div>
+
+    </div>
+    @Html.Partial("_Link")
+</div>
+
+

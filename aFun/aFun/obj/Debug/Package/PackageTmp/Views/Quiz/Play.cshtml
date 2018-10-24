@@ -1,0 +1,283 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string Fullname, Birthday, Sex, PhoneMobile, TopLevel, Point, TXURLCATION;
+    Fullname = Birthday = Sex = PhoneMobile = "";
+    TXURLCATION = "/";
+    Point = TopLevel = "0";
+    JObject mo = (JObject)ViewBag.mo;
+    if (mo != null)
+    {
+        Point = mo["CURRENT_POINT"].ToString();
+        //TopLevel = mo["TopLevel"].ToString();
+        if (Session["LoginName"] != null)
+        {
+            PhoneMobile = Session["LoginName"].ToString();
+        }
+
+    }
+    int INDEX_TOTAL = Convert.ToInt32(ViewBag.INDEX_TOTAL.ToString());
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Thông tin người chơi - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "";
+    ViewBag.UrlWeb = aFun.Models.MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = aFun.Models.MakeLink.DefaultURLWap() + TXURLCATION;
+    
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div class="active"><a href="/trac-nghiem/"><i class="icon-coffee"></i>Chơi game</a></div>
+            <div><a href="/trac-nghiem/the-le.html"><i class="icon-info-sign"></i>Thể lệ</a></div>
+            <div><a href="/trac-nghiem/danh-sach-trung-thuong.html"><i class="icon-sitemap"></i>Ds trúng thưởng</a></div>
+        </div>
+        <div class="content_box">
+            <div class="choigame">
+                <div class="banner_choigame">
+                    <div style="margin-bottom: 10px;" class="info_quiz">
+                        Bạn đang sử dụng sđt : @PhoneMobile -
+                                            Điểm số : <span class="span_point">@Point điểm </span>
+                    </div>
+                    <img src="/Content/images/typhu_banner.png" alt="" />
+                    <div class="content_game">
+                        <div id="infoplayer" class="infoacc"></div>
+                        <div class="f_clear"></div>
+                        <div class="faq">
+                            @if (INDEX_TOTAL == Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["Limit"].ToString()))
+                            {
+                                <span class="title_tin" id="infoquestion"><span class="orange">Quý khách đã trả lời hết @System.Configuration.ConfigurationManager.AppSettings["Limit"].ToString() câu hỏi miễn phí hôm nay.Để tiếp tục tham gia trả lời câu hỏi của dịch vụ, giá cước @System.Configuration.ConfigurationManager.AppSettings["Price"].ToString()/1 câu.</span></span>
+                            }
+                            else
+                            {
+                                <span class="title_tin" id="infoquestion"></span>
+                            }
+                        </div>
+                        <ul id="list_answer">
+                            <li onclick="StartGame();"><a href="javascript:void(0)" title="">Bắt đầu nào</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        @*<input type="hidden" id="ANSWER_TIME" value="@System.Configuration.ConfigurationManager.AppSettings["TimePlay"].ToString()" />
+        <input type="hidden" id="QUIZ_QUESTION_LIMIT" value="@System.Configuration.ConfigurationManager.AppSettings["Limit"].ToString()" />
+        <input type="hidden" id="QUIZ_PRICE" value="@System.Configuration.ConfigurationManager.AppSettings["Price"].ToString()" />*@
+
+    </div>
+</div>
+<script type="text/javascript">
+    var point = 0;
+    var curpoint = 0;
+    var round = 0;
+    var time = 10;
+    var price = 500;
+    var limitfree = 0; 
+    var answercor = "";
+    var questioninfo;
+    var list_answer;
+    var str_answer;
+    var list_charge;
+    var stranswer;
+    var status;
+    var QuestionID;
+    var AnswerID;
+    var AnswerIDF;
+    var object_current_answer;
+    var ntrue = 0;
+    var answert;
+    var ntotal = 0;
+    var da;
+    var checkplay;
+    var charge = 0;
+    var ti_p = 0;
+    var tol_p = 0;
+    //    $(window).ready(function () {
+    //        checkplay();
+    //    });
+    //    function checkplay() {
+    //        $.post('/Trivia/CheckPlayTimes', function (data) {
+    //            if (data == "OK") {
+    //                $("#infoquestion").html('<span class="orange">Quý khách đã trả lời hết ' + limitfree + ' câu hỏi miễn phí hôm nay.Để tiếp tục tham gia trả lời câu hỏi của dịch vụ, giá cước ' + price + '/1 câu.</span>');
+    //            } else {
+    //                $("#infoquestion").html('');
+    //            }
+    //        });
+    //    }
+    //    function checknextplay() {
+    //        $.post('/Trivia/CheckNextPlay', function (data) {
+    //            if (data == "OK") {
+    //                $("#infoquestion").html('<span class="orange">Quý khách đã trả lời hết ' + limitfree + ' câu hỏi miễn phí hôm nay.Để tiếp tục tham gia trả lời câu hỏi của dịch vụ, giá cước ' + price + '/1 câu.</span>');
+    //            } else {
+    //                $("#infoquestion").html('');
+    //            }
+    //        });
+    //    }
+    function loadquestion() {
+        $.post('/Quiz/LoadQuestion', function (data) {
+            data = $.parseJSON(data);
+            if (data == '-1') {
+                alert('Hệ thống đang bận.')
+            }else if (data == '108') {
+                alert('Tài khoản quý khách không đủ tiền. Vui lòng nạp thêm tiền để chơi tiếp.');
+            } else if (data == '1102') {
+                alert('Quý khách chưa đăng ký gói trắc nghiệm pháp luật.');
+
+            } else {
+                questioninfo = data.QUESTION;
+                round = questioninfo[0].TIMES;
+                ntrue = questioninfo[0].INDEX_TRUE;
+                answert = questioninfo[0].ANSWER_TRUE;
+                ti_p = questioninfo[0].TIME_QUIZ;
+                tol_p = questioninfo[0].FREE_QUIZ;
+                price = questioninfo[0].MONEY_QUIZ;
+                var quescontent = questioninfo[0].CONTENT;
+                str_answer = questioninfo[0].ANSWER;
+                time = ti_p;
+                limitfree = tol_p;
+                var list_answer = str_answer.split('##');
+                var htmlx = '';
+                $("#infoquestion").html('Câu ' + round + ': ' + questioninfo[0].CONTENT);
+                for (var i = 0; i < list_answer.length; i++) {
+                    if (i == 0) stranswer = 'A. ';
+                    if (i == 1) stranswer = 'B. ';
+                    if (i == 2) stranswer = 'C. ';
+                    if (i == 3) stranswer = 'D. ';
+                    var saa = list_answer[i];
+                    i++;
+                    if (i == answert) {
+                        da = i;
+                        //alert("da=" + da + " - answert=" + answert + " - saa=" + saa);
+                    }
+                    htmlx += '<li  data-toogle="' + i + '" onclick="select_answer(this)"><a  href="javascript:void(0)" title="">' + stranswer + saa + '</a></li>';
+                    i--;
+                }
+                $("#list_answer").html(htmlx);
+                if (charge == "-1" || charge == "0") {
+                    var s = setInterval(function () {
+                        time--;
+                        if (time > 0) {
+                            $("#infoplayer").html('<div class="number">Trả lời đúng: ' + ntrue + '/' + round + '</div><div class="timeplay">Time: ' + time + '</div>');
+                        }
+                        else if (time == 0) {
+                            clearInterval(s);
+                            return_answer();
+                        } else {
+                            clearInterval(s);
+                        }
+                    }, 1000);
+                }
+                charge = "-1";
+            }
+        });
+    }
+    function select_answer(id) {
+        var index = $(id).attr('data-toogle');
+        if (da == index) {
+            $(id).addClass('true_answer');
+            $(id).css('backgroundColor', '#0000FF');
+            ntrue++;
+        }
+        else {
+            $(id).addClass('wrong_answer');
+            var lista = $('#list_answer li');
+            $.each(lista, function (index, value) {
+                if (index == da) {
+                    $(this).addClass('true_answer');
+                }
+            })
+            $(id).css('backgroundColor', '#FF4500');
+        }
+        time = 0;
+        AnswerID = index;
+        $.post('/Quiz/answerQuestion', { AnswerID: AnswerID }, function (data) {
+            if (data == '-1') {
+                alert('Hệ thống đang bận.')
+            } else if (data == '108') {
+                alert('Tài khoản quý khách không đủ tiền. Vui lòng nạp thêm tiền để chơi tiếp.')
+            } else {
+                data = $.parseJSON(data);
+                questioninfo = data.QUESTION;
+                ntrue = questioninfo[0].INDEX_TRUE;
+                //round = questioninfo[0].TIMES;
+                curpoint = questioninfo[0].POINT_CUR;
+                time = 0;
+                $("#infoplayer").html('<div class="number">Trả lời đúng: ' + ntrue + '/' + round + '</div><div class="timeplay">Time: ' + time + '</div>');
+                $(".info_quiz span.span_point").html(curpoint);
+            }
+        });
+        $(id).prop('onclick', null);
+
+        var t = setInterval(function () {
+            clearInterval(t);
+            $("#list_answer").html('<li onclick="NextGame()"><a href="javascript:void(0)">Chơi tiếp</a></li><li><a href="/Quiz/Info" title="">Dừng cuộc chơi</a></li>');
+            if (round == limitfree) {
+                $("#infoquestion").html('<span class="orange">Quý khách đã trả lời hết ' + limitfree + ' câu hỏi miễn phí hôm nay.Để tiếp tục tham gia trả lời câu hỏi của dịch vụ, giá cước ' + price + '/1 câu.</span>');
+                //$("#list_answer").html('');
+            } else {
+                $("#infoquestion").html('');
+            }
+
+        }, 2000);
+
+
+    }
+    function return_answer() {
+        var lista = $('#list_answer li');
+        $.each(lista, function (index, value) {
+            var lista = $('#list_answer li');
+            if (index == da) {
+                $(this).addClass('true_answer');
+                $(this).css('backgroundColor', '#FF4500');
+                $(this).prop('onclick', null);
+            }
+        })
+        AnswerID = "0";
+        $.post('/Quiz/answerQuestion', { AnswerID: AnswerID }, function (data) {
+            if (data == '-1') {
+                alert('Hệ thống đang bận.')
+            } else if (data == '108') {
+                alert('Tài khoản quý khách không đủ tiền. Vui lòng nạp thêm tiền để chơi tiếp.')
+            } else {
+                data = $.parseJSON(data);
+                questioninfo = data.QUESTION;
+                //round = questioninfo[0].TIMES;
+                ntrue = questioninfo[0].INDEX_TRUE;
+                time = 0;
+                //Hien thong tin
+                $("#infoplayer").html('<div class="number">Trả lời đúng: ' + ntrue + '/' + round + '</div><div class="timeplay">Time: ' + time + '</div>');
+            }
+        });
+     
+  
+        var f = setInterval(function () {
+            clearInterval(f);
+            $("#list_answer").html('<li onclick="NextGame()"><a href="javascript:void(0)">Chơi tiếp</a></li><li><a href="/Quiz/Info" title="">Dừng cuộc chơi</a></li>');
+            if (round == limitfree) {
+                $("#infoquestion").html('<span class="orange">Quý khách đã trả lời hết ' + limitfree + ' câu hỏi miễn phí hôm nay.Để tiếp tục tham gia trả lời câu hỏi của dịch vụ, giá cước ' + price + '/1 câu.</span>');
+                //$("#list_answer").html('');
+            } else {
+                $("#infoquestion").html('');
+            }
+        }, 2000);
+
+    }
+    function StartGame() {
+        time = $("#ANSWER_TIME").val();
+        ntrue = 0;
+        round = 1;
+        loadquestion();
+    }
+
+    function NextGame() {
+        time = $("#ANSWER_TIME").val();
+        loadquestion();
+    }
+
+</script>
+
+

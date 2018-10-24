@@ -1,0 +1,43 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray lstComment = (JArray)ViewBag.ma_comment;
+    string AUTO_ID,CREATE_DATE, TITLE, CONTENT, CREATEBY;
+    AUTO_ID = ViewBag.AUTO_ID;
+}
+<div class="f_clear"></div>
+<div class="send_comment">
+        <div class="title_detail">Bình luận</div>
+        <div class="content_comment">
+            <form action="/News/Comment" method="post" class="frm-comment ">
+                @Html.AntiForgeryToken()
+                @Html.Hidden("AUTO_ID", AUTO_ID)
+                @Html.TextArea("txtComment", "", new { placeholder = "Hãy nhập bình luận của quý khách" })
+                <div class="clear"></div>
+                <input type="submit" class="btn_blue" name="btncomment" value="Gửi" />
+            </form>
+        </div>
+        <div id="commentList">
+        @if (lstComment != null && lstComment.Count > 0)
+        {
+            foreach (var item in (JArray)ViewBag.ma_comment)
+            {
+                TITLE = item["TITLE"].ToString();
+                CONTENT = item["CONTENT"].ToString();
+                CREATE_DATE = item["CREATE_DATE"].ToString();
+                CREATEBY = item["CREATEBY"].ToString();
+            <div class="comment-item">
+
+                <h3 class="width_fix_text">@CREATEBY.Replace(CREATEBY.Substring(4, 4), "xxxx")</h3>
+                <span class="">@CREATE_DATE</span>
+                <p>@Html.Raw(HttpUtility.HtmlDecode(CONTENT))</p>
+            </div>
+            }
+        }
+        else
+        {
+            <p>Chưa có bình luận nào...</p>
+        }
+    </div>
+    </div>
+<div class="f_clear"></div>

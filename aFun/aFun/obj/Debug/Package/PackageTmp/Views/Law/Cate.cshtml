@@ -1,0 +1,143 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;
+    JArray listdata = (JArray)ViewBag.ma;
+    string PCODE, PNAME, PURL;
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, TXURLPAGER;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = "";
+    ISVIEW = "0";
+    TXURLPAGER = "/";
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = ViewBag.CATENAME + " - aFun";
+    ViewBag.Description = ViewBag.CATENAME + " - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+
+    ///////////////////////////////////////////////////////////////////////////////
+}
+@if (listcate != null && listcate.Count > 1)
+{
+    <div class="content_dv">
+        @try
+        {
+            if (listcate != null && listcate.Count > 0)
+            {
+                foreach (var itemp in listcate)
+                {
+
+                    PCODE = itemp["CATE_CODE"].ToString();
+                    PNAME = itemp["TXNAME"].ToString();
+                    PURL = MakeLink.MakeCateLaw(PNAME, PCODE);
+                    JObject mo = MyControllers.GetLawByCate(Core.TXLAW, PCODE, 0, 5);
+                    mo = JObject.Parse(mo["Body"]["Data"].ToString());
+                    listdata = JArray.Parse(mo["LAW"].ToString());
+                    ViewBag.Title = PNAME + " - aFun";
+                
+            <div class="box_dv vb">
+                <div class="title_box_dv">
+                    <a href="@PURL" id="icon_news">
+                        @PNAME</a>
+                </div>
+                <div class="content_box">
+                    <div class="tin">
+                        @if (listdata != null && listdata.Count > 0)
+                        {
+                            <ul>
+                                @foreach (var item in listdata)
+                                {
+                                    AUTO_ID = item["LAW_ID"].ToString();
+                                    TXNAME = item["TXNAME"].ToString();
+                                    if (TXNAME.Length > 30)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 30).ToString() + "....";
+                                    }
+                                    CATE_NAME = item["CATE_NAME"].ToString();
+                                    CATE_CODE = item["CATE_CODE"].ToString();
+                                    AVATAR = item["AVATAR"].ToString();
+                                    LAST_DATE = item["CREATE_DATE"].ToString();
+                                    ISVIEW = item["ISVIEW"].ToString();
+                                    TXURL = MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, AUTO_ID);
+                                    <li>
+                                        <a href="@TXURL"><span class="title_tin"><i class="icon-align-left"></i>@TXNAME</span></a>
+                                    </li>
+                                }
+                            </ul>
+                            <a href="@PURL" title="Xem thêm">
+                                <div class="btn_xemthem">
+                                    <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="nodata">
+                                Dữ liệu đang cập nhật...
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+                }
+            }
+        }
+        catch (Exception)
+        {
+        }
+        @Html.Partial("_Link")
+    </div>
+
+}
+else
+{
+    <div class="content_dv">
+        <div class="box_dv vb">
+            <div class="title_box_dv">
+                <span id="icon_news">
+                    @ViewBag.CATENAME</span>
+            </div>
+             <div class="content_box">
+                    <div class="tin">
+                    @if (listdata != null && listdata.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in listdata)
+                            {
+                                AUTO_ID = item["LAW_ID"].ToString();
+                                TXNAME = item["TXNAME"].ToString();
+                                if (TXNAME.Length > 65)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                }
+                                CATE_NAME = item["CATE_NAME"].ToString();
+                                CATE_CODE = item["CATE_CODE"].ToString();
+                                AVATAR = item["AVATAR"].ToString();
+                                LAST_DATE = item["CREATE_DATE"].ToString();
+                                ISVIEW = item["ISVIEW"].ToString();
+                                TXURL = MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, AUTO_ID);
+                                TXURLPAGER = MakeLink.MakeCateLaw(CATE_NAME, CATE_CODE);
+                                <li>
+                                    <a href="@TXURL"><span class="title_tin"><i class="icon-align-left"></i>@TXNAME</span></a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="nodata">
+                            Dữ liệu đang cập nhật...
+                        </p>
+                    }
+                    @if (listdata != null && ViewBag.TotalRecord > 10)
+                    {
+                        @Html.Partial("_Pager", new aFun.Models.MyPage { NameURL = TXURLPAGER, PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+                    }
+                </div>
+                 <div style="clear:both;"></div>
+            </div>
+        </div>
+        @Html.Partial("_Link")
+    </div>  
+}

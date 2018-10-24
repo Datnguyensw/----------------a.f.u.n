@@ -1,0 +1,64 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.ChangePassAccModel
+@{
+    ViewBag.Title = "Đổi mật khẩu - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+                                    ///////////////////////////////////////////////////////////////////////////////
+
+}
+@*<div class="breadcum">
+    <div class="p5">
+        <a href="/"><img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/tai-khoan">Tài khoản</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Đổi mật khẩu</span>
+    </div>
+</div>*@
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-edit"></i>Gói dịch vụ</a></div>
+            <div class="active"><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            <div class="form">
+                                @using (Html.BeginForm())
+                                {
+                                    if (ViewBag.Message != null)
+                                    {
+                                    @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+                                    }
+                                    @Html.ValidationSummary()
+                                    @Html.AntiForgeryToken()
+                                    <div>
+                                        <span class="ip">Mật Khẩu cũ</span>
+                                        @Html.PasswordFor(m => m.Password, new { @class = "text" })
+                                    </div>
+                                    <div>
+                                        <span class="ip">Mật khẩu</span>
+                                        @Html.PasswordFor(m => m.Passwordnew, new { @class = "text" })
+                                    </div>
+                                    <div>
+                                        <span class="ip">Nhập lại Mật khẩu</span>
+                                        @Html.PasswordFor(m => m.Passwordnewconfirm, new { @class = "text" })
+                                    </div>
+                                    <div class="dn">
+                                        <input type="submit" class="btn_blue" value="Đổi mật khẩu" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

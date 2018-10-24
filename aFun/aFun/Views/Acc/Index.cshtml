@@ -1,0 +1,34 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Tài khoản - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/"><img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Tài khoản</span>
+    </div>
+</div>
+<div class="p10">
+    <div class="content_main taikhoan">
+        <div class="canhan">
+            <ul>
+                <li><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Xin chào: @Session["LoginName"].ToString()</a></li>
+                <li><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-info-sign"></i>Gói dịch vụ</a></li>
+                <li><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin cá nhân</a></li>
+                @if(Session["msisdn"] == null)
+                {
+                <li><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></li>
+                }
+                 <li><a href="/tai-khoan/lich-su-giao-dich.html"><i class="icon-lock"></i>Lịch sử giao dịch</a></li>
+                <li><a href="/dang-xuat.html"><i class="icon-signout"></i>Đăng xuất</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

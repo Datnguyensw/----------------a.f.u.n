@@ -1,0 +1,123 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string AUTO_ID, TXNAME, AVATAR, SHORT_DESC, CONTENTS, LAST_DATE, CATE_NAME, CATE_CODE, TXURL, TXRES, PURL, ISVIEW, isservice, lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = TXRES = PURL =  isservice = lbl_ishot = "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.info;
+    AUTO_ID = mo["LAW_ID"].ToString();
+    TXNAME = mo["TXNAME"].ToString();
+    if (TXNAME.Length > 65)
+    {
+        TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+    }
+    CATE_NAME = mo["CATE_NAME"].ToString();
+    CATE_CODE = mo["CATE_CODE"].ToString();
+    AVATAR = mo["AVATAR"].ToString();
+    //LAST_DATE = mo["CREATE_DATE"].ToString();
+    ISVIEW = mo["ISVIEW"].ToString();
+    TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+    PURL = MakeLink.MakeCateLaw(CATE_NAME, CATE_CODE);
+    TXRES = "/";
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    JObject res = (JObject)ViewBag.res;
+    if (res != null)
+    {
+        TXRES = res["PPATH"].ToString();
+        if (res["RPATH"].ToString() != "[]")
+        {
+            res = JObject.Parse(JArray.Parse(res["RPATH"].ToString())[0].ToString());
+            TXRES = TXRES + res["CPATH"].ToString();
+        }
+    }
+    //log
+    JObject mlogstream = new JObject();
+    string LoginName = "UNKNOW";
+    if (Session["LoginName"] != null)
+    {
+        LoginName = Session["LoginName"].ToString();
+    }
+    if (System.Configuration.ConfigurationManager.AppSettings["ConfigLogStreaming"].ToString() == "1")
+    {
+        mlogstream = MyControllers.Log_Streaming(LoginName, TXRES, "A");
+        //if (Common.Check_HttpWebRequest(urlaudio2))
+        //{
+        //    mlogstream = MyControllers.Log_Streaming(LoginName, urlaudio, "A");
+        //}
+        //else
+        //{
+        //    mlogstream = MyControllers.Log_Streaming(LoginName, urlaudio, "F");
+        //}
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+                        ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/radio" title="Radio">Radio</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@PURL" title="@CATE_NAME">@CATE_NAME</a>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_dv">
+            <div class="content_box">
+                <div class="nd_vb">
+                    <h1><span class="title_tin"><strong>@TXNAME</strong></span></h1>
+                    <div class="f_clear"></div>
+                    <div id="audiowrap">
+                        <div id="audio0">
+                            <audio controls>
+                                <source src="@TXRES" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+                  <div class="f_clear"></div>
+                <div class="chiase news">
+                    <p>
+                        <span style="float: left; margin-right: 10px;">Chia sẻ:</span>  <a href="https://www.facebook.com/sharer/sharer.php?src=bm&amp;u=@HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURL)&amp;t=@HttpUtility.UrlEncode(TXNAME)&amp;v=3" target="_blank"><i class="fb"></i></a>
+                        <a href="https://plus.google.com/share?url=@HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURL)" target="_blank"><i class="mail"></i></a>
+                    </p>
+                </div>
+                  <div class="f_clear"></div>
+                <div class="tinkhac">
+                    <div class="title_tin">Radio cùng thể loại</div>
+                    <ul>
+                        @foreach (var itemother in ma_other)
+                        {
+                            AUTO_ID = itemother["LAW_ID"].ToString();
+                            TXNAME = itemother["TXNAME"].ToString();
+                            if (TXNAME.Length > 65)
+                            {
+                                TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                            }
+                            CATE_NAME = itemother["CATE_NAME"].ToString();
+                            CATE_CODE = itemother["CATE_CODE"].ToString();
+                            TXURL = MakeLink.MakeLinkAudio(CATE_NAME, TXNAME, AUTO_ID);
+                            isservice = itemother["ISSERVICE"].ToString();
+                            if (isservice == "1")
+                            {
+                                lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                            }
+                            else
+                            {
+                                lbl_ishot = "";
+                            }
+                            <li><a href="@TXURL" title="@TXNAME">@TXNAME @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

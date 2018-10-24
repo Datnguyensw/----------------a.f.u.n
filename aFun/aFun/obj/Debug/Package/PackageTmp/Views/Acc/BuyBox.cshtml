@@ -1,0 +1,130 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.BuyNotLogInViewModel
+@{
+    ViewBag.Title = "afun.vn - Mua";
+    ViewBag.Description = "afun.vn";
+    ViewBag.Description = "afun.vn";
+    ViewBag.Images = "http://afun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://afun.vn/";
+    ViewBag.UrlWap = "http://m.afun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    string clsdisplay = "";
+    string redex = "";
+    int is3g = 0;
+    if (Session["LoginName"] != null && Session["LoginName"].ToString() != "0" && Session["LoginName"].ToString() != "")
+    {
+        clsdisplay = "hidden";
+    }
+    else
+    {
+        Model.MobileNumber = "";
+    }
+    if (Session["msisdn"] != null)
+    {
+        redex = "onclick='onredex();'";
+        is3g = 1;
+    }
+    
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Mua sách</span>
+    </div>
+</div>
+<div class="p10">
+    <div class="content_main taikhoan">
+        <div class="warning">
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+            @Html.AntiForgeryToken()
+            if (ViewBag.NextBox == "1" && Session["LoginName"] != null)
+            {
+            @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+            <div class="form">
+                <div class="rows txcenter">
+                    <div class="input">
+                        <a href="@ViewBag.ReadBook" title="Đọc sách">
+                            <button class="btn_dk1 btn_dk2 orange" type="button"><i class="icon_doc"></i>Đọc sách</button></a>
+                        <a href="/thu-vien/tu-sach" title="Thư viện">
+                            <button class="btn_dk1 btn_dk2 blue2" type="button">Thư viện</button></a>
+                        <a href="/" title="Về trang chủ">
+                            <button class="btn_dk1 btn_dk2 gray" type="button">Về trang chủ</button></a>
+                    </div>
+                    <div class="fix_clear">
+                    </div>
+
+                </div>
+            </div>
+            }
+            else if (ViewBag.NextBox == "1" && Session["LoginName"] == null)
+            {
+            @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+            <div>Quý khách chưa đăng nhập. Quý khách vui lòng đăng nhập để sử dụng đầy đủ tính năng của hệ thống: </div>
+            <div class="form">
+                <div class="rows txcenter">
+                    <div class="input">
+                        <a href="/dang-nhap.html">
+                            <button class="btn_dk1 btn_dk2 blue2" type="button">Đăng nhập</button></a>
+                        <a href="/">
+                            <button class="btn_dk1 btn_dk2" type="button">Về trang chủ</button></a>
+                    </div>
+                    <div class="fix_clear">
+                    </div>
+
+                </div>
+            </div>
+            }
+            else
+            {
+            @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+                if (is3g == 0)
+                {
+            <div><span class="bold">Lưu ý:</span> Để mua cuốn sách:@Model.BookName có giá @aFun.Models.Common.formatCuryment(Model.Price.ToString()) vui lòng soạn tin nhắn: <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["CPBuy"].ToString() @ViewBag.BookCode</b> gửi <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["telViettel"].ToString()</b> hoặc kích vào nút Nhận OTP để nhận mã xác nhận:</div>
+                }
+                else
+                {
+            <div><span class="bold">Lưu ý:</span> Để mua cuốn sách:@Model.BookName có giá @aFun.Models.Common.formatCuryment(Model.Price.ToString()) vui lòng soạn tin nhắn: <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["CPBuy"].ToString() @ViewBag.BookCode</b> gửi <b class="red bold">@System.Configuration.ConfigurationManager.AppSettings["telViettel"].ToString()</b> hoặc làm theo các bước bên dưới:</div>
+                }
+            <div class="form">
+                <div class="@clsdisplay">
+                    @Html.HiddenFor(x => x.BookId)
+                    @Html.HiddenFor(x => x.BookName)
+                    @Html.HiddenFor(x => x.Btype)
+                    @Html.TextBoxFor(x => x.MobileNumber, new { @class = "text", @placeholder = "Số điện thoại", @required = "required" })
+                </div>
+
+                @if (is3g == 0)
+                {
+                   
+                    <script>
+                        function onredex() {window.location = "@ViewBag.reUrl_EB";}
+                    </script>
+                    <div style="width: 100%; display: block; text-align: center; clear: both; height: 30px; line-height: 30px;">
+                        <img src='/Captcha/Show' alt="" class="captcha_img" id="captcha_img" />
+                        <a class="icon-refresh refeshcaptcha"></a>
+                    </div>
+                    <div style="width: 100%; display: block; text-align: left;">
+                        @Html.TextBoxFor(x => x.CaptchaValue, new { @class = "text", @placeholder = "Mã chống spam" })
+                    </div>
+                    <div style="width: 100%; display: block; text-align: left; line-height: 30px; margin-bottom: 5px;">
+                        <button class="btn_dk1 btn_dk2" type="submit" name="btnOTP">Nhận OTP</button>
+                    </div>
+                    <div>
+                        @Html.TextBoxFor(x => x.CodeOTP, new { @class = "text", @placeholder = "Mã xác nhận" })
+                    </div>
+                   
+                }
+                <div style="width: 100%; display: block; text-align: center; clear: both;">
+                    <button class="blue_btn" type="submit" name="btnUpdate" @redex >Mua</button>
+                    <button class="btn_dk1 btn_dk2" type="submit" name="btnHome">Hủy bỏ</button>
+                </div>
+
+
+            </div>
+            }
+        }
+    </div>
+</div>

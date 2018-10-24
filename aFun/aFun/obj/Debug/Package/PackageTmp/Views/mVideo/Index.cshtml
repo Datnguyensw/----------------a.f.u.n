@@ -1,0 +1,154 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;//cate_gory
+    JArray cate_lid = (JArray)ViewBag.cate_gory;//cate_gory//parent  
+    JArray item_cate = (JArray)ViewBag.item_cate;//cate_gory//parent 
+    JArray listorder = (JArray)ViewBag.list_oder;//cate_gory//
+    JObject ALMODER = (JObject)ViewBag.list_arr;//cate_gory// 
+    string PCODE, PNAME, PURL;
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, isservice, lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = isservice = lbl_ishot = "";
+    ISVIEW = "0";
+    PURL = "/";
+   
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Video - aFun.vn";
+    ViewBag.Description = "Video - aFun.vn";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+    int lc = 0, lb = 0;
+    string isbutom = ViewBag.PACKADU;
+}
+<div class="hello">
+    <div class="breadcum">
+        <div class="p5">
+            <a href="/">
+                <i class="icon-home"></i>
+            </a>
+            <img class="arrow" alt="arrow" src="Content/images/icon_arrow.png">
+            <span class="active">Video</span>
+        </div>
+    </div>
+    <div class="tab2 cate_tab" style="">
+        <ul class="tab2-video">
+            @foreach (var ca in cate_lid)
+            {
+                string acv = "";
+                if (lc == 0) { acv = "active3"; }
+                string txname = ca["TXNAME"].ToString();
+                string rel = ca["SEO_NAME"].ToString();
+                <li><a href="#" class="tab3 @acv" rel="@rel" >@txname </a></li>
+                lc++;
+            }
+        </ul>
+    </div>
+</div>
+
+@foreach (var ca in cate_lid)
+{
+    string msdd = cate_lid.ToString();
+    string rel = ca["SEO_NAME"].ToString();
+    string style = "display:none";
+    if (lb == 0) { style = "display:block"; }
+    JObject cate_gory_ = MyControllers.Get_cate_item_0002("0002","0",ca["CATE_CODE"].ToString());
+    JObject array_al = JObject.Parse(cate_gory_["Body"]["Data"].ToString());
+    cate_gory_ = JObject.Parse(cate_gory_["Body"]["Data"].ToString());//1
+    string bbbt = cate_gory_.ToString();
+    
+    <div class="content_dv  content-video" id="@rel" style="@style" >
+        @foreach (var ls in listorder)
+        {
+            string mmkkd = cate_gory_.ToString();
+            string asd = ALMODER.ToString();
+            string key = ls["KEY"].ToString();
+            JArray VIDEO = JArray.Parse(cate_gory_["" + key + ""].ToString());
+            string adsadasdsad = VIDEO.ToString();
+            string url_g = MakeLink.MakeCateVideo_tyle(ca["TXNAME"].ToString(), ls["NAME"].ToString(), ca["CATE_CODE"].ToString(), ls["TYPE"].ToString());
+            
+            <div class="box_dv">
+                <div class="title_box_dv">
+                    <a href="@url_g" id="icon_clip">@ls["NAME"].ToString()</a>
+                    <div class="btn_xemthem">
+                        <a href="@url_g"> <span>Xem thêm &raquo;</span></a>
+                    </div>
+                </div>
+                <div class="content_box">
+                    <div class="tin">
+                        <ul>
+                            @try
+                            {
+                                foreach (var bok in VIDEO)
+                                {
+                                    string PRICE = bok["PRICE"].ToString();
+                                    string url_byu = "/acc/bokVDTH/" + AUTO_ID; string tx_buy = "mua";
+                                    string xems = "xem thử";
+                                     //string xems = "xem thử";
+                                    if(Session["LoginName"]!=null){
+                                    if (PRICE == "" || PRICE == "0" || PRICE == null)
+                                    {
+                                        url_byu = "#";
+                                        tx_buy = "Miễn phí";
+                                        xems = "xem";
+                                    }
+                                    else
+                                    {
+                                        if (isbutom == "OK")
+                                        {
+                                            xems = "xem";
+                                        }
+                                    }
+                                    }
+                                    TXNAME = bok["TXNAME"].ToString();
+                                    if (TXNAME.Length > 65)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                    }
+                                    TXURL = MakeLink.MakeLinkVideo(TXNAME, TXNAME, bok["AUTO_ID"].ToString());
+                                    AUTO_ID = bok["AUTO_ID"].ToString();
+                                <li>
+                                    <a href="@TXURL" title="@bok["TXNAME"].ToString()">
+                                        
+                                            <div class="round_img"><img class="tin_clip" src="@bok["AVATAR"].ToString()" alt="@bok["TXNAME"].ToString()"></div>
+                                     </a>
+                                    <a href="@TXURL"><span class="title_tin">@bok["TXNAME"].ToString()</span></a>
+                                    <span class="detail_tin">
+                                        <span class="date"><i class="icon-time"></i>Ngày đăng: @bok["LAST_DATE"].ToString()</span>
+                                        <span class="time"><i class="icon-play-circle"></i>@bok["ISVIEW"].ToString() lượt xem</span>
+                                    </span>
+                                    <div class="button_book">
+                                        <a href="@TXURL" title="@xems">
+                                            <input value="@xems" class="yellow_btn btn_read" type="button"></a> 
+                                        <a href="@url_byu" title="@tx_buy">
+                                            <input value="Mua" class="blue_btn btn_buy" type="button"></a>
+                                           <a href="/acc/giffVDTH/@AUTO_ID" title="Tặng">
+                                                        <input value="Tặng" class="btn_giff btn_buy" type="Tặng"></a>
+                                    </div>
+
+
+                                </li>
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                <li>Loading.....@e.ToString()</li>
+                            }
+                        </ul>
+
+
+
+                    </div>
+                </div>
+            </div>                
+      
+        }
+
+    </div>
+   
+        lb++;
+}
+
+<div class="content_dv  content-video" id="ebook">
+</div>

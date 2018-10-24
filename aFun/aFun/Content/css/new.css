@@ -1,0 +1,64 @@
+﻿/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 3, 2015, 9:06:52 AM
+    Author     : Quangdat
+*/
+
+.lean_overlay {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,.9);
+  display: none;
+}
+
+.chon_nha_mang h2 {
+  background: #08c;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  padding: 0;
+  line-height: 30px;
+}
+.alert_y_bt a { 
+  text-align: center;
+  background: #01AB17;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-right: 10px;
+}
+alert_y_bt_huy {
+  width: 70px;
+  height: 25px;
+  margin: 10px;
+  float: left;
+}
+.chon_nha_mang .nd {
+  margin-top: -20px;
+  
+}
+.alert_y_bt_huy {
+  width: 70px;
+  margin: 10px;
+  float: right;
+  text-align: center;
+  background: #01AB17;
+  padding: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  margin-right: 10px;
+  position: relative;
+  top: -30px;
+}

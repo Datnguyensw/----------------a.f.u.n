@@ -1,0 +1,49 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        //when button is clicked
+        $('#btnCancel').click(function () {
+            $('#dlgMsgBox').dialog("close");
+        });
+
+    });
+
+</script>
+
+<div id='dlgMsgBox'>
+    @if (Session["LoginName"] != null)
+    {
+        <div>Quý khách đã đọc hết số trang đọc thử vui lòng mua cuốn sách hoặc đăng ký gói để được đọc tiếp.</div>
+        <div class="txcenter btn_goup">
+            <a href="/acc/buybox/@ViewBag.bookid">
+                <input type="button" value="Mua sách" class="btn_blue" /></a>
+            <a href="/tai-khoan/thong-tin-goi-dich-vu.html">
+                <input type="button" value="ĐK gói cước" class="btn_yellow" /></a>
+            <input type="button" value="Hủy" class="btn_gray" id="btnCancel" />
+        </div>
+    }
+    else
+    {
+        <div>Quý khách đã đọc hết số trang đọc thử vui lòng đăng nhập để đọc tiếp.</div>
+        <div class="txcenter btn_goup">
+            <a href="/dang-nhap.html">
+                <input type="button" value="Đăng nhập" class="btn_blue" /></a>
+             <input type="button" value="Hủy" class="btn_gray" id="btnCancel" />
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#dlgMsgBox").dialog({
+            title: "Thông báo",
+            modal: true,
+            autoOpen: true,
+            width: 310,
+            resizable: false,
+            overlay: {
+                backgroundColor: '#000',
+                opacity: 0.8
+            },
+            buttons: {}
+        });
+    });
+</script>

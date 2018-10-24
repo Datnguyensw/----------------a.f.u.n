@@ -1,0 +1,285 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+<div class="box">
+    <div class="item_left_menu">
+        <div class="search_slide">
+            <form class="frm-search" method="get" action="/home/search/" id="frmSearch" name="frmSearch">
+                <input type="text" placeholder="Tìm kiếm" name="key"  />
+                
+            </form>
+        </div>
+    </div>
+
+    <div class="item_left_menu">
+        <ul>
+            @if (Session["LoginName"] != null)
+            {
+                <li class="tk"><a href="/tai-khoan/thong-tin-ca-nhan.html">
+                    <div>
+                        <i class="icon-mobile-phone"></i>Tài khoản
+                    </div>
+                </a>
+                </li>
+                <li class="tk"><a href="/thu-vien">
+                    <div>
+                        <i class="icon-mobile-phone"></i>Thư viện cá nhân
+                    </div>
+                </a>
+                </li>
+            }
+            else
+            {
+                <!--<li class="tk"><a href="/dang-nhap.html">
+                    <div>
+                        <img src="/Content/images/icon_login.png" alt="Đăng nhập" />Đăng nhập
+                    </div>
+                </a>
+                </li>  <li class="tk"><a href="/dang-ky.html">
+                    <div>
+                        <img src="/Content/images/icon_register.png" alt="Đăng ký" />Đăng ký
+                    </div>
+                </a>
+                </li>-->
+                
+                <li class="tk">
+                    <a href="/dang-nhap.html">
+                    <div>
+                        <i class="icon-mobile-phone"></i>Tài khoản</div>
+                    </a>
+                </li>
+                
+            }
+        </ul>
+    </div>
+    <div class="item_left_menu">
+        <ul>
+            <div class="title">
+                <li><a href="/">
+                    <div>
+                        Danh mục
+                    </div>
+                </a></li>
+            </div>
+            @if (ViewBag.MENULEFT != null)
+            {//<i class="icon-play"></i>
+                string TXNAME, CATE_CODE, urllink, urlicon, MOD_CODE,ICON;
+                ICON = "";
+                urlicon = "";
+                foreach (JObject item in (JArray)ViewBag.MENULEFT)
+                {
+                    TXNAME = item["TXNAME"] == null ? "" : item["TXNAME"].ToString();
+                    CATE_CODE = item["CATE_CODE"] == null ? "" : item["CATE_CODE"].ToString();
+                    MOD_CODE = item["MOD_CODE"] == null ? "" : item["MOD_CODE"].ToString();
+                    urlicon = item["AVATAR"] == null ? "" : item["AVATAR"].ToString();
+                    if (MOD_CODE == Core.TXNEW)
+                    {
+                        urllink = MakeLink.MakeCateNews(TXNAME, CATE_CODE);
+                    }
+                    else if (MOD_CODE == Core.A_TXHOME&& CATE_CODE == Core.A_HOME)
+                    {
+                        urllink = "/";
+                        ICON = "icon-home";
+                        
+                    }
+                    
+                    else
+                        if (MOD_CODE == Core.A_TXVIDEO&& CATE_CODE == Core.A_VIDEO)
+                    {
+                        urllink = "/video";
+                        ICON = "icon-play";
+
+                    }
+                        else if (MOD_CODE == Core.A_TXLUAT && CATE_CODE == Core.A_LUAT)
+                        {
+                            urllink = "/van-ban";
+                            ICON = "icon-align-right";
+                        }
+                        else if (MOD_CODE == Core.A_TXBOOK && CATE_CODE == Core.A_BOOK)
+                        {
+                            urllink = "/book";
+                            ICON = "icon-book";
+                        }
+                        
+                        else if (MOD_CODE == Core.A_TXHELP && CATE_CODE == Core.A_HELP)
+                        {
+                            urllink = "/hoi-dap";
+                            ICON = "icon-play";
+                        }
+                     
+                            
+                    //icon-align-right
+                    else if (MOD_CODE == Core.TXQUIZ && CATE_CODE == Core.C_QUIZ)
+                    {
+                        urllink = "/trac-nghiem";
+                        ICON = "icon-indent-right";
+                    }
+                        else if (MOD_CODE == Core.A_TXINFO && CATE_CODE == Core.A_INFO)
+                    {
+                        urllink = "/gioi-thieu.html";
+                        ICON = "icon-info-sign";
+                    }
+                        else if (MOD_CODE == Core.A_TXDOWLOAD && CATE_CODE == Core.A_DOWLOAD)
+                        {
+                            urllink = "/tai-xuong.html";
+                            ICON = "icon-download";
+                        }
+                        else if (MOD_CODE == Core.A_TXSHARE && CATE_CODE == Core.A_SHARE)
+                        {
+                            urllink = "/Chia-xe.html";
+                            ICON = "icon-headphones";
+                        }
+                            
+                    else
+                    {
+                        urllink = "/";
+                    }
+                <li><a href="@urllink" title="@TXNAME">
+                    <div>
+                        <i class="@ICON"></i>@TXNAME
+                    </div>
+                </a></li>
+                 
+
+                }
+            }
+          @for (int i = 0; i < 10;i++ ) {
+                 <li><a> &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp </a>
+                    <div>
+                       
+                    </div>
+                </li>
+               }
+
+            @if (Session["LoginName"] != null)
+            {
+                <li>
+
+                    <a href="/dang-xuat.html">
+                       <i class="icon-user"></i>
+                        <span>Thoát</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+@*<div class="box">
+    <div class="item_left_menu">
+        <div class="search_slide">
+            <input type="text" placeholder="Tìm kiếm" />
+            <a href="/tim-kiem"><i class="icon-search"></i></a>
+
+        </div>
+    </div>
+    <div class="item_left_menu">
+        <ul>
+            <li class="tk"><a href="/tai-khoan/thong-tin-ca-nhan.html">
+                <div>
+                    <i class="icon-mobile-phone"></i>Tài khoản
+                </div>
+            </a></li>
+        </ul>
+    </div>
+    <div class="item_left_menu">
+        <ul>
+            <div class="title">
+                <li><a href="/">
+                    <div>
+                        Danh mục
+                    </div>
+                </a></li>
+            </div>
+            <li><a href="/">
+                <div>
+                    <i class="icon-home"></i>Trang chủ
+                </div>
+            </a></li>
+            <li><a href="/thong-tin-nguoi-choi.html">
+                <div>
+                    <i class="icon-coffee"></i>Trắc nghiệm pháp luật
+                </div>
+            </a></li>
+            <li><a href="/tin-tuc.html">
+                <div>
+                    <i class="icon-indent-right"></i>Tin tức
+                </div>
+            </a></li>
+            <li><a href="/danh-sach-video.html">
+                <div>
+                    <i class="icon-play"></i>Video
+                </div>
+            </a></li>
+            <li><a href="/chuyen-muc-audio.html">
+                <div>
+                    <i class="icon-headphones"></i>Radio
+                </div>
+            </a></li>
+            <li><a href="/tinh-huong-phap-luat.html">
+                <div>
+                    <i class="icon-road"></i>Tình huống pháp luật
+                </div>
+            </a></li>
+            <li><a href="/hoi-dap-chuyen-gia.html">
+                <div>
+                    <i class="icon-pencil"></i>Hỏi đáp
+                </div>
+            </a></li>
+            <li><a href="/goc-thu-gian.html">
+                <div>
+                    <i class="icon-github-alt"></i>Thư giãn
+                </div>
+            </a></li>
+            <li><a href="/ho-so-vu-an.html">
+                <div>
+                    <i class="icon-briefcase"></i>Hồ sơ vụ án
+                </div>
+            </a></li>
+            <li><a href="/">
+                <div>
+                    <i class="icon-book"></i>Tư liệu mật
+                </div>
+            </a></li>
+            <li><a href="/thu-tuc-hanh-chinh.html">
+                <div>
+                    <i class="icon-medkit"></i>Thủ tục hành chính
+                </div>
+            </a></li>
+            <li><a href="/van-ban-phap-luat.html">
+                <div>
+                    <i class="icon-align-right"></i>Văn bản
+                </div>
+            </a></li>
+            <li><a href="/">
+                <div>
+                    <i class="icon-share"></i>Chia sẻ
+                </div>
+            </a></li>
+            <li><a href="/">
+                <div>
+                    <i class="icon-suitcase"></i>Danh mục VP luật sư
+                </div>
+            </a></li>
+            <li><a href="/gioi-thieu.html">
+                <div>
+                    <i class="icon-info-sign"></i>Giới thiệu
+                </div>
+            </a></li>
+            <li><a href="/tai-ung-dung.html">
+                <div>
+                    <i class="icon-download"></i>Tải ứng dụng
+                </div>
+            </a></li>
+            @if (Session["LoginName"] != null)
+            {
+                <li>
+                    <a href="/dang-xuat.html">
+                        <img alt="more_icon_info" src="/Content/images/menu_icon_huongdan.png">
+                        <span>Thoát</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>*@

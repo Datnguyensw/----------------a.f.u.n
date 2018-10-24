@@ -1,0 +1,91 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string AUTO_ID, TXNAME, AVATAR, SHORT_DESC, CONTENTS, LAST_DATE, CATE_NAME, CATE_CODE, TXURL,PURL, ISVIEW;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = PURL = AVATAR = LAST_DATE = "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.mo;
+    AUTO_ID = mo["AUTO_ID"].ToString();
+    TXNAME = mo["TXNAME"].ToString();
+    AVATAR = mo["AVATAR"].ToString();
+    SHORT_DESC = mo["SHORT_DESC"].ToString();
+    CONTENTS = mo["CONTENTS"].ToString();
+    LAST_DATE = mo["LAST_DATE"].ToString();
+    CATE_NAME = mo["CATE_NAME"].ToString();
+    CATE_CODE = mo["CATE_CODE"].ToString();
+    TXURL = MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+    PURL = MakeLink.MakeCateNews(CATE_NAME, CATE_CODE);
+   
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+                ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@PURL" title="@CATE_NAME">@CATE_NAME</a>
+    </div>
+</div>
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_dv">
+            <div class="content_box">
+                <div class="nd_vb detail">
+                    <h1><span class="title_tin"><strong>@TXNAME</strong></span></h1>
+                    <span class="date">(ngày đăng: @LAST_DATE)</span>
+                    @Html.Raw(HttpUtility.HtmlDecode(CONTENTS.ToString()))
+                </div>
+                <div class="f_clear"></div>
+                <div class="chiase news">
+                    <p>
+                        <span style="float: left; margin-right: 10px;">Chia sẻ:</span>  <a href="https://www.facebook.com/sharer/sharer.php?src=bm&amp;u=@HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURL)&amp;t=@HttpUtility.UrlEncode(TXNAME)&amp;v=3" target="_blank"><i class="fb"></i></a>
+                        <a href="https://plus.google.com/share?url=@HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURL)" target="_blank"><i class="mail"></i></a>
+                    </p>
+                </div>
+                 @Html.Partial("_CommentNews")
+                <div class="f_clear"></div>
+               
+             </div>
+        </div>
+    </div>
+   
+  <div class="box_dv lk">
+    <div class="title_box_dv">
+        <a href="#" id="icon_share">Tin khác</a>
+    </div>
+         @if (ViewBag.ma_other != null)
+                {
+ 
+           <div class="content_box">
+                 <div class="tin">
+                        <ul>
+                            @if (ma_other != null && ma_other.Count > 0)
+                            {
+                                foreach (var oitem in ma_other)
+                                {
+                                    AUTO_ID = oitem["AUTO_ID"].ToString();
+                                    TXNAME = oitem["TXNAME"].ToString();
+                                    LAST_DATE = oitem["LAST_DATE"].ToString();
+                                    CATE_NAME = oitem["CATE_NAME"].ToString();
+                                    CATE_CODE = oitem["CATE_CODE"].ToString();
+                                    TXURL = "/phap-luat/"+MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+                                <li><a href="@TXURL" title="@TXNAME"> @TXNAME (@LAST_DATE)</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+               </div>
+                   
+                }
+
+    </div>
+    @Html.Partial("_Link")
+</div>

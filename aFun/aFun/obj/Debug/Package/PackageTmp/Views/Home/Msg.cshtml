@@ -1,0 +1,22 @@
+﻿@{ViewBag.Title = "Thông báo";}
+@{
+    string message = string.Empty;
+    if (Session["mess"] != null)
+    {
+        message = Session["mess"].ToString();
+    }
+    string url = string.Empty;
+    if (Session["re_url"] != null)
+    {
+        url = Session["re_url"].ToString();
+    }
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/"><img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Thông báo</span>
+    </div>
+</div>
+<div class="p10">
+    @Html.Raw(HttpUtility.HtmlDecode(message))
+</div>
+<meta http-equiv="REFRESH" content="2,url=@url"/>

@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+   <title>@ViewBag.Title</title>
+    <meta name="robots" content="index,follow" />
+    <meta name="Googlebot" content="index,follow" />
+    <meta name="MobileOptimized" content="100" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link type="image/x-icon" href="/Content/images/favicon.png" rel="Shortcut Icon">
+    <meta property="og:url" content="@ViewBag.Url" />
+    <meta property="og:title" content="@ViewBag.Title" />
+    <meta property="og:description" content="@if (ViewBag.Description != "") { @ViewBag.Description; }else{@ViewBag.ShortDes;}"/>
+    <meta property="og:image" content="@if (ViewBag.Images != "") { @ViewBag.Images; }else{@ViewBag.Img;}" />
+    <meta name="description" content="@if (ViewBag.Description != "") { @ViewBag.Description; }else{@ViewBag.ShortDes;}" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="450" />
+    <meta property="og:type" content="website"/>
+    <meta property="fb:admins" content="100002603012271"/>
+    <meta property="fb:app_id" content="1424657094531373"/>
+
+    <link rel="stylesheet" type="text/css" href="/Content/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/new.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/font-awesome.css" />
+    <script src="/Content/js/jquery.1.7.2.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery-ui-1.8.2.js" type="text/javascript"></script>
+    <script src="/Content/js/jquery.tmpl.min.js" type="text/javascript"></script>
+    <script src="/Content/js/data_m.js" type="text/javascript"></script>
+  
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"> </script>
+    <script src="/Content/js/jquery.json-2.3.min.js" type="text/javascript"></script>
+    <script src="/Content/js/ref.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function searchText() {
+            var key = document.getElementById("keyword").value;
+            if (key.length > 2) {
+               // alert(key);
+                $(document).ready(function () {
+                   // alert(key);
+                    $.ajax({
+                        type: "PORT",
+                        url: "/search.html",
+                        data: "key=" + key,
+                        success: function (answer) {
+                            $("div#search").fadeIn();
+                            $("div#search").html(answer);
+                            console.log(answer)
+                        }
+                    });
+                });
+            }
+        }
+        $("a[href='#top']").click(function () {
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+            return false;
+        });
+   
+    function clod() {
+        document.getElementById("search").style.display = "none";
+    }
+    </script>
+</head>
+
+<body>
+  
+    <div class="wrapper" onclick="clod();">
+        <!--Menu Slide-->
+        <div class="left_menu">
+            <div class="left fullwidth" id="scrollbar_sidebar">
+                @Html.Partial("_LeftMenu")
+            </div>
+        </div>
+        <!--Menu Slide-->
+        <div class="carea">
+            <div class="main">
+                <div class="hello">
+                    <div class="bg_head">
+                        <div class="bg-radial">
+                            <a class="btn_menu" id="sib_btn"><i class="icon-reorder"></i>
+                                <br />
+                            </a>
+
+                            <a href="/" id="logo_service">
+                                <img src="/Content/images/Viettel-logo.png" alt="logo dich vu" title="logo aFun"  style="height:28px;"/></a>
+                           @* @if (ViewBag.SearchLaw == null)
+                            {
+                            <a href="/home/search" id="search-r"><i class="icon-search"></i></a>
+                            }else
+                            {
+                            <a href="/law/search" id="search-r"><i class="icon-search"></i></a>
+                            }*@
+                        </div>
+                    </div>
+                    
+                    <!-- t-->
+
+                 <div class="search">
+                    <form class="frm-search" method="post" action="" id="frmSearch" name="frmSearch">
+                        <div class="p5">
+                            <input placeholder="Tìm kiếm " name="keyword" type="text" id="keyword"onclick="searchText()"  onkeyup="searchText()" autocomplete="off" />
+                            <input class="button_search" value="" type="button" />
+                              <div id="search" class="search-conten"></div>
+                        </div>
+                    </form>
+                </div>
+                    <!-- end -->
+
+                    <!-- sl-->
+                   
+                     <!-- end -->
+                    
+                    
+
+                    @if (Session["LoginName"] != null)
+                    {
+                        string Display = string.IsNullOrEmpty(Session["LoginDisplay"].ToString()) ? Session["LoginName"].ToString() : Session["LoginDisplay"].ToString();
+                        if (Display.Length > 25)
+                        {
+                            Display = Display.Substring(0, 25);
+                        }
+                        <div class="after-log">
+                            <span class="phone2">Xin chào:<a class="reddam" href="/tai-khoan"> @Display</a> | <a class="reddam" href="/thu-vien/tu-sach"> Tủ Sách  </a> |<a class="reddam" href="/dang-xuat.html">Thoát</a></span>
+                        </div>
+                    }
+                    else if (Session["user_login"] == null && Session["msisdn"] != null)
+                    {
+                        <div class="after-log">
+                            <div class="f_r reddam">
+                                <span class="phone">Xin chào : @Session["msisdn"].ToString() | <a href="/dang-ky.html">Đăng ký </a></span>
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="after-log">
+                            <div class="f_r width38 reddam">
+                                <span class="phone"><a href="/acc/login">Đăng nhập </a></span>
+                            </div>
+                        </div>
+                    }
+                    @{
+                        string AVATAR, TXNAME, TXURL;
+                        AVATAR= TXNAME= TXURL="";
+                        Newtonsoft.Json.Linq.JArray ma = (Newtonsoft.Json.Linq.JArray)ViewBag.SLIDE;
+                        if(ma!=null)
+                        {
+                            TXNAME = ma[0]["TXNAME"].ToString();
+                         AVATAR = ma[0]["AVATAR"].ToString();
+                         TXURL = ma[0]["TXURL"].ToString();
+                        }
+                    }
+                    
+                    @*<div class="banner">
+                        <a href="@TXURL">
+                            <img src="@AVATAR" alt="@TXNAME" /></a>
+                    </div>*@
+                   <!-- @Html.Partial("_LoginPartial")-->
+                </div>
+                @RenderBody()
+            </div>
+            <!--main-->
+            <footer style="text-align: center;">
+      		<div class="wrapper" style="overflow-x: hidden;">
+                <img src="/Content/images/footer.png"  alt="Logo aFun" />      
+            </div>
+                <span id="lemon-time-play" style="display:none;">0:00</span>
+                
+            </footer>
+        </div>
+        <!--carea-->
+    </div>
+
+    <div class="ontop"><a class="scrollup" href="#" style="display: inline;">Scroll</a></div>
+<script type="text/javascript" src="/Content/js/jquery_003.js"></script>
+<script src="/Content/js/event_m.js" type="text/javascript"></script>
+
+ <script type="text/javascript">
+     $(document).ready(function () {
+
+         $(window).scroll(function () {
+             if ($(this).scrollTop() > 800) {
+                 $('.scrollup').fadeIn();
+             } else {
+                 $('.scrollup').fadeOut();
+             }
+         });
+
+         $('.scrollup').click(function () {
+             $("html, body").animate({ scrollTop: 0 }, 800);
+             return false;
+         });
+     });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;
+    JArray listdata = (JArray)ViewBag.ma;
+    string PCODE, PNAME, PURL;
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, TXURLPAGER;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = "";
+    ISVIEW = "0";
+    TXURLPAGER = "/phap-luat/";
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = ViewBag.CATENAME + " - aFun";
+    ViewBag.Description = ViewBag.CATENAME + " - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+
+    ///////////////////////////////////////////////////////////////////////////////
+}
+@if (listcate != null && listcate.Count > 1)
+{
+    <div class="content_dv">
+        @try
+        {
+            if (listcate != null && listcate.Count > 0)
+            {
+                foreach (var itemp in listcate)
+                {
+
+                    PCODE = itemp["CATE_CODE"].ToString();
+                    PNAME = itemp["TXNAME"].ToString();
+                    PURL = MakeLink.MakeCateNews(PNAME, PCODE);
+                    JObject mo = MyControllers.GetListNews(PCODE, 0, 5);
+                    mo = JObject.Parse(mo["Body"]["Data"].ToString());
+                    listdata = JArray.Parse(mo["NEW"].ToString());
+                   <div class="hello">
+                         <div class="breadcum">
+                <div class="p5">
+                    <a href="/">
+                    <i class="icon-home"></i>
+                    </a>
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"><a href="/van-ban">Pháp luật </a></span>   
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"><a> </a><a href="@PURL" id="icon_news">
+                        @PNAME</a></span>
+                     
+                </div>
+            </div>  
+                   </div>
+            <div class="box_dv vb">
+                    <div class="title_box_dv">
+                    <a href="#" id="icon_clip">@PNAME</a>
+                    <div class="btn_xemthem">
+                      
+                    </div>
+                </div>
+                <div class="content_box">
+                    <div class="tin">
+                        @if (listdata != null && listdata.Count > 0)
+                        {
+                            <ul>
+                                @foreach (var item in listdata)
+                                {
+                                    AUTO_ID = item["AUTO_ID"].ToString();
+                                    TXNAME = item["TXNAME"].ToString();
+                                    if (TXNAME.Length > 30)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 30).ToString() + "....";
+                                    }
+                                    CATE_NAME = item["CATE_NAME"].ToString();
+                                    CATE_CODE = item["CATE_CODE"].ToString();
+                                    AVATAR = item["AVATAR"].ToString();
+                                    SHORT_DESC = item["SHORT_DESC"].ToString();
+                                    if (SHORT_DESC.Length > 75)
+                                    {
+                                        SHORT_DESC = SHORT_DESC.Substring(0, 75).ToString() + "...";
+                                    }
+
+                                    LAST_DATE = item["LAST_DATE"].ToString();
+                                    ISVIEW = item["ISVIEW"].ToString();
+                                    TXURL = MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+                                    <li>
+                                        <a href="@TXURL">
+                                            <img src="@AVATAR" alt="@TXNAME" /></a>
+                                        <a href="@TXURL"><span class="title_tin">@TXNAME</span></a>
+                                        <span class="detail_tin">
+                                            @SHORT_DESC
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                            <a href="@PURL" title="Xem thêm">
+                                <div class="btn_xemthem">
+                                    <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="nodata">
+                                Dữ liệu đang cập nhật...
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+                }
+            }
+        }
+        catch (Exception)
+        {
+        }
+        @Html.Partial("_Link")
+    </div>
+}
+else
+{
+           <div class="hello">
+                         <div class="breadcum">
+                <div class="p5">
+                    <a href="/">
+                    <i class="icon-home"></i>
+                    </a>
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"><a href="/van-ban">Pháp luật </a></span>   
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"><a> </a><a href="#" id="icon_news">
+                         @ViewBag.CATENAME</a></span>
+                     
+                </div>
+            </div>  
+                   </div>
+    <div class="content_dv">
+        <div class="box_dv">
+            <div class="title_box_dv">
+                    <a href="#" id="icon_clip">@ViewBag.CATENAME</a>
+                    <div class="btn_xemthem">
+                      
+                    </div>
+                </div>
+            <div class="content_box">
+                <div class="tin">
+                    @if (listdata != null && listdata.Count > 0)
+                    { string TX_NAMEURL="";
+                        <ul>
+                            @foreach (var item in listdata)
+                            {
+                                AUTO_ID = item["AUTO_ID"].ToString();
+                                TXNAME = item["TXNAME"].ToString();
+                               // string TX_NAMEURL;
+                                if (TXNAME.Length > 45)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                                    
+                                }
+                               
+                                if (TXNAME.Length > 20)
+                                {
+                                    TX_NAMEURL = TXNAME.Substring(0, 20).ToString() + "...";
+                                    
+                                }
+                                CATE_NAME = item["CATE_NAME"].ToString();
+                                CATE_CODE = item["CATE_CODE"].ToString();
+                                AVATAR = item["AVATAR"].ToString();
+                                SHORT_DESC = item["SHORT_DESC"].ToString();
+                                if (SHORT_DESC.Length > 80)
+                                {
+                                    SHORT_DESC = SHORT_DESC.Substring(0, 80).ToString() + "...";
+                                }
+
+                                LAST_DATE = item["LAST_DATE"].ToString();
+                                ISVIEW = item["ISVIEW"].ToString();
+                                TXURL = "/phap-luat/" + MakeLink.MakeNews(CATE_NAME, TX_NAMEURL, AUTO_ID);
+                                TXURLPAGER = MakeLink.MakeCateNews(CATE_NAME, CATE_CODE);
+                                <li>
+                                    <a href="@TXURL">
+                                        <img src="@AVATAR" alt="@TXNAME" /></a>
+                                    <a href="@TXURL"><span class="title_tin">@TXNAME</span></a>
+                                    <span class="detail_tin">
+                                        @SHORT_DESC
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>
+                            Dữ liệu đang cập nhật...
+                        </p>
+                    }
+                    @if (listdata != null && ViewBag.TotalRecord > 10)
+                    {
+                        @Html.Partial("_Pagernew", new aFun.Models.MyPage { NameURL = TXURLPAGER, PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+                    }
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_Link")
+    </div>
+}

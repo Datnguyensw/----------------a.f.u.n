@@ -1,0 +1,119 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.HistoryAccModel
+@{
+    ViewBag.Title = "Lịch sử giao dịch - aFun";
+    ViewBag.Description = "afun.vn - aFun";
+    ViewBag.Description = "afun.vn - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    JArray lstHis = (JArray)ViewBag.ma;
+
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div class="active"><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-edit"></i>Gói dịch vụ</a></div>
+            @if (Session["msisdn"] == null)
+            {
+                <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+            }
+        </div>
+
+        <div class="tab_2">
+            <ul class="tabs">
+                <li>
+                   <h3><a href="/tai-khoan/lich-su-giao-dich.html"><i class="icon-calendar"></i>Lịch sử Giao Dịch</a></h3>
+                </li>
+               
+                   
+                   
+                
+            </ul>
+        </div>
+        <div class="content_box">
+            <div class="content_main" id="tt">
+                <div class="dk_wifi">
+                     @using (Html.BeginForm())
+                        {
+                    <div class="form">
+                        <table>
+                       
+                            <tr>
+                               <td><span class="ip">Từ ngày</span></td> 
+                               <td> @Html.DropDownListFor(m => m.SelectedFromDayId, Model.DaysFrom, new { @class = "select_tiny" })</td>
+                                <td>@Html.DropDownListFor(m => m.SelectedFromMonthId, Model.MonthsFrom, new { @class = "select_tiny" })</td>
+                               <td> @Html.DropDownListFor(m => m.SelectedFromYearId, Model.YearsFrom, new { @class = "select_tiny" })</td>
+                            </tr>
+                            <tr>
+                               <td> <span class="ip">Đến ngày</span></td >
+                              <td>  @Html.DropDownListFor(m => m.SelectedToDayId, Model.DaysTo, new { @class = "select_tiny" })</td >
+                              <td>  @Html.DropDownListFor(m => m.SelectedToMonthId, Model.MonthsTo, new { @class = "select_tiny" })</td >
+                               <td> @Html.DropDownListFor(m => m.SelectedToYearId, Model.YearsTo, new { @class = "select_tiny" })</td >
+                            </tr>
+                            <tr>
+                                <td><span class="ip">Loại dịch vụ:</span></td >
+                                <td colspan="2"> @Html.DropDownListFor(m => m.SelectedServiceCode, Model.ServiceList, new { @class = "Text" })</td >
+                            </tr>
+                           
+                         </table>
+                         <div class="dn">
+                                <input type="submit" value="Xem" class="bgorange" />
+                            </div>
+                        @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+                        <div class="table_kq f_clear">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="1">
+                                <tr>
+                                    <th>STT
+                                    </th>
+                                    <th>Tên giao dịch
+                                    </th>
+                                    <th>Giá tiền
+                                    </th>
+                                    <th>Thời gian giao dịch
+                                    </th>
+                                </tr>
+                                @if (lstHis != null && lstHis.Count > 0)
+                                {
+                                    for (int i = 0; i < lstHis.Count; i++)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @((i + 1).ToString("00"))
+                                        </td>
+                                        <td>
+                                            @lstHis[i]["TXDESC"].ToString()
+                                        </td>
+                                        <td>
+                                            @lstHis[i]["AMOUNT"].ToString() VNĐ
+                               
+                                        </td>
+                                        <td>
+                                            @lstHis[i]["LOG_DATE"].ToString()
+                                        </td>
+                                    </tr>
+                        
+                                    }
+                                }
+                            </table>
+
+                        </div>
+                    </div>
+                     }</div>
+                        
+            </div>
+                 @if (lstHis != null && ViewBag.TotalRecord != null && Convert.ToInt32(ViewBag.TotalRecord) > 0)
+                    {
+                        @Html.Partial("_Pager_2", new aFun.Models.MyPage { NameURL = "/tai-khoan/lich-su-giao-dich", PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+                    }
+
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>
+
+
+
+

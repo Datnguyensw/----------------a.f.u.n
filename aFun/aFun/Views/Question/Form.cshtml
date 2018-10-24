@@ -1,0 +1,43 @@
+﻿@model aFun.Models.LAW_QAModel
+@{
+    ViewBag.Title = "Đặt câu hỏi";
+}
+<div class="content_dv">
+    <div class="box_dv vb">
+        <div class="title_box_dv">
+            <a href="/"><i class="icon-question-sign"></i>Đặt câu hỏi</a>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="form">
+                    @using (Html.BeginForm())
+                    { 
+                        @Html.ValidationSummary()
+                        <div>@Html.Raw(HttpUtility.HtmlDecode(ViewBag.Status))</div>
+                        <div class="em">
+                            <span>Tiêu đề</span>
+                            @Html.TextBoxFor(x => x.TITLE, new { @class = "text", placeholder = "Tiêu đề câu hỏi",@required = "required" })
+                        </div>
+                        <div class="em">
+                            @Html.TextAreaFor(x => x.TXDESC, new { @class = "text", placeholder = "Nội dung",@required = "required" })
+                        </div>
+                            
+                        <div>
+                            <img src='/Captcha/Show' alt="" class="captcha_img" />
+                            <a class="ic-refresh refeshcaptcha"></a>
+                        </div>
+                        <div>
+                            @Html.TextBoxFor(x => x.CaptchaValue, new { @class = "text", @placeholder = "Mã chống spam", @required = "required" })
+                        </div>
+                        <div class="dn">
+                            <input type="submit" name="btnUpdate" class="btn_blue" value="Gửi câu hỏi" />
+                            <input type="reset" class="btn_gray" value="Hủy bỏ" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>
+

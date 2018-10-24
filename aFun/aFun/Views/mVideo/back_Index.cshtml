@@ -1,0 +1,269 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;//cate_gory
+    JArray cate_lid = (JArray)ViewBag.cate_gory;//cate_gory
+    string PCODE, PNAME, PURL;
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, isservice,lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE =isservice= lbl_ishot="";
+    ISVIEW = "0";
+    PURL = "/";
+    JObject mo_fix = MyControllers.GetTopLaw(Core.TXVIDEO);
+    mo_fix = JObject.Parse(mo_fix["Body"]["Data"].ToString());
+    JArray ma_new = JArray.Parse(mo_fix["NEW"].ToString());
+    JArray ma_hot = JArray.Parse(mo_fix["HOT"].ToString());
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Video - aFun";
+    ViewBag.Description = "Video - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/"; int lc = 0;
+    ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="hello">
+
+            <div class="breadcum">
+                <div class="p5">
+                    <a href="/">
+                    <i class="icon-home"></i>
+                    </a>
+                    <img class="arrow" alt="arrow" src="Content/images/icon_arrow.png">
+                    <span class="active">Video</span>
+                </div>
+            </div>
+
+            <div class="tab2 cate_tab">
+                <ul class="tab2-video">
+                    @foreach (var ca in cate_lid)
+                    { //active3
+                        string acv = "";
+                        if (lc == 0) { acv="active3"; }
+                        string txname = ca["TXNAME"].ToString();
+                        string rel = ca["SEO_NAME"].ToString();
+                        <li> <a href="#" class="tab3 @acv" rel="@rel" >@txname </a></li>
+                        lc++;
+                    }
+                
+                </ul>
+            </div>
+          </div>
+<div class="content_dv content-video"  id="am-nhac">
+    @try
+    {
+        <div class="box_dv vb">
+            <div class="title_box_dv">
+                <a href="/video/video-moi" id="icon_clip">VIDEO MỚI</a>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    @if (ma_new != null && ma_new.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in ma_new)
+                            {
+                                AUTO_ID = item["LAW_ID"].ToString();
+                                TXNAME = item["TXNAME"].ToString();
+                                if (TXNAME.Length > 65)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                }
+                                CATE_NAME = item["CATE_NAME"].ToString();
+                                CATE_CODE = item["CATE_CODE"].ToString();
+                                AVATAR = item["AVATAR"].ToString();
+                                LAST_DATE = item["CREATE_DATE"].ToString();
+                                ISVIEW = item["ISVIEW"].ToString();
+                                TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                                isservice = item["ISSERVICE"].ToString();
+                                if (isservice == "1")
+                                {
+                                    lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                                }
+                                else
+                                {
+                                    lbl_ishot = "";
+                                }
+                 
+                                 <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img">
+                                        <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME  @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                <span class="detail_tin">
+                                    <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                    <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                </span>
+                            </li>
+                            }
+                        </ul>
+                        <a href="/video/video-moi" title="Xem thêm">
+                            <div class="btn_xemthem">
+                                <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                         <p class="nodata">
+                            Dữ liệu đang cập nhật...
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="box_dv vb">
+            <div class="title_box_dv">
+                <a href="/video/video-noi-bat" id="icon_clip">VIDEO NỔI BẬT</a>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    @if (ma_hot != null && ma_hot.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in ma_hot)
+                            {
+                                AUTO_ID = item["LAW_ID"].ToString();
+                                TXNAME = item["TXNAME"].ToString();
+                                if (TXNAME.Length > 65)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                }
+                                CATE_NAME = item["CATE_NAME"].ToString();
+                                CATE_CODE = item["CATE_CODE"].ToString();
+                                AVATAR = item["AVATAR"].ToString();
+                                LAST_DATE = item["CREATE_DATE"].ToString();
+                                ISVIEW = item["ISVIEW"].ToString();
+                                isservice = item["ISSERVICE"].ToString();
+                                TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                                if (isservice == "1")
+                                {
+                                    lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                                }
+                                else
+                                {
+                                    lbl_ishot = "";
+                                }
+                 
+                                 <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img">
+                                        <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME  @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                <span class="detail_tin">
+                                    <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                    <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                </span>
+                            </li>
+                            }
+                        </ul>
+                        <a href="/video/video-noi-bat" title="Xem thêm">
+                            <div class="btn_xemthem">
+                                <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                         <p class="nodata">
+                            Dữ liệu đang cập nhật...
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        if (listcate != null && listcate.Count > 0)
+        {
+            foreach (var itemp in listcate)
+            {
+
+                PCODE = itemp["CATE_CODE"].ToString();
+                PNAME = itemp["TXNAME"].ToString();
+                PURL = MakeLink.MakeCateVideo(PNAME, PCODE);
+                JObject mo = MyControllers.GetLawByCate(Core.TXVIDEO,PCODE, 0, 5);
+                mo = JObject.Parse(mo["Body"]["Data"].ToString());
+                JArray listdata = JArray.Parse(mo["LAW"].ToString());
+                
+        <div class="box_dv vb">
+            <div class="title_box_dv">
+                <a href="@PURL" id="icon_clip">
+                    @PNAME</a>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    @if (listdata != null && listdata.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in listdata)
+                            {
+                                AUTO_ID = item["LAW_ID"].ToString();
+                                TXNAME = item["TXNAME"].ToString();
+                                if (TXNAME.Length > 65)
+                                {
+                                    TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+                                }
+                                CATE_NAME = item["CATE_NAME"].ToString();
+                                CATE_CODE = item["CATE_CODE"].ToString();
+                                AVATAR = item["AVATAR"].ToString();
+                                LAST_DATE = item["CREATE_DATE"].ToString();
+                                ISVIEW = item["ISVIEW"].ToString();
+                                isservice = item["ISSERVICE"].ToString();
+                                TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                                if (isservice == "1")
+                                {
+                                    lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                                }
+                                else
+                                {
+                                    lbl_ishot = "";
+                                }
+                 
+                                 <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img">
+                                        <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME  @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                <span class="detail_tin">
+                                    <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                    <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                </span>
+                            </li>
+                            }
+                        </ul>
+                        <a href="@PURL" title="Xem thêm">
+                            <div class="btn_xemthem">
+                                <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                         <p class="nodata">
+                            Dữ liệu đang cập nhật...
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+            }
+        }
+    }
+    catch (Exception)
+    {
+    }
+   
+</div>
+
+<div class="content_dv content-video"  id="doc-la">  <br /><br /><br /> load..
+
+</div>
+<div class="content_dv content-video"  id="bong-da"> <br /><br /><br /> load..</div>
+
+<div class="content_dv">  @Html.Partial("_Link") </div>

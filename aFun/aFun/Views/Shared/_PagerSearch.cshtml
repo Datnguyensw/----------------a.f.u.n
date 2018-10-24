@@ -1,0 +1,51 @@
+﻿@model aFun.Models.MyPage
+@{
+    string url_prev = "#";
+    string url_next = "#";
+    string url_pagFist = "#";
+    string url_pagLast = "#";
+    int TotalPage = 0;
+    int TotalRecord = 0;
+    int CurrentPage = 1;
+    string FullLink = "";
+
+    FullLink = Model.NameURL + "&" + Model.PageParameter + "=";
+
+    CurrentPage = Model.PageCurrent;
+
+    TotalRecord = Model.TotalRecord;
+
+    int sodu = (int)TotalRecord % 10;
+    if (sodu == 0)
+    {
+        TotalPage = (int)TotalRecord / 10;
+    }
+    else
+    {
+        TotalPage = (int)(TotalRecord / 10) + 1;
+    }
+
+    url_pagFist = FullLink + 1;
+    url_pagLast = FullLink + TotalPage;
+    url_prev = FullLink + (CurrentPage - 1);
+    url_next = FullLink + (CurrentPage + 1);
+}
+<div class="page">
+    <ul>
+        @if (CurrentPage > 1)
+        {
+            
+            <li><a href="@url_pagFist">Đầu</a> </li>
+            <li><a href="@url_prev">@((CurrentPage - 1).ToString("00"))</a></li>
+        }
+        @if (TotalPage > 1)
+        {
+            <li><a class="active" href="#">@CurrentPage.ToString("00")</a></li>
+        }
+        @if (CurrentPage < TotalPage)
+        {
+            <li><a href="@url_next">@((CurrentPage + 1).ToString("00"))</a></li>
+            <li><a href="@url_pagLast">Cuối</a></li>    
+        }
+    </ul>
+</div>

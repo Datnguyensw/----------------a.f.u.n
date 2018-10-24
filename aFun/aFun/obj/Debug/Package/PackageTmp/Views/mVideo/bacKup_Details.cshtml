@@ -1,0 +1,276 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string useragent = Request.UserAgent;
+    string AUTO_ID, TXNAME, AVATAR, SHORT_DESC, CONTENTS, LAST_DATE, CATE_NAME, CATE_CODE, TXURL, TXRES, PURL, ISVIEW, isservice, lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = TXRES = PURL = isservice = lbl_ishot = "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.info;
+    AUTO_ID = mo["LAW_ID"].ToString();
+    TXNAME = mo["TXNAME"].ToString();
+    if (TXNAME.Length > 65)
+    {
+        TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+    }
+    CATE_NAME = mo["CATE_NAME"].ToString();
+    CATE_CODE = mo["CATE_CODE"].ToString();
+    AVATAR = mo["AVATAR"].ToString();
+    SHORT_DESC = mo["CONTENT"].ToString();
+    //LAST_DATE = mo["CREATE_DATE"].ToString();
+    ISVIEW = mo["ISVIEW"].ToString();
+    TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+    PURL = MakeLink.MakeCateVideo(CATE_NAME, CATE_CODE);
+    TXRES = "/";
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    JObject res = (JObject)ViewBag.res;
+    if (res != null)
+    {
+        TXRES = res["PPATH"].ToString();
+        if (res["RPATH"].ToString() != "[]")
+        {
+            res = JObject.Parse(JArray.Parse(res["RPATH"].ToString())[0].ToString());
+            string m = res.ToString();
+            TXRES = TXRES + res["CPATH"].ToString();
+        }
+    }
+    JObject mlogstream = new JObject();
+    string LoginName = "UNKNOW";
+    if (Session["LoginName"] != null)
+    {
+        LoginName = Session["LoginName"].ToString();
+    }
+    if (System.Configuration.ConfigurationManager.AppSettings["ConfigLogStreaming"].ToString() == "1")
+    {
+        mlogstream = MyControllers.Log_Streaming(LoginName, TXRES, "A");
+        
+
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+    ///////////////////////////////////////////////////////////////////////////////
+    if (Session["LoginName"] == null)
+    {  
+                             <script type="text/javascript">
+                                  $(document).ready(function () {
+                                      document.getElementById("afun_video_id").style.display = "none";
+                                      var list = document.getElementById("afun_video_id");
+                                      list.removeChild(list.childNodes[0]);
+                                      //document.getElementsB("-webkit-media-controls-timeline");
+                                      var list = document.getElementsByClassName("-webkit-media-controls-timeline");
+                                      
+                                  });
+                            </script>
+    }
+    
+}
+<div id="show_messeger" class="show_messeger"> </div>
+<link href="//vjs.zencdn.net/4.7/video-js.css" rel="stylesheet" />
+<script src="/Content/js/video.js"></script>
+<script>
+    $(function () {
+        $(document).on('click', '#example_video_1', function (e) {
+            var tdd = setInterval(function () {
+                var time = document.getElementById("lemon-time-play").innerText;
+                var b1 = time.split(":");
+                console.log(parseInt(b1[1]));
+                //parseInt(b1[1]);
+                if (b1[1] != "30") {
+                    stopPlayer(t_video);
+                } else {
+                    if (b1[0] > "0") {
+                        stopPlayer(t_video);
+                    }
+                }
+            }, 300);
+
+            var t_video = $('#t_video').val();
+            var video = $(this).get(0);
+            if (video.paused === false) {
+                video.paused();
+            } else {
+                stopPlayer(t_video);
+            }
+            myVar = setTimeout(function () {
+                var time = document.getElementById("lemon-time-play").innerText;
+                var b1 = time.split(":");
+                console.log(time);
+                if (b1[0] >= "1" && b1[1] >= "01") {
+                    stopPlayer(t_video);
+                    clearTimeout(myVar);
+                }
+            }, 10000);
+            return false;
+        });
+
+        $(document).on('click', '#example_video_1_html5_api', function (e) {
+            myVar = setTimeout(function () {
+                var time = document.getElementById("lemon-time-play").innerText;
+                var b1 = time.split(":");
+               // console.log(b1[0] + ";;;" + b1[1]);
+                console.log(parseInt(b1[1]));
+
+                if (parseInt(b1[0]) == 0) {
+                    if (parseInt(b1[1]) >= 30) {
+                        stopPlayer(2);
+                    }
+                } else {
+                            //stopPlayer(1);
+                }
+
+                clearTimeout(myVar);
+            }, 500);
+            var t_video = $('#t_video').val();
+            var video = $(this).get(0);
+            if (video.paused === false) {
+                video.paused();
+            } else {
+                stopPlayer(t_video);
+            }
+            return false;
+        });
+        
+    });
+
+    function stopPlayer(t_video) {
+        // alert('ok');
+        var v_demo = $('#v_demo').val();
+        var mediaPlayer;
+        //alert(time_video);
+        if (v_demo != 1) {
+            mediaPlayer = document.getElementById('example_video_1_html5_api');
+            var t = setInterval(function () {
+                t_video--;
+                var mediaPlayer;
+                mediaPlayer = document.getElementById('example_video_1_html5_api');
+                if (t_video < 0) {
+                    clearInterval(t);
+                    mediaPlayer.pause();
+                    mediaPlayer.currentTime = 0;
+                    t_video =60;
+                    document.getElementById("mesager").innerHTML="@ViewBag.msr";
+                } else {
+                    mediaPlayer.play();
+                }
+            }, 1000);
+        } else {
+
+        }
+    }
+</script>
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/video">Video</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@PURL">@CATE_NAME</a>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_box">
+            <div class="tin">
+                <div class="video_play">
+                    <h1><span class="title_tin">@TXNAME</span></h1>
+                    <span class="detail_video">@Html.Raw(HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(SHORT_DESC)))</span>
+
+                           <div class="video_player">
+                       
+                               <video id="example_video_1" class="video-js vjs-default-skin" controls preload="auto" width="100%" poster="@AVATAR" data-setup='{"example_option":true}'>
+                            <source src="@TXRES" type='video/mp4' />
+                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                        </video>
+                    </div>
+  
+                </div>
+                
+                <div class="btn_4btn btn_baihat" > 
+                    <span  id="mesager" class="mer"> </span>
+
+                </div>
+                <div class="btn_4btn btn_baihat">
+                    <table style="width: 100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="/video/tai-video-@AUTO_ID" title=""><i class="icon-cloud-download"></i>Tải </a>
+                                </td>
+                                <td>
+                                    <a onclick="share_facebook();"><i class="icon-share"></i>Chia sẻ </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function (e) {
+                        // Get First Item Tab
+                        var id_first_item = $('.tabs ul li a.active').attr('tab-content');
+                        $('#' + id_first_item).show();
+                        $('.tabs ul li a').click(function () {
+                            $('.tab-content').hide();
+                            var id_tab_content = $(this).attr('tab-content');
+                            $('#' + id_tab_content).show();
+                        })
+                    });
+                </script>
+                <div class="tabs">
+                    <ul class="tab-nav">
+                        <li><a tab-content="suggestedBox" class="fn-tab active">Video khác</a> </li>
+                        <li><a tab-content="commentBox" class="fn-tab color_2">Bình luận</a></li>
+                    </ul>
+                    <div class="tab-content fn-autoload" id="suggestedBox" style="display: block;">
+                        @if (ma_other != null)
+                        {
+                            <ul>
+                                @foreach (var item in ma_other)
+                                {
+                                    AUTO_ID = item["LAW_ID"].ToString();
+                                    TXNAME = item["TXNAME"].ToString();
+                                    if (TXNAME.Length > 45)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                                    }
+                                    CATE_NAME = item["CATE_NAME"].ToString();
+                                    CATE_CODE = item["CATE_CODE"].ToString();
+                                    AVATAR = item["AVATAR"].ToString();
+                                    LAST_DATE = item["CREATE_DATE"].ToString();
+                                    ISVIEW = item["ISVIEW"].ToString();
+                                    TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                                    isservice = item["ISSERVICE"].ToString();
+                                    if (isservice == "1")
+                                    {
+                                        lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                                    }
+                                    else
+                                    {
+                                        lbl_ishot = "";
+                                    }
+                                    <li>
+                                        <a href="@TXURL" title="@TXNAME">
+                                            <div class="round_img">
+                                                <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                            </div>
+                                        </a>
+                                        <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                        <span class="detail_tin">
+                                            <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                            <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    @Html.Partial("_Comment")
+                    <input type="hidden" id="v_demo" name="v_demo" value="@ViewBag.Full"/>
+                    <input type="hidden" id="t_video" name="t_video" value="@Iconfig.time" />
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

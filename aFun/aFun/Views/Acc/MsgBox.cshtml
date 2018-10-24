@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Thông báo";
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span>Thông báo</span>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_box">
+            <div class="note">
+                Quý khách chưa đăng ký dịch vụ, vui lòng đăng ký dịch vụ để có thể sử dụng tốt nhất dịch vụ  <span>
+                    <img src="/Content/images/logo-aFuns.png" alt="aFun" title="aFun" /></span>
+                <br />
+                @using (Html.BeginForm())
+                { 
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Đăng ký" class="btn_blue" name="btnUpdate" />
+                    <input type="submit" value="Về trang chủ" class="btn_gray" name="btnHome" />
+                }
+            </div>
+
+        </div>
+    </div>
+
+</div>
+

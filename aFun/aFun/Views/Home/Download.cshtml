@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Tải ứng dụng - aFun";
+}
+
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Tải ứng dụng</span>
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_dv">
+            <div class="content_box download">
+                <p><strong>Tải ứng dụng aFun về máy:</strong> </p>
+                <p><a href="@System.Configuration.ConfigurationManager.AppSettings["linkandroid"]" title="tải android">
+                    <img src="/Content/images/icon_android.png" alt="Hệ điều hành Android">Hệ điều hành Android </a></p>
+                <p><a href="/Home/DownloadApp/1" title="tải ios">
+                    <img src="/Content/images/icon_apple.png" alt="Hệ điều hành IOS">Hệ điều hành IOS </a></p>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

@@ -1,0 +1,91 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.InfoAccModel
+@{
+    ViewBag.Title = "Thông tin cá nhân - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    /////////////////////////////////////////////////////////////////////////////
+    string Fullname, Birthday, Sex, PhoneMobile, TopLevel, Point;
+    Fullname = Birthday = Sex = PhoneMobile = "";
+    Point = TopLevel = "0";
+    if (Model != null)
+    {
+        Point = Model.Point;
+        //TopLevel = Model.TopLevel;
+    }
+
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div class="active"><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-edit"></i>Gói dịch vụ</a></div>
+            @if (Session["msisdn"] == null)
+            {
+                <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+            }
+        </div>
+        <div class="tab_2">
+            <ul class="tabs">
+                <li class="active">
+                    <a href="#tt"><i class="icon-info-sign"></i>Tài khoản</a>
+                    <div class="trigger"></div>
+                </li>
+                <li>
+                    <div class="trigger"></div>
+                    <a href="/tai-khoan/lich-su-giao-dich.html"><i class="icon-calendar"></i>Lịch sử GD</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content_box">
+            <div class="tin tab_content" id="tt">
+                <div>Bạn đang sử dụng dịch vụ aFun</div>
+                <div>Dịch vụ aFun là dịch vụ cung cấp thông tin pháp luật cho thuê bao Viettel</div>
+                <div class="clear"></div>
+                <div class="form">
+                    @using (Html.BeginForm())
+                    {
+                        if (ViewBag.Message != null)
+                        {
+                        @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+                        }
+                        @Html.ValidationSummary()
+                        @Html.AntiForgeryToken()
+                        <div>
+                            <span class="ip">Số điện thoại</span>
+                            <input type="text"  value="@Session["LoginName"].ToString()" readonly = "readonly">
+                        </div>
+                        <div>
+                            <span class="ip">Số điểm</span>
+                            <input type="text"   value="@Point" readonly = "readonly">
+                            @Html.HiddenFor(x => x.Point);
+                        </div>
+                        <div>
+                            <span class="ip">Tên hiển thị</span>
+                            @Html.TextBoxFor(x => x.Fullname, new { @class = "text", @placeholder = "Tên hiển thị", @required = "required" })
+                        </div>
+                        <div>
+                            <span class="ip">Ngày sinh</span>
+                            @Html.TextBoxFor(x => x.Birthday, new { @class = "text", @placeholder = "dd/mm/yyyy", @required = "required" })
+                        </div>
+               
+                        <div>
+                            <span class="ip">Giới tính</span>
+                            @Html.DropDownListFor(x => x.SelectedSex, Model.ListSex, new { @class = "text" })
+                        </div>
+                        <div style="width: 100%; display: block; text-align: center;">
+                            <button class="btn_blue" type="submit">Cập nhật</button>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+@Html.Partial("_Link")
+</div>

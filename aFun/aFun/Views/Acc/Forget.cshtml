@@ -1,0 +1,64 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.ForgetAccModel
+@{
+    ViewBag.Title = "Quên mật khẩu - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+                                ///////////////////////////////////////////////////////////////////////////////
+
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            @using (Html.BeginForm())
+                            {
+                                <div><span class="bold">Lưu ý:</span> Để lấy lại mật khẩu mới quý khách vui lòng kích vào nút Nhận OTP để nhận mã xác nhận.</div>
+                                @Html.ValidationSummary()
+                                if (ViewBag.Message != null)
+                                {
+                                @Html.Raw(HttpUtility.HtmlDecode(ViewBag.Message))
+                                }
+                                @Html.AntiForgeryToken()
+                                <div class="form">
+                                    <div>
+                                        <span class="ip">Tài khoản</span>
+                                        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "text", @required = "required", @placeholder = "Số điện thoại Viettel" })
+                                    </div>
+                                    <div>
+                                        <img src='/Captcha/Show' alt="" class="captcha_img"/>
+                                        <a class="ic-refresh refeshcaptcha"></a>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.CaptchaValue, new { @class = "text", @placeholder = "Mã chống spam", @required = "required" })
+                                    </div>
+                                    <div>
+                                        <input type="submit" name="btnOTP" value="Nhận OTP" class="btn_gray" />
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(m => m.CodeOTP, new { @class = "text w60", @placeholder = "Nhập mã xác nhận" })
+
+                                    </div>
+
+                                    <div class="dn">
+                                        <input type="submit" name="btnUpdate" value="Hoàn tất" class="btn_blue" />
+                                         <a href="/"><input type="button" value="Hủy bỏ" class="btn_gray"></a>
+                                    </div>
+
+                                </div>
+                                  <div><span class="bold">SMS:</span> Soan MK gửi @System.Configuration.ConfigurationManager.AppSettings["telViettel"].ToString() </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

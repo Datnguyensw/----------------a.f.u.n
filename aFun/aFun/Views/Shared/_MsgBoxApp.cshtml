@@ -1,0 +1,48 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        //when button is clicked
+        $('#btnCancelApp').click(function () {
+            $('#dlgMsgBoxApp').dialog("close");
+        });
+        $('#btnDownload').click(function () {
+            $('#dlgMsgBoxApp').dialog("close");
+        });
+
+    });
+
+</script>
+
+<div id='dlgMsgBoxApp'>
+    @{
+        string is_iphone = "2";
+        string lblDevice = "Android";
+        string useragent = HttpContext.Current.Request.UserAgent.ToLower();
+        if (useragent.Contains("ipad") || useragent.Contains("iphone"))
+        {
+            is_iphone = "1";
+            lblDevice = "iOs";
+        }
+    }
+    <div>mBookstore đã có phiên bản @lblDevice đem lại trải nghiệm đọc sách hoàn thiện hơn. Bạn có muốn sử dụng ngay không?</div>
+    <div class="txcenter btn_goup">
+        <a href="/Home/DownloadApp/@is_iphone">
+            <input type="button" value="Tải ứng dụng" class="btn_blue" id="btnDownload" /></a>
+        <input type="button" value="Hủy" class="btn_gray" id="btnCancelApp" />
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#dlgMsgBoxApp").dialog({
+            title: "Thông báo",
+            modal: true,
+            autoOpen: true,
+            width: 310,
+            resizable: false,
+            overlay: {
+                backgroundColor: '#000',
+                opacity: 0.8
+            },
+            buttons: {}
+        });
+    });
+</script>

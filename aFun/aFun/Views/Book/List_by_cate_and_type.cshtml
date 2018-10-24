@@ -1,0 +1,254 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    JArray listcate = (JArray)ViewBag.ma_cate;
+    JArray listdata = (JArray)ViewBag.ma;
+    string PCODE, PNAME, PURL, PRICE="",BOOK_CODE="";
+  
+    string AUTHOR_NAME = "", PUBLISHER_NAME = "";
+    string AVATAR_A = "", TXNAME_A = "", TXURL_A = "";
+    
+    string AUTO_ID, TXNAME, TXURL, AVATAR, SHORT_DESC, LAST_DATE, CATE_NAME, CATE_CODE, ISVIEW, TXURLPAGER;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = "";
+    ISVIEW = "0";
+    TXURLPAGER = "/";
+    int _page = Convert.ToInt32(ViewBag._tpage);
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = ViewBag.CATENAME + " - aFun";
+    ViewBag.Description = ViewBag.CATENAME + " - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+    int pg = 0;
+    ///////////////////////////////////////////////////////////////////////////////
+}
+@if (listcate != null && listcate.Count > 1)
+{
+    <div class="content_dv">
+        @try
+        {
+            if (listcate != null && listcate.Count > 0)
+            {
+                foreach (var itemp in listcate)
+                {
+                    PCODE = itemp["CATE_CODE"].ToString();
+                    PNAME = itemp["TXNAME"].ToString();
+                    PURL = MakeLink.MakeCateLaw(PNAME, PCODE);
+                  
+             <div class="breadcum">
+                <div class="p5">
+                    <a href="/">
+                    <i class="icon-home"></i>
+                    </a>
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"> @PNAME</span>
+                </div>
+            </div>
+            
+            <div class="content_dv">
+                <div class="content_box">
+                    <div class="tin">
+                        @if (listdata != null && listdata.Count > 0)
+                        {
+                            <ul>
+                              
+                                
+                            </ul>
+                            <a href="@PURL" title="Xem thêm">
+                                <div class="btn_xemthem">
+                                    <i class="icon-arrow-right"><span>Xem thêm</span></i>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="nodata">
+                                Dữ liệu đang cập nhật...
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+                }
+            }
+        }
+        catch (Exception)
+        {
+        }
+        @Html.Partial("_Link")
+    </div>
+
+}else{         
+   
+            <div class="hello">
+             <div class="breadcum">
+                <div class="p5">
+                    <a href="/">
+                    <i class="icon-home"></i>
+                    </a>
+                     <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"> <a href="/book"> Sách Điện tử</a> </span>
+                    <img class="arrow" alt="arrow" src="/../Content/images/icon_arrow.png">
+                    <span class="active"> @ViewBag.CATENAME</span>
+                </div>
+            </div>
+        </div>
+             <div class="content_dv content-video" id="doc-la">
+             <div class="box_dv">
+            <div class="title_box_dv">
+                <a href="/book" id="icon_news">
+                    @ViewBag.name_tyle</a>
+            </div>
+            <div class="content_box">
+                    	<div class="p10">
+          <div class="content_main" id="contentbook_0" style="">
+             <ul>
+                        @foreach (var item in listdata)
+                        {
+                            AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                            PUBLISHER_NAME = item["PUB_NAME"].ToString();
+                            AUTO_ID = item["BOOK_ID"].ToString();
+                            TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                            }
+                            PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                            CATE_NAME = item["CATE_NAME"].ToString();
+                            BOOK_CODE = item["BOOK_CODE"].ToString();
+                            AVATAR = item["AVATAR"].ToString();
+                         //   TXURL = MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+                            pg = 1;
+                          
+                            //string EREA = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+
+                            //TXURL = MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+                            PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                            string btnReadTitle = "", btys = "";
+                          //  TXNAME = item["TXNAME"].ToString();
+                            if (Session["LoginName"] != null)
+                            {
+                                if ((Session["LoginName"] != null && Session["pack_EB"] == "OK") || PRICE == "Miễn phí" || PRICE == "0")
+                                {
+                                    if (item["BTYPE"].ToString() == "TEXT")
+                                    {
+                                        btnReadTitle = "Đọc"; btys = "1";
+                                        TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "AUDIO")
+                                    {
+                                        btys = "2";
+                                        btnReadTitle = "Nghe";
+                                        TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "VIDEO")
+                                    {
+                                        btys = "4";
+                                        btnReadTitle = "Xem";
+                                        TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "IMAGE")
+                                    {
+                                        btys = "3";
+                                        btnReadTitle = "Đọc ";
+                                        TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                    }
+                                }
+                                else
+                                {
+                                    if (item["BTYPE"].ToString() == "TEXT")
+                                    {
+                                        btys = "1";
+                                        btnReadTitle = "Đọc thử";
+                                        TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "AUDIO")
+                                    {
+                                        btys = "2";
+                                        btnReadTitle = "Nghe thử";
+                                        TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "VIDEO")
+                                    {
+                                        btys = "4";
+                                        btnReadTitle = "Xem ";
+                                        TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                    }
+                                    if (item["BTYPE"].ToString() == "IMAGE")
+                                    {
+                                        btys = "3";
+                                        btnReadTitle = "Đọc";
+                                        TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                    }
+                                }
+                            }
+                            else {
+                                if (item["BTYPE"].ToString() == "TEXT")
+                                {
+                                    btys = "1";
+                                    btnReadTitle = "Đọc thử";
+                                    TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "AUDIO")
+                                {
+                                    btys = "2";
+                                    btnReadTitle = "Nghe thử";
+                                    TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "VIDEO")
+                                {
+                                    btys = "4";
+                                    btnReadTitle = "Xem ";
+                                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "IMAGE")
+                                {
+                                    btys = "3";
+                                    btnReadTitle = "Đọc";
+                                    TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                }
+                            }
+                            string TXURL_re = MakeLink.MakeLinkEBook(TXNAME, AUTO_ID, btys);
+                            
+                  <li>
+                      <a href="@TXURL_re" title="@TXNAME">
+                                                    <span class="thumb_img">
+                                                        <img src="@AVATAR" alt="@TXNAME"></span>
+                                                <div class="info_book">
+                                                        <div class="title_book">@TXNAME</div>
+                                                        <div class="price_book"><span class="black">Giá bán:</span> @PRICE</div>
+                                                        <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                                                    </div>
+                      </a>
+                                                <div class="button_book">
+                                                	<a href="/acc/buybox/@AUTO_ID" title="Mua">
+                                                        <input value="Mua" class="blue_btn btn_buy" type="button"></a>
+                                                    <a href="@TXURL" title="@btnReadTitle">
+                                                        <input value="@btnReadTitle" class="yellow_btn btn_read" type="button"></a>
+                                                    <a href="acc/giffbox/@AUTO_ID" title="Tặng">
+                                                        <input value="Tặng" class="btn_giff btn_buy" type="Tặng"></a>
+                                                </div>
+                  </li>
+                            
+                        }
+                    </ul>
+ 
+                <div style="clear: both;"></div>
+                @if (pg == 1) { 
+                        if (listdata != null && ViewBag.TotalRecord > _page)
+                        {
+                            @Html.Partial("_Pager", new aFun.Models.MyPage { NameURL = TXURLPAGER, PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+                        }
+                    }
+            </div>
+        </div>
+   </div>
+        </div>
+                  
+        
+        
+    </div>         
+        @Html.Partial("_Link")
+}
+

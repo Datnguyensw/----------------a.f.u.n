@@ -1,0 +1,41 @@
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.csprojResolveAssemblyReference.cache
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\RSAx.dll
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\RSAx.xml
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\BouncyCastle.Crypto.dll
+E:\PROJECTS\LEMON\PAYGATE_TOTAL\lemon.wapgw.cryptengine\bin\Debug\BouncyCastle.Crypto.pdb
+C:\Users\dunghoang\Desktop\Temp\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+C:\Users\dunghoang\Desktop\Temp\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+C:\Users\dunghoang\Desktop\Temp\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.csprojResolveAssemblyReference.cache
+C:\Users\dunghoang\Desktop\Temp\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+C:\Users\dunghoang\Desktop\Temp\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\Mbook\WebMbook\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\Mbook\WebMbook\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\Mbook\WebMbook\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\Mbook\WebMbook\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\Mbook\WapMbook\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\Mbook\WapMbook\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\Mbook\WapMbook\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\Mbook\WapMbook\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\Mbook\WapMbook\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.csprojResolveAssemblyReference.cache
+E:\Du an\Project Law\mLaw\Wapmlaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\Project Law\mLaw\Wapmlaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\Project Law\mLaw\Wapmlaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\Project Law\mLaw\Wapmlaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\mLaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\mLaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\mLaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.csprojResolveAssemblyReference.cache
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb
+D:\ASP_PJOECT\AFUN\CODE\AFUN\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.dll
+D:\ASP_PJOECT\AFUN\CODE\AFUN\lemon.wapgw.cryptengine\bin\Debug\lemon.wapgw.cryptengine.pdb
+D:\ASP_PJOECT\AFUN\CODE\AFUN\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.csprojResolveAssemblyReference.cache
+D:\ASP_PJOECT\AFUN\CODE\AFUN\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.dll
+D:\ASP_PJOECT\AFUN\CODE\AFUN\lemon.wapgw.cryptengine\obj\Debug\lemon.wapgw.cryptengine.pdb

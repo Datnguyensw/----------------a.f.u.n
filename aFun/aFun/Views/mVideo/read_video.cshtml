@@ -1,0 +1,309 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ///////////////////////////////////////////////////////////////////////////////
+    JObject info = (JObject)ViewBag.info;
+    string BOOK_ID, BOOK_CODE, TXNAME, SEO_NAME, AVATAR, AUTHOR_NAME, PUB_NAME, PRICE, CONTENT, STAR, TOTAL_STAR, ISVIEW, KEYWORKS, TXURLCATION, CATE_NAME, contentsms, PRICE_COVER, CATE_CODE, SHORT_DESC;
+    SHORT_DESC = "";
+    if (info != null)
+    {
+        BOOK_ID = info["L_ID"].ToString();
+        BOOK_CODE = info["BOOK_CODE"].ToString();
+        TXNAME = info["TXNAME"].ToString();
+        SEO_NAME = info["SEO_NAME"].ToString();
+        AVATAR = info["AVATAR"].ToString();
+        AUTHOR_NAME = info["AUTHOR_NAME"].ToString();
+        if (AUTHOR_NAME.Length > 25)
+        {
+            AUTHOR_NAME = AUTHOR_NAME.Substring(0, 22) + "...";
+        }
+        PUB_NAME = info["PUB_NAME"].ToString();
+        PRICE_COVER = Common.formatCuryment(info["PRICE_COVER"].ToString());
+        PRICE = Common.formatCuryment(info["PRICE"].ToString());
+        CONTENT = info["CONTENT"].ToString();
+        STAR = info["STAR"].ToString();
+        TOTAL_STAR = Convert.ToInt32(info["TOTAL_STAR1"].ToString()) + Convert.ToInt32(info["TOTAL_STAR2"].ToString()) + Convert.ToInt32(info["TOTAL_STAR3"].ToString()) + Convert.ToInt32(info["TOTAL_STAR4"].ToString()) + Convert.ToInt32(info["TOTAL_STAR5"].ToString()).ToString();
+        TXURLCATION = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+        KEYWORKS = info["KEYWORKS"].ToString();
+        ISVIEW = info["ISVIEW"].ToString();
+        CATE_NAME = info["CATE_NAME"].ToString();
+        CATE_CODE = info["CATE_CODE"].ToString();
+    }
+    else
+    {
+        BOOK_ID = BOOK_CODE = TXNAME = AVATAR = AUTHOR_NAME = PUB_NAME = PRICE = CONTENT = STAR = SEO_NAME = KEYWORKS = CATE_NAME = TOTAL_STAR = PRICE_COVER = CATE_CODE = "";
+        TXURLCATION = "/";
+        ISVIEW = "0";
+    }
+    string btnReadTitle = "Xem thử";
+    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+    {
+        btnReadTitle = "Xem";
+    }
+    else
+    {
+        btnReadTitle = "Xem thử";
+    }
+    contentsms = "[afun.vn] Gioi thieu cuon sach (" + SEO_NAME + "), chi tiet xem tai: " + TXURLCATION;
+    //////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + "- Sachtot.vn";
+    if (!string.IsNullOrEmpty(SHORT_DESC.Trim()))
+    {
+        ViewBag.Description = SHORT_DESC;
+    }
+    else
+    {
+        ViewBag.Description = "http://afun.vn nơi trải nghiệm đọc sách, Xem truyện, xem truyện tranh online miễn phí";
+    }
+    ViewBag.Keywords = "đọc sách, Xem video, đọc truyện tranh online miễn phí, Sachtot.vn";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURLCATION;
+                /////////////////////////////////////////////////////////////////////////////////////////////
+}
+<link href="//vjs.zencdn.net/4.7/video-js.css" rel="stylesheet" />
+<script src="/Content/js/video.js"></script>
+<script>
+    $(function () {
+        $(document).on('click', '#example_video_1', function (e) {
+            var t_video = $('#t_video').val();
+            var video = $(this).get(0);
+            if (video.paused === false) {
+                video.paused();
+            } else {
+                //video.play();
+                //video.currentTime = 0;
+                //alert('1');
+                stopPlayer(t_video);
+            }
+            return false;
+        });
+    });
+
+    function stopPlayer(t_video) {
+        // alert('ok');
+        var v_demo = $('#v_demo').val();
+        var mediaPlayer;
+        //alert(time_video);
+        if (v_demo != 1) {
+            mediaPlayer = document.getElementById('example_video_1_html5_api');
+            var t = setInterval(function () {
+                t_video--;
+                var mediaPlayer;
+                mediaPlayer = document.getElementById('example_video_1_html5_api');
+                if (t_video < 0) {
+                    clearInterval(t);
+                    mediaPlayer.pause();
+                    mediaPlayer.currentTime = 0;
+                    t_video = 5;
+                } else {
+                    mediaPlayer.play();
+                }
+            }, 1000);
+        } else {
+
+        }
+
+    }
+</script>
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/video">Video</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@MakeLink.MakeLinkEREADBook_video(CATE_NAME, CATE_CODE)"><span class="active">@CATE_NAME</span></a>
+    </div>
+</div>
+<div class="p10">
+    <div class="content_main">
+        <div class="book_view">
+            @if (info != null)
+            {
+                <div class="book">
+                    <div class="nd_view">
+                        <div class="title_a title_audio">[Video] @TXNAME</div>
+                    </div>
+                    @{
+                JArray ma = new JArray();
+                try
+                {
+                    string pathres = "/";
+                    string urlVideo = "/";
+                    string urlVideo2 = "/";
+                    int j = 0;
+                    info = (JObject)ViewBag.info;
+                    ma = (JArray)ViewBag.ma;
+                    if (ViewBag.Linkres != null)
+                    {
+                        pathres = (string)ViewBag.Linkres;
+                    }
+
+                    if (ViewBag.Full != null)
+                    {
+                        urlVideo = pathres + ma[0]["PATH"].ToString();
+                        urlVideo2 = urlVideo;
+
+                    }
+                    else
+                    {
+                        urlVideo = pathres + ma[0]["PATH"].ToString();
+                        urlVideo2 = urlVideo;
+                    }
+
+                    //log mlogstream
+                    JObject mlogstream = new JObject();
+                    string LoginName = "UNKNOW";
+                    if (Session["LoginName"] != null)
+                    {
+                        LoginName = Session["LoginName"].ToString();
+                    }
+                    if (System.Configuration.ConfigurationManager.AppSettings["ConfigLogStreaming"].ToString() == "1")
+                    {
+                        mlogstream = MyControllers.Log_Streaming(LoginName, urlVideo, "A");
+                        //if (Common.Check_HttpWebRequest(urlVideo2))
+                        //{
+                        //    mlogstream = MyControllers.Log_Streaming(LoginName, urlVideo, "A");
+                        //}
+                        //else
+                        //{
+                        //    mlogstream = MyControllers.Log_Streaming(LoginName, urlVideo, "F");
+                        //}
+                    }
+                        <video id="example_video_1" class="video-js vjs-default-skin" controls preload="auto" width="100%" poster="@AVATAR" data-setup='{"example_option":true}'>
+                            <source src="@urlVideo" type='video/mp4' />
+                            <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                        </video>
+
+                }
+                catch (Exception)
+                {
+                    Response.Redirect(TXURLCATION);
+                }
+        
+            
+                    }
+                    @if (Session["LoginName"] == null)
+                    {
+                        <div style="float: left; font-weight: normal; color: Green; clear: both; width: 90%; line-height: 25px; margin: 10px 0; padding: 5px 10px; text-align: justify;">(*) Quý khách chưa đăng nhập, hãy nhanh tay đăng nhập (hoặc đăng kí MIỄN PHÍ) để được xem nhiều hơn! (MIỄN PHÍ 100%)</div>
+                    }
+                    else if (ViewBag.Packge != null)
+                    {
+                        <div style="float: left; font-weight: normal; color: Green; clear: both; width: 90%; line-height: 25px; margin: 10px 0; padding: 5px 10px; text-align: justify;">(*) Gói cước sử dụng của quý khách hiện đã hết hạn. Để xem nhiều hơn quý khách vui lòng mua sách hoặc gia hạn gói cước.</div>
+                    }
+
+                    <div class="f_clear"></div>
+                    <div class="chiase f_l" style="margin-right: 20px;">
+                        <i>Chia sẻ</i>
+                        @*                        <a href="https://www.facebook.com/sharer/sharer.php?src=bm&u=@Html.Raw(HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURLCATION))&t=@Html.Raw(HttpUtility.UrlEncode(TXNAME))&v=3" target="_blank" title="Chia sẻ qua Facebook">
+                            <img src="/Content/images/detail_icon_fb.png" alt="Share facebook"></a>
+                        <a href="https://plus.google.com/share?url=@Html.Raw(HttpUtility.UrlEncode(MakeLink.DefaultURLWap() + TXURLCATION))" target="_blank" title="Chia sẻ qua G+">
+                            <img src="/Content/images/icon_g.png" alt="Share mail"></a>*@
+                        @if (Session["LoginName"] != null)
+                        {
+                            <a href="sms:@Session["LoginName"]?body=@contentsms" target="_blank" title="Chia sẻ qua SMS">
+                                <img src="/Content/images/detail_icon_sms.png" alt="Share SMS"></a>
+                        }
+                        else
+                        {
+                            <a href="/dang-nhap.html" title="Chia sẻ qua SMS">
+                                <img src="/Content/images/detail_icon_sms.png" alt="Share SMS"></a>
+                        }
+                        @if (Session["LoginName"] != null)
+                        {
+                            
+                            <a href="javascript:addlikebook(@BOOK_ID,'1');" title="Sách yêu thích">
+                                <img src="/Content/images/detail_icon_like.png" alt="Sách yêu thích"></a>
+                        }
+                        else
+                        {
+                            <a href="/dang-nhap.html" title="Sách yêu thích">
+                                <img src="/Content/images/detail_icon_like.png" alt="Sách yêu thích"></a>
+                        }
+                    </div>
+                    <div class="chiase f_l">
+                        <i>Tải ứng dụng</i>
+
+                        <a href="/Home/DownloadApp/2" title="tải android">
+                            <img src="/Content/images/icon_android.png" alt="Hệ điều hành Android"></a>
+
+                        <a href="/Home/DownloadApp/1" title="tải ios">
+                            <img src="/Content/images/icon_apple.png" alt="Hệ điều hành IOS"></a>
+
+
+                    </div>
+                    <div class="f_clear"></div>
+                    <div class="book_detail">
+                        <div class="title_detail">
+                            <span>Tóm tắt</span>
+                        </div>
+                        <div class="nd_book_detail">
+                            @Html.Raw(HttpUtility.HtmlDecode(CONTENT))
+                        </div>
+                        @*<a href="/sach-dien-tu.html" class="readmore">Xem thêm</a>*@
+                    </div>
+                    @Html.Partial("_Comment")
+                    <input type="hidden" id="v_demo" name="v_demo" value="@ViewBag.Full"/>
+                    <input type="hidden" id="t_video" name="t_video" value="5" />
+                </div>
+            }
+        </div>
+        <div class="book_same">
+            <div class="title_box tab_more">
+                @if (ViewBag.mtab != "2")
+                {
+                    <a class="active">Cùng thể loại</a> 
+                    <a href="@*@MakeLink.MakeLinkVideoBookTab(TXNAME, BOOK_ID, "2")*@">Cùng tác giả</a>
+                }
+                else
+                {
+                    <a href="@*@MakeLink.MakeLinkVideoBookTab(TXNAME, BOOK_ID, "1")*@">Cùng thể loại</a>
+                    <a class="active">Cùng tác giả</a> 
+                }
+            </div>
+            <ul>
+                @foreach (var item in (JArray)ViewBag.ma_author)
+                {
+                    string TXURL, TXURL_READ, TXURL_BUY;
+
+                    BOOK_ID = item["BOOK_ID"].ToString();
+                    TXNAME = item["TXNAME"].ToString();
+                    AVATAR = item["AVATAR"].ToString();
+                    PRICE = Common.formatCuryment(info["PRICE"].ToString());
+                    if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                    {
+                        btnReadTitle = "Xem";
+                    }
+                    else
+                    {
+                        btnReadTitle = "Xem thử";
+                    }
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PUB_NAME = item["PUB_NAME"].ToString();
+                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_READ = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+                    TXURL_BUY = "/acc/buybox/" + BOOK_ID;
+                    <li>
+                        <a href="@TXURL_READ" title="@TXNAME">
+                            <span class="thumb_img thumb_video">
+                                <img src="@AVATAR" alt="@TXNAME">
+                                <i class="icon_video"></i>
+                            </span>
+                            <div class="info_book">
+                                <div class="title_book">@TXNAME</div>
+                                <div class="price_book">@PRICE</div>
+                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                            </div>
+                        </a>
+                        <div class="button_book">
+                            <a href="@TXURL_READ" title="@btnReadTitle">
+                                <input type="button" value="@btnReadTitle" class="yellow_btn btn_read"></a>
+                            <a href="@TXURL_BUY" title="Mua">
+                                <input type="button" value="Mua" class="blue_btn btn_buy"></a>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+</div>
+

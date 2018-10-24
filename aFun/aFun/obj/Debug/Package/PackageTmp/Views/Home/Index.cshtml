@@ -1,0 +1,462 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Trang chủ - aFun";
+    ViewBag.Description = "Trang chủ - aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://aFun.vn/";
+    ViewBag.UrlWap = "http://m.aFun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    int i = 0;
+    int j = 0;
+    string isbutom = ViewBag.PACKADU;
+    string AUTHOR_NAME="", PUBLISHER_NAME="";
+    string AVATAR_A="", TXNAME_A="", TXURL_A="";
+    string PCODE, PNAME, MCODE, PURL;
+    string AUTO_ID, TXNAME, CATE_NAME,BOOK_CODE ,CATE_CODE, SHORT_DESC, TXURL, AVATAR, LAST_DATE, ISVIEW, isservice, lbl_ishot;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = isservice = lbl_ishot = "";
+    ISVIEW = "0";
+    string PRICE;
+    JArray lstdata = new JArray();
+    JArray lstParent = (JArray)ViewBag.TAB;
+    JArray SLIDE = (JArray)ViewBag.SLIDE;
+    JObject mo = (JObject)ViewBag.mo;
+    string bt_video = "Xem thử", btbook = "Đọc thử";
+    if (Session["LoginName"]!=null) {
+        bt_video = "Xem ";
+    }
+  
+}
+<div class="slide">
+
+    @if (Session["LoginName"] != null)
+    {
+        string Display = string.IsNullOrEmpty(Session["LoginDisplay"].ToString()) ? Session["LoginName"].ToString() : Session["LoginDisplay"].ToString();
+        if (Display.Length > 12)
+        {
+            Display = Display.Substring(0, 12);
+        }
+        <div class="welcome">
+            <div class="f_l width60">
+                <marquee>Chào mưng bạn đến với Afun </marquee>
+            </div>
+            <div class="f_r width38 reddam">
+               <div class="after-log">  Xin chào:<a class="reddam" href="/tai-khoan"> @Display</a> | <a class="reddam" href="/dang-xuat.html">Thoát</a></div>
+            </div>
+        </div> 
+    }
+    else if (Session["user_login"] == null && Session["msisdn"] != null)
+    {
+        <div class="welcome">
+            <div class="f_l width60">
+                <marquee>Chào mưng bạn đến với Afun </marquee>
+            </div>
+            <div class="f_r width38 reddam">
+               <div class="after-log">  Xin chào : @Session["msisdn"].ToString() | <a href="/thoat.html">Thoát </a></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="welcome">
+            <div class="f_l width60">
+                <marquee>Mời bạn đăng ký để sử dụng dịch vụ aFun</marquee>
+            </div>
+            <div class="f_r width38 reddam">
+                <div class="after-log">  <a href="/dang-nhap.html">Đăng nhập</a></div>
+
+            </div>
+        </div>
+    }
+    @{
+                       
+        AVATAR_A = TXNAME_A = TXURL_A = "";
+        Newtonsoft.Json.Linq.JArray ma = (Newtonsoft.Json.Linq.JArray)ViewBag.SLIDE;
+        if (ma != null)
+        {
+            TXNAME_A = ma[0]["TXNAME"].ToString();
+            AVATAR_A = ma[0]["AVATAR"].ToString();
+            TXURL_A = ma[0]["TXURL"].ToString();
+        }
+    }
+
+
+    <div id="slides">
+        @foreach (var sl in SLIDE) { 
+             <img src="@sl["AVATAR"].ToString()" alt="@sl["TXNAME"].ToString()" onclick="makeslideshow('2325','B')">
+        }
+
+    </div>
+
+    @*  <div class="welcome2"></div>*@
+
+    <div class="nav nav_header">
+        <table class="tab_nav" border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+                <td><a href="/"><i class="icon-home" style="font-size: 18px;"></i></a></td>
+                <td><a href="/book">Sách Điện tử</a></td>
+                <td><a href="/video">Video</a></td>
+                <td><a href="/van-ban">Pháp Luật</a></td>
+                <td><a href="/trac-nghiem">Trắc nghiệm</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="content_dv">
+
+    @if (lstParent != null && lstParent.Count > 0)
+    {string Book_ID="";
+        foreach (var itemp in lstParent)
+        {
+            PURL = "/";
+            MCODE = itemp["MOD_CODE"].ToString();
+            PCODE = itemp["CATE_CODE"].ToString();
+            PNAME = itemp["TXNAME"].ToString();
+            
+            if (MCODE == Core.A_TXBOOK && PCODE == Core.A_BOOK)
+            {
+               
+                PURL = "/book";//MakeLink.MakeCateNews(PNAME, PCODE);
+                lstdata = mo["" + PCODE + ""] == null ? null : JArray.Parse(mo["" + PCODE + ""].ToString());
+                string asd = mo["" + PCODE + ""].ToString();
+        <div class="box_dv">
+            <div class="title_box_dv">
+                <a href="/book" id="icon_news">
+                    @PNAME</a>
+                <div class="btn_xemthem">
+                    <a href="/book"><span>Xem thêm &raquo;</span></a>
+                </div>
+            </div>
+            <div class="content_box">
+                    	<div class="p10">
+          <div class="content_main" id="contentbook_0" style="">
+             <ul>
+                        @foreach (var item in lstdata)
+                        {
+                            AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                            PUBLISHER_NAME = item["PUBLISHER_NAME"].ToString();
+                            AUTO_ID = item["BOOK_ID"].ToString();
+                            TXNAME = item["TXNAME"].ToString();
+                          
+                            string TXURL_READ = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                            }
+                            
+                            PRICE = item["PRICE"].ToString();
+                            CATE_NAME = item["CATE_NAME"].ToString();
+                            BOOK_CODE = item["BOOK_CODE"].ToString();
+                            AVATAR = item["AVATAR"].ToString();
+                            string btyusss = "";
+                            PRICE = Common.formatCuryment(item["PRICE"].ToString());
+                            string btnReadTitle="";
+                            string bo_buy="Mua";
+                            if (PRICE == "Miễn phí" || PRICE == "0" ) {
+                                bo_buy="";
+                            }
+                            
+                            if (Session["LoginName"] != null || PRICE == "Miễn phí" || PRICE == "0")
+                            {
+                                if (item["BTYPE"].ToString() == "TEXT" )
+                                {
+                                    btyusss = "1"; 
+                                    btnReadTitle = "Đọc";
+                                    TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "AUDIO")
+                                {
+                                    btyusss = "2"; 
+                                    btnReadTitle = "Nghe";
+                                    TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "VIDEO")
+                                {
+                                    btyusss = "4"; 
+                                    btnReadTitle = "Xem";
+                                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "IMAGE")
+                                {
+                                    btyusss = "3"; 
+                                    btnReadTitle = "Đọc ";
+                                    TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                }
+                            }
+                            else
+                            {
+                                if (item["BTYPE"].ToString() == "TEXT")
+                                {
+                                    btyusss = "1"; 
+                                    btnReadTitle = "Đọc thử";
+                                    TXURL = MakeLink.MakeLinkERead(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "AUDIO")
+                                {
+                                    btyusss = "2"; 
+                                    btnReadTitle = "Nghe thử";
+                                    TXURL = MakeLink.MakeLinkREADBook_audio(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "VIDEO")
+                                {
+                                    btyusss = "4"; 
+                                    btnReadTitle = "Xem ";
+                                    TXURL = MakeLink.MakeLinkEREADBook_video(TXNAME, AUTO_ID);
+                                }
+                                if (item["BTYPE"].ToString() == "IMAGE")
+                                {
+                                    btyusss = "3";
+                                    btnReadTitle = "Đọc";
+                                    TXURL = MakeLink.MakeLinkREADBook_image(TXNAME, AUTO_ID);
+                                }
+                            }
+                            string TXURL_re = MakeLink.MakeLinkEBook(TXNAME, AUTO_ID, btyusss);
+                          
+                            
+                  <li>
+                            <a href="@TXURL_re" title="@TXNAME">
+                                                    <span class="thumb_img">
+                                                        <img src="@AVATAR" alt="@TXNAME"></span>
+                                                <div class="info_book">
+                                                        <div class="title_book">@TXNAME</div>
+                                                        <div class="price_book"><span class="black">Giá bán:</span> @PRICE</div>
+                                                        <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                                                    </div>
+                             </a>
+                                                <div class="button_book">
+                                                	<a href="/acc/buybox/@AUTO_ID" title="Mua">
+                                                        <input value="Mua" class="blue_btn btn_buy" type="button"></a>
+                                                    <a href="@TXURL" title="@btnReadTitle">
+                                                        <input value="@btnReadTitle" class="yellow_btn btn_read" type="button"></a>
+                                                    <a href="/acc/giffbox/@AUTO_ID" title="Mua">
+                                                        <input value="Tặng" class="btn_giff btn_buy" type="Tặng"></a>
+                                                </div>
+                  </li>
+                        }
+                    </ul>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+   </div>
+
+        </div>
+            }
+
+            if (MCODE == Core.A_TXVIDEO && PCODE == Core.A_VIDEO)
+            {
+                PURL = "/video";
+                lstdata = mo["" + PCODE + ""] == null ? null : JArray.Parse(mo["" + PCODE + ""].ToString());
+        <div class="box_dv">
+            <div class="title_box_dv">
+                <a href="@PURL" id="icon_clip">@PNAME</a>
+                <div class="btn_xemthem">
+                    <a href="@PURL"><span>Xem thêm &raquo;</span></a>
+                </div>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    <ul>
+                        @foreach (var item in lstdata)
+                        {
+                            
+                            AUTO_ID = item["LAW_ID"].ToString();
+                            TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 45).ToString() + "...";
+                            }
+                            string PRICEs = item["TXNAME"].ToString(); ;
+                            CATE_NAME = item["CATE_NAME"].ToString();
+                            CATE_CODE = item["CATE_CODE"].ToString();
+                            AVATAR = item["AVATAR"].ToString();
+                            SHORT_DESC = item["SHORT_DESC"].ToString();
+                            LAST_DATE = item["LAST_DATE"].ToString();
+                            ISVIEW = item["ISVIEW"].ToString();
+                            //    isservice = item["ISSERVICE"].ToString();
+                            TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+                           // string url_byu = "/acc/bokVDTH/" + AUTO_ID; string tx_buy = "mua";
+                            string url_byu = "", tx_buy = "mua";
+                            
+                              string xems = "xem thử";
+                            if(Session["LoginName"]!=null){
+                                      if (PRICEs == "" || PRICEs == "0" || PRICEs == null)
+                                      {
+                                        url_byu = "#" ;
+                                        tx_buy = "Miễn phí";
+                                        xems = "xem";
+
+                                      }else{
+                                           if(isbutom=="OK"){
+                                              xems = "xem";
+                                                 }
+                                      }
+                                    if (isservice == "1")
+                                    {
+                                        lbl_ishot = @"";
+                                    }
+                                    else
+                                    {
+                                        lbl_ishot = "";
+                                    }
+                            }
+                            <li>
+                                <a href="@TXURL" title="@TXNAME">
+                                    <div class="round_img">
+                                        <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                    </div>
+                                </a>
+                                <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                <span class="detail_tin">
+                                    <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                    <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                </span>
+                                <div class="button_book">
+                                        <a href="@TXURL" title="@xems">
+                                            <input value="@xems" class="yellow_btn btn_read" type="button"></a> 
+                                    @if (url_byu!="#"){
+                                     <a href="/acc/buyVDTH/@AUTO_ID" title="Mua">
+                                                        <input value="@tx_buy" class="blue_btn btn_buy" type="button"></a>
+                                    }else{
+                                      <a href="#" title="@tx_buy">
+                                                        <input value="@tx_buy" class="blue_btn btn_buy" type="button"></a>
+                                    }
+                                           <a href="/acc/giffVDTH/@AUTO_ID" title="Tặng">
+                                                        <input value="Tặng" class="btn_giff btn_buy" type="Tặng"> </a>
+                                    </div>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+            }
+
+            if (MCODE == Core.TXAUDIO && PCODE == Core.C_AUDIO)
+            {
+                PURL = "/radio";
+            }
+            if (MCODE == Core.TXQUIZ)
+            {
+                PURL = "/trac-nghiem";
+        <div class="box_dv trivia">
+            <div class="title_box_dv">
+                <a href="@PURL" id="icon_cup" title="@PNAME">
+                    @PNAME</a>
+            </div>
+            <div class="content_box">
+                <div class="choigame">
+                    <div class="banner_choigame">
+                        <img src="/Content/images/typhu_banner.png" alt="@PNAME" />
+                        <div class="content_game">
+                            <ul>
+                                <li><a href="/trac-nghiem/choi-trac-nghiem.html">CHƠI</a></li>
+                                <li><a href="/trac-nghiem/the-le.html">THỂ LỆ</a></li>
+                               <li><a href="/trac-nghiem/thong-tin-nguoi-choi.html">THÔNG TIN TÀI KHOẢN</a></li>
+                               <li><a href="/trac-nghiem/bang-xep-hang.html">BẢNG XÊP HẠNG</a></li>
+                                <li><a href="/trac-nghiem/danh-sach-trung-thuong.html">DS NGƯỜI TRÚNG THƯỞNG</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            }
+
+            if (MCODE == Core.A_TXLUAT && PCODE == Core.A_LUAT)
+            {
+                PURL = "/van-ban";
+                lstdata = mo["" + PCODE + ""] == null ? null : JArray.Parse(mo["" + PCODE + ""].ToString());
+        <div class="box_dv">
+            <div class="title_box_dv">
+                <a href="@PURL" id="icon_news">
+                    @PNAME</a>
+                <div class="btn_xemthem">
+                    <a href="@PURL"><span>Xem thêm &raquo;</span></a>
+                </div>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    <ul>
+                        @foreach (var item in lstdata)
+                        {
+                            AUTO_ID = item["AUTO_ID"].ToString();
+                            TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 45)
+                            {
+                                TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                            }
+                            CATE_NAME = item["CATE_NAME"].ToString();
+                            CATE_CODE = item["CATE_CODE"].ToString();
+                            AVATAR = item["AVATAR"].ToString();
+                            SHORT_DESC = item["SHORT_DESC"].ToString();
+                            if (SHORT_DESC.Length > 45)
+                            {
+                                SHORT_DESC = SHORT_DESC.Substring(0, 42).ToString() + "...";
+                            }
+
+                            LAST_DATE = item["LAST_DATE"].ToString();
+                            ISVIEW = item["ISVIEW"].ToString();
+                            TXURL ="/phap-luat/"+ MakeLink.MakeNews(CATE_NAME, TXNAME, AUTO_ID);
+                            <li>
+                                <a href="@TXURL">
+                                    <img src="@AVATAR" alt="" /></a>
+                                <a href="@TXURL"><span class="title_tin">@TXNAME</span></a>
+                                <span class="detail_tin">@SHORT_DESC</span>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+            }
+            if (MCODE == Core.TXLAW && PCODE == Core.C_LAW)
+            {
+                PURL = "/van-ban";
+                lstdata = mo["" + PCODE + ""] == null ? null : JArray.Parse(mo["" + PCODE + ""].ToString());
+        <div class="box_dv vb">
+            <div class="title_box_dv">
+                <a href="@PURL" id="icon_news">@PNAME</a>
+                <div class="btn_xemthem">
+                    <a href="@PURL"><span>Xem thêm &raquo;</span></a>
+                </div>
+            </div>
+            <div class="content_box">
+                <div class="tin">
+                    <ul>
+                        @foreach (var item in lstdata)
+                        {
+                            AUTO_ID = item["AUTO_ID"].ToString();
+                            TXNAME = item["TXNAME"].ToString();
+                            if (TXNAME.Length > 65)
+                            {
+                                TXNAME = TXNAME.Substring(0, 62).ToString() + "...";
+                            }
+                            CATE_NAME = item["CATE_NAME"].ToString();
+                            CATE_CODE = item["CATE_CODE"].ToString();
+                            AVATAR = item["AVATAR"].ToString();
+                            LAST_DATE = item["LAST_DATE"].ToString();
+                            ISVIEW = item["ISVIEW"].ToString();
+                            TXURL = MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, AUTO_ID);
+                            <li>
+                                <a href="@TXURL"><span class="title_tin"><i class="icon-align-left"></i>@TXNAME</span></a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div style="clear: both;"> </div>
+            </div>
+        </div>
+            }
+
+        }
+    }
+
+    @Html.Partial("_Link")
+</div>
+<!--content_dv-->

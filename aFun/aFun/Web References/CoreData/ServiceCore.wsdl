@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="uploadAvatar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="avatar" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="Header" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Body" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Footer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="uploadAvatarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="uploadAvatarResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProService">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Header" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Body" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Footer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProServiceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProServiceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayService">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Header" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Body" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="footer" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PayServiceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PayServiceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="uploadAvatarSoapIn">
+    <wsdl:part name="parameters" element="tns:uploadAvatar" />
+  </wsdl:message>
+  <wsdl:message name="uploadAvatarSoapOut">
+    <wsdl:part name="parameters" element="tns:uploadAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProServiceSoapIn">
+    <wsdl:part name="parameters" element="tns:ProService" />
+  </wsdl:message>
+  <wsdl:message name="ProServiceSoapOut">
+    <wsdl:part name="parameters" element="tns:ProServiceResponse" />
+  </wsdl:message>
+  <wsdl:message name="PayServiceSoapIn">
+    <wsdl:part name="parameters" element="tns:PayService" />
+  </wsdl:message>
+  <wsdl:message name="PayServiceSoapOut">
+    <wsdl:part name="parameters" element="tns:PayServiceResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceCoreSoap">
+    <wsdl:operation name="uploadAvatar">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Upload Avatar!</wsdl:documentation>
+      <wsdl:input message="tns:uploadAvatarSoapIn" />
+      <wsdl:output message="tns:uploadAvatarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProService">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Xy ly request tu phia client request len server!</wsdl:documentation>
+      <wsdl:input message="tns:ProServiceSoapIn" />
+      <wsdl:output message="tns:ProServiceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PayService">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Xy ly request tu phia client request len server --&gt; lien quan den PAYMENT!</wsdl:documentation>
+      <wsdl:input message="tns:PayServiceSoapIn" />
+      <wsdl:output message="tns:PayServiceSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceCoreSoap" type="tns:ServiceCoreSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="uploadAvatar">
+      <soap:operation soapAction="http://tempuri.org/uploadAvatar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProService">
+      <soap:operation soapAction="http://tempuri.org/ProService" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayService">
+      <soap:operation soapAction="http://tempuri.org/PayService" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceCoreSoap12" type="tns:ServiceCoreSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="uploadAvatar">
+      <soap12:operation soapAction="http://tempuri.org/uploadAvatar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProService">
+      <soap12:operation soapAction="http://tempuri.org/ProService" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayService">
+      <soap12:operation soapAction="http://tempuri.org/PayService" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServiceCore">
+    <wsdl:port name="ServiceCoreSoap" binding="tns:ServiceCoreSoap">
+      <soap:address location="http://service.aFun.vn/Controllers/ServiceCore.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceCoreSoap12" binding="tns:ServiceCoreSoap12">
+      <soap12:address location="http://service.aFun.vn/Controllers/ServiceCore.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

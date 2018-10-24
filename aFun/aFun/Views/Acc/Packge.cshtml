@@ -1,0 +1,298 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.PackgeAccModel
+@{
+    ViewBag.Title = "Gói dịch vụ - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+    JArray servi = ViewBag.ma;
+    ///////////////////////////////////////////////////////////////////////////////
+    int i;
+    string names = "Đăng ký";
+    string namecode = "";
+    string classser = "bgorange";
+    string cuphap = "";
+    string enddate = "";
+}
+
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div class="active"><a href="/tai-khoan/thong-tin-goi-dich-vu.html"><i class="icon-edit"></i>Gói dịch vụ</a></div>
+            @if (Session["msisdn"] == null)
+            {
+                <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+            }
+        </div>
+        <div class="tab_2">
+            <ul class="tabs">
+                <li class="active"><a href="#tt"><i class="icon-info-sign"></i>Đăng ký/Hủy gói </a>
+                    <div class="trigger">
+                    </div>
+                </li>
+                <li>
+                    <div class="trigger">
+                    </div>
+                    <a href="/tai-khoan/nhan-sms.html"><i class="icon-calendar"></i>Đăng ký/Hủy nhận
+                        SMS</a> </li>
+            </ul>
+        </div>
+        <div class="content_box">
+            <div class="tin tab_content" id="tt">
+                <div class="list_dv_dk">
+                    <span><strong>Lựa chọn gói dịch vụ</strong></span>
+                    <div id="lblmessage">@Html.Raw(HttpUtility.HtmlDecode(ViewBag.Status))</div>
+                    <ul>
+                        @for (i = 0; i < Model.ListPackge.Count; i++)
+                        {
+                            if (Model.ListPackge[i].Checked == true && Model.ListPackge[i].REMAIN >= 0)
+                            {
+                                names = "Hủy";
+                                namecode = "HU" + Model.ListPackge[i].ID;
+                                if (Model.ListPackge[i].ID == "EB")
+                                {
+                                    Session["pack_EB"] = "OK";
+                                }
+                                if (Model.ListPackge[i].ID == "VD")
+                                {
+                                    Session["pack_VD"] = "OK";
+                                }
+                                classser = "bggray";
+                                enddate = " (Đã đăng ký)";
+                            }
+                            else if (Model.ListPackge[i].Checked == true && Model.ListPackge[i].REMAIN < 0)
+                            {
+                                names = "Hủy";
+                                namecode = "HU" + Model.ListPackge[i].ID;
+                                if (Model.ListPackge[i].ID == "EB")
+                                {
+                                    Session["pack_EB"] = "A";
+                                }
+                                if (Model.ListPackge[i].ID == "VD")
+                                {
+                                    Session["pack_VD"] = "A";
+                                }
+                                classser = "bggray";
+                                enddate = " (Hết hạn)";
+                            }
+                            else
+                            {
+                                names = "Đăng ký";
+                                namecode = "DK" + Model.ListPackge[i].ID;
+                                classser = "bgorange";
+                                enddate = "";
+                            }
+                            <li>
+                                <div class="checkpack">
+                                    @Html.CheckBoxFor(x => x.ListPackge[i].Checked, Model.ListPackge[i].ID)
+                                    <a href="#" title="Kích vào đây để xem chi tiết thông tin gói"><span>@Model.ListPackge[i].Text
+                                        <br />
+                                        <span class="bghh">@enddate</span></span></a>
+                                    @Html.HiddenFor(x => x.ListPackge[i].ID)
+                                    @Html.HiddenFor(x => x.ListPackge[i].Text)
+                                </div>
+                                @if (ViewBag.ISCOMFIRM_MOBI == "1" && Session["msisdn"] != null)
+                                {
+                                    if (Model.ListPackge[i].Checked == true)
+                                    {
+                                  <a class="@classser" data-toogle="@namecode" data-reurl="@Model.ListPackge[i].reUrl"  onclick="updatepackgevms(this);">@names</a>
+                                    }
+                                    else
+                                    {
+                                    <a class="@classser" data-toogle="@namecode" data-reurl="@Model.ListPackge[i].reUrl"  onclick="updatepackgevms(this);">@names</a>
+                                    }
+                                }
+                                else
+                                {
+                                    if (Model.ListPackge[i].Checked == true)
+                                    {
+                                     <a class="@classser" data-toogle="@namecode" data-reurl="@Model.ListPackge[i].reUrl"  onclick="updatepackgevms(this);">@names</a>
+                                    }
+                                    else
+                                    {
+                                    <a class="@classser" data-toogle="@namecode" data-reurl="@Model.ListPackge[i].reUrl"  onclick="updatepackgevms(this);">@names</a>
+                                    }
+                                }
+                            </li>
+                        }
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <br />
+                @*  <div>
+                    <span class="ip f_left">Nhập mã xác nhận <span class="red">(bắt buộc) </span></span>
+                    <br />
+                    <br />
+                </div>*@
+                @*<div>
+                    @Html.TextBox("CaptchaValue", "", new { @class = "captcha", @required = "required" })
+                    <img src='/Captcha/Show' alt="" class="captcha_img" id="captcha_img" />
+                    <a class="ic-refresh refeshcaptcha"></a>
+
+                    <div class="clear"></div>
+                </div>*@
+                <br />
+                <div class="f_clear notep">
+                    <div class="f_clear"><strong>Quý khách cũng có thể thao tác bằng SMS như sau:</strong></div>
+                    @foreach (var items in servi)
+                    {
+                        <span><strong>-@items["TXNAME"].ToString():</strong> @items["SHORTDESC"].ToString()</span>
+                        <div>+ Đăng ký dịch vụ soạn: <span class="blue_less"><strong>DK @items["SERVICE_CODE"] gửi @aFun.Models.Core.headerphone</strong></span> (@aFun.Models.Common.formatCuryment(items["PRICE"].ToString()) đồng/1 ngày, miễn phí ngày đầu đối với KH đăng ký lần đầu tiên). Gói dịch vụ sẽ tự động gia hạn.</div>
+                    }
+                    @* <span><strong>- Gói Luật tổng hợp:</strong> Miễn phí xem tất cả nội dung dịch vụ như: video clip, audio, văn bản pháp luật, tình huống pháp luật... qua kênh wap, app của dịch vụ.</span>
+                    <div>+ Đăng ký dịch vụ soạn: <span class="blue_less"><strong>DK LTH gửi @aFun.Models.Core.headerphone</strong></span> (1.000 đồng/1 ngày, miễn phí ngày đầu đối với KH đăng ký lần đầu tiên). Gói dịch vụ sẽ tự động gia hạn.</div>
+                    <div>+ Hủy dịch vụ: <span class="blue_less"><strong>HUY LTH gửi @aFun.Models.Core.headerphone</strong></span></div>
+                    <span><strong>- Gói Trắc nghiệm pháp luật:</strong> giúp Quý khách tiếp cận với pháp luật một cách đơn giản thông qua hình thức tham gia trả lời các câu hỏi trắc nghiệm về luật đồng thời có cơ hội trúng giải thưởng hấp dẫn của chương trình.
+                    </span>
+                    <div>+ Đăng ký dịch vụ: <span class="blue_less"><strong>DK TN gửi @aFun.Models.Core.headerphone</strong></span> (2.000đồng/1ngày, miễn phí ngày đầu đối với KH đăng ký lần đầu tiên). Gói dịch vụ sẽ tự động gia hạn.</div>
+                    <div>
+                        + Hủy dịch vụ: <span class="blue_less"><strong>HUY TN gửi @aFun.Models.Core.headerphone</strong></span>
+                    </div>*@
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>
+<script type="text/javascript">
+
+    function updatepackge(id) {
+        var value = $(id).attr('data-toogle');
+        var tran = value.substr(0, 2);
+        var captcha = "123";// $("#CaptchaValue").val();
+        var comfirmBox;
+        if (tran == 'DK') {
+            comfirmBox = confirm('Quý khách có muốn đăng ký ?');
+        } else if (tran == 'HU') {
+            comfirmBox = confirm('Quý khách có muốn hủy dịch vụ ?');
+        } else {
+            comfirmBox = confirm('Quý khách có muốn tiếp tục thực hiện giao dịch không ?');
+        }
+        if (comfirmBox == false) {
+            return false;
+        }
+
+        if (captcha == '') {
+            $("#lblmessage").html('<span class="red">Quý khách chưa nhập mã xác nhận.</span>');
+        }
+        else {
+            $(id).prop('onclick', null);
+            $.post('/Acc/PackgeAdd', { id: value, CaptchaValue: captcha },
+            function (data) {
+                if (data == "0") {
+                    if (tran == "DK") {
+                        $("#lblmessage").html('<span class="mess_sucess">Đăng ký gói thành công.</span>');
+                    } else {
+                        $("#lblmessage").html('<span class="mess_sucess">Hủy gói thành công.</span>');
+                    }
+                } else if (data == "108") {
+                    $("#lblmessage").html('<span class="mess_error">Tài khoản không đủ tiền.</span>');
+                } else if (data == "-2") {
+                    $("#lblmessage").html('<span class="mess_error">Chưa nhập mã xác nhận.</span>');
+                } else if (data == "-5") {
+                    $("#lblmessage").html('<span class="mess_error">Mã xác nhận không chính xác.</span>');
+                } else if (data == "107") {
+                    $("#lblmessage").html('<span class="mess_error">Thuê bao quý khách không phải là thuê bao của Viettel.</span>');
+                } else if (data == "1101") {
+                    $("#lblmessage").html('<span class="mess_error">Gói cước này quý khách đã đăng ký.</span>');
+                } else if (data == "1102") {
+                    $("#lblmessage").html('<span class="mess_error">Giao dịch thất bại.</span>');
+                } else {
+                    if (tran == "DK") {
+                        $("#lblmessage").html('<span class="mess_error">Đăng ký gói thất bại.</span>');
+                    } else {
+                        $("#lblmessage").html('<span class="message_error">Hủy gói thất bại.</span>');
+                    }
+                }
+                var t = setInterval(function () {
+                    clearInterval(t);
+                    document.location.reload(true);
+                }, 3000);
+            });
+        }
+    }
+
+    function updatepackgevms(id) {
+        var value = $(id).attr('data-toogle');
+        var reurl = $(id).attr('data-reurl');
+        var tran = value.substr(0, 2);
+        var pk = value.substr(2, value.length - 2);
+        var captcha = "123";// $("#CaptchaValue").val();
+        //var comfirmBox;
+        //if (tran == 'DK') {
+        //    comfirmBox = confirm('Quý khách có muốn đăng ký ?');
+        //} else if (tran == 'HU') {
+        //    comfirmBox = confirm('Quý khách có muốn hủy dịch vụ ?');
+        //} else {
+        //    comfirmBox = confirm('Quý khách có muốn tiếp tục thực hiện giao dịch không ?');
+        //}
+        //if (comfirmBox == false) {
+        //    return false;
+        //}
+
+        if (captcha == '') {
+            $("#lblmessage").html('<span class="red">Quý khách chưa nhập mã xác nhận.</span>');
+        }
+        else {
+            $(id).prop('onclick', null);
+            var res = reurl.split("&");
+            var req = res[6];
+            $.post('/Acc/PackgeVms', { id: value, CaptchaValue: captcha, req: req },
+            function (data) {
+                if (data == "0") {
+                    //alert(reurl);
+                    document.location.href = reurl; //"/tai-khoan/goi-dich-vu.html";
+                } else if (data == "2") {
+                    //alert(reurl);
+                    if (tran == 'DK') {
+                        if (pk == '@aFun.Models.Core.LTH') {
+                            pk = '@aFun.Models.Core.LTH';
+                        } else
+                            if (pk == '@aFun.Models.Core.TN') {
+                                pk = '@aFun.Models.Core.TN';
+                            } else
+                                if (pk == '@aFun.Models.Core.EB') {
+                                    pk = '@aFun.Models.Core.EB';
+                            } else
+                                if (pk == '@aFun.Models.Core.VD') {
+                                    pk = '@aFun.Models.Core.VD';
+                                }
+                                else {
+                                    pk = '@aFun.Models.Core.TN';// tuc TP
+                                }
+                    $("#lblmessage").html('<span class="mess_sucess">Bạn đang sử dụng wifi.Vui lòng bật 3g để đăng ký dịch vụ hoặc soạn tin ' + pk + ' gửi @aFun.Models.Core.headerphone.</span>');
+                    } else {
+                        if (pk == '@aFun.Models.Core.LTH') {
+                            pk = '@aFun.Models.Core.LTH';
+                        } else
+                            if (pk == '@aFun.Models.Core.TN') {
+                                pk = '@aFun.Models.Core.TN';
+                            } else
+                                if (pk == '@aFun.Models.Core.EB') {
+                                    pk = '@aFun.Models.Core.EB';
+                                } else
+                                    if (pk == '@aFun.Models.Core.VD') {
+                                        pk = '@aFun.Models.Core.VD';
+                                    }
+                                else {
+                                    pk = '@aFun.Models.Core.TN';// tuc TP trieu phu
+                                }
+                        $("#lblmessage").html('<span class="mess_sucess">Bạn đang sử dụng wifi.Vui lòng bật 3g để hủy dịch vụ hoặc soạn tin ' + pk + ' gửi @aFun.Models.Core.headerphone.</span>');
+                    }
+                } else {
+                    $("#lblmessage").html('<span class="mess_error">Hệ thống đang quá tải. Vui lòng quay lại sau ít phút!</span>');
+                }
+                var t = setInterval(function () {
+                    clearInterval(t);
+                    document.location.reload(true);
+                }, 5000);
+            });
+    }
+}
+
+</script>

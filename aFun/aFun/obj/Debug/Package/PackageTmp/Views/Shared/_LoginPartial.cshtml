@@ -1,0 +1,37 @@
+﻿@if (Session["LoginName"] == null && Session["msisdn"] == null && Session["showboxlogin"] == null)
+{
+<div class="note">
+    Bạn chưa đăng nhập, vui lòng đăng nhập để có thể sử dụng tốt nhất dịch vụ <span>
+        <img src="/Content/images/logo-aFuns.png" alt="aFun" title="aFun" /></span>
+    <a href="/dang-nhap.html">.
+            	<div class="btn_dk">
+                    <span>Đăng nhập</span>
+                </div>
+    </a>
+</div>
+}
+else if (Session["LoginName"] == null && Session["msisdn"] != null && Session["showboxlogin"] == null)
+{
+  <div class="note">
+    Quý khách được miễn phí sử dụng dịch vụ aFun ngày đầu tiên. Đăng ký để cập nhật thông tin pháp luật HOT nhất. <span>
+        <img src="/Content/images/logo-aFuns.png" alt="aFun" title="aFun" /></span>
+    <a href="/dang-ky.html">.
+            	<div class="btn_dk">
+                    <span>Đăng ký</span>
+                </div>
+    </a>
+</div>  
+}
+else if ((Session["LoginName"] != null && Session["PACKGE"] == null && Session["showboxlogin"] == null) || (Session["PACKGE"] != null && Convert.ToInt32(Session["PACKGE"].ToString()) <= 0))
+{
+  <div class="note">
+    Quý khách chưa đăng ký dịch vụ, vui lòng đăng ký dịch vụ để có thể sử dụng tốt nhất dịch vụ <span>
+        <img src="/Content/images/logo-aFuns.png" alt="aFun" title="aFun" /></span>
+    <a href="/tai-khoan/thong-tin-goi-dich-vu.html">.
+            	<div class="btn_dk">
+                    <span>Đăng ký</span>
+                </div>
+    </a>
+</div>  
+}
+

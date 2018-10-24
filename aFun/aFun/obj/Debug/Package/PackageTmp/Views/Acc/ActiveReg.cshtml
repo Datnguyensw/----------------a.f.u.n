@@ -1,0 +1,59 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.ActiveRegAccModel
+@{
+    ViewBag.Title = "Kích hoạt tài khoản - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "http://aFun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://www.aFun.vn/";
+    ViewBag.UrlWap = "http://aFun.vn/";
+                                ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/tai-khoan/thong-tin-ca-nhan.html"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div class="active"><a href="/dang-ky.html"><i class="icon-edit"></i>Đăng ký dịch vụ</a></div>
+            <div><a href="/tai-khoan/doi-mat-khau.html"><i class="icon-lock"></i>Đổi mật khẩu</a></div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            <span>Nhập mã code mà hệ thống vừa gửi về điện thoại của bạn</span>
+
+                            @using (Html.BeginForm())
+                            {
+                                @Html.ValidationSummary()
+                                @Html.AntiForgeryToken() 
+                                <div class="form">
+                                    <div>
+                                        <span class="ip">Mã xác nhận</span>
+                                        @Html.HiddenFor(x => x.MobileNumber)
+                                        @Html.TextBoxFor(x => x.Otp, new { @class = "text", @placeholder = "Mã xác nhận", @required = "required" })
+                                    </div>
+                                    <div>
+                                        <img src='/Captcha/Show' alt="" class="captcha_img" id="captcha_img" />
+                                        <a class="ic-refresh refeshcaptcha"></a>
+                                    </div>
+                                    <div>
+                                        @Html.TextBoxFor(x => x.CaptchaValue, new { @class = "text", @placeholder = "Mã chống spam" })
+                                    </div>
+                                    <div class="dn">
+                                        <input type="submit" name="btnUpdate" value="Kích hoạt" class="btn_blue" />
+                                        <a href="/">
+                                            <input type="button" value="Hủy bỏ" class="btn_gray"></a>
+                                    </div>
+                                    <span>Nếu hệ thống chưa gửi Code về điện thoại của bạn. Ấn vào đây để nhận lại Code
+                                                    <input type="submit" name="btnGenCode" value="Gửi lại" class="btn" />
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

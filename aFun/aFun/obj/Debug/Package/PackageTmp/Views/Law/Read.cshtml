@@ -1,0 +1,202 @@
+﻿@using System.Data;
+@using aFun.Models;
+@using System.Text;
+@using HtmlAgilityPack;
+@using System.Collections.Generic;
+@using Newtonsoft.Json.Linq;
+@{
+    Layout = null;
+    string bookid = "0";
+    string i_pageitem = "3";
+    string chapname = "";
+    string TXNAME = "";
+    string CATE_NAME = "";
+    string clschap = "";
+    string url_info = "/";
+    JArray ma = (JArray)ViewBag.ma;
+    JObject info = (JObject)ViewBag.info;
+    if (info != null)
+    {
+        bookid = info["LAW_ID"].ToString();
+        TXNAME = info["TXNAME"].ToString();
+        CATE_NAME = info["CATE_NAME"].ToString();
+        chapname = ViewBag.namechapter;
+        url_info = MakeLink.MakeLinkLaw(CATE_NAME, TXNAME, bookid);
+    }
+    if (ViewBag.i_pageitem != null)
+    {
+        i_pageitem = ViewBag.i_pageitem.ToString();
+    }
+    ViewBag.Title = TXNAME;
+    int n = 0;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="MobileOptimized" content="100" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    @*  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">*@
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="<apple-to></apple-to>uch-fullscreen" content="yes">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="title" content="@ViewBag.Title">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="ROBOTS" content="index, follow">
+    <meta http-equiv="refresh" content="900">
+    <meta property="og:image" content="@ViewBag.Images">
+    <meta property="og:description" content="@ViewBag.Description">
+    <link rel="image_src" href="@ViewBag.Images">
+    @*    <link rel="canonical" href="@ViewBag.UrlWeb">*@
+    <link rel="alternate" media="handheld" href="@ViewBag.UrlWap">
+    <meta property="fb:admins" content="100000">
+    <meta name="author" content="mbook.vn">
+    <link rel="author" href="https://plus.google.com/u/0/11011">
+    <meta name="copyright" content="Copyright © 2010 by 24H.COM.VN">
+    <meta name="abstract" content="Đọc sách online">
+    <meta name="distribution" content="Global">
+    <meta name="revisit-after" content="1 days">
+    <meta name="rating" content="general">
+    <link rel="stylesheet" href="/Content/css/style.css" />
+    <link rel="stylesheet" href="/Content/css/docsach.css" />
+    <script src="/Content/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(window).load(function () {
+            // run code
+            var min = 0;
+            var max = $("#slider_max").val();
+            var value = $("#slider_value").val();
+            loadData(value);
+
+            $(".slider_first").click(function () {
+                loadData(0);
+            });
+
+            $(".slider_last").click(function () {
+                loadData(max - 1);
+            });
+
+            $(".slider_previous").click(function () {
+                var currentpage = $("#slider_value").val();
+                //if (currentpage <= min) return;
+                var currentChapter = $("#currentChapter").val();
+                if ((currentChapter > 0 && currentpage >= 0) || (currentChapter == 0 && currentpage > 0)) {
+                    currentpage--;
+                    loadData(currentpage);
+                }
+                //testdata();
+            });
+
+            $(".slider_next").click(function () {
+                var currentpage = $("#slider_value").val();
+                currentpage++;
+                loadData(currentpage);
+
+            });
+
+            function loadData(value) {
+                var totalchapter = $("#totalChapter").val();
+                var bookId = $("#bookId").val();
+                var currentChapter = $("#currentChapter").val();
+                var max = $("#slider_max").val();
+                var bookpaging = document.getElementById('bookpaging');
+
+                if (value >= max && currentChapter <= totalchapter - 1) {
+                    currentChapter++;
+                    bookpaging.selectedIndex = currentChapter;
+                    value = 0;
+                    getTotalPart(currentChapter);
+                }
+                if (value < 0 && currentChapter > 0) {
+                    currentChapter--;
+                    bookpaging.selectedIndex = currentChapter;
+                    value = 0;
+                    getTotalPart(currentChapter);
+                }
+                var urlRequest = '/law/getcontentpart/?id=' + bookId + '&part=' + value + '&currentChapter=' + currentChapter + '';
+                $("#slider_value").val(value);
+                $("#currentChapter").val(currentChapter);
+                $.get(urlRequest, function (data) {
+                    // can use 'data' in here...
+                    $("#Result").html(data);
+                });
+            }
+            function getTotalPart(currentChapter) {
+                var bookId = $("#bookId").val();
+                var urlRequest = '/law/gettotalpart/?id=' + bookId + '&currentChapter=' + currentChapter;
+                $.get(urlRequest, function (data) {
+                    // can use 'data' in here...
+                    max = data;
+                    $("#slider_max").val(data);
+
+                });
+            }
+
+        });
+      
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="docsach" style="padding: 0 0px 20px;">
+
+            <div class="content_docsach">
+                <div id="Result">
+                </div>
+            </div>
+            <br>
+            <div class="header_docsach footer_doc">
+                <input type="hidden" name ="slider_max" id="slider_max" value = "@ViewBag.totalItem" />
+                <input type="hidden" name="slider_value" id="slider_value" value="@ViewBag.i_pageitem" />
+                <input type="hidden" id="bookId" value="@bookid" />
+                <input type="hidden" id="totalChapter" value="@ViewBag.totalPage" />
+                <input type="hidden" id="currentChapter" value="@ViewBag.i_pageIndex" />
+                <ul>
+                   <li><a href="/" title="Về trang chủ">
+                        <img src="/Content/images/docsach_icon_home.png" alt="trang chủ"></a></li>
+                    <li>
+                        <img class="icon_dup slider_previous" src="/Content/images/white_prev.png" alt="Trang trước" title="Trang trước" /></li>
+                    <li>
+                        <img class="icon_dup slider_next" src="/Content/images/white_next.png" alt="Trang tiếp" title="Trang tiếp" /></li>
+                    <li>
+                    <li>
+                       <select id="bookpaging" name="bookpaging" class="listchap"
+                                onchange="location = this.options[this.selectedIndex].value;">
+                                @if (ma != null && ma.Count > 0)
+                                {
+
+                                    n = ma.Count;
+                                    for (int i = 1; i <= n; i++)
+                                    {
+                                        string urlpage = MakeLink.MakeLinkLawReadPage(CATE_NAME, TXNAME, bookid) + "-trang-" + i + ".html";
+                                        string namepage = ma[i - 1]["CNAME"].ToString();
+                                        if (namepage == ViewBag.namechapter)
+                                        {
+                                            clschap = "selected";
+                                        }
+                                        else
+                                        {
+                                            clschap = "";
+                                        }
+                                    <option value="@urlpage" @clschap>@namepage</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="#">--- Chọn chương--- </option>
+                                }
+                            </select>
+                    </li>
+                    <li><a href="@url_info" title="Trang chi tiết">
+                        <img class="icon_dup3" src="/Content/images/white_exit.png" alt="Thoát" /></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

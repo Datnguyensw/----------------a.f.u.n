@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aFun", "aFun\aFun.csproj", "{998A9C21-EC1D-44C4-8069-506197AF0656}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lemon.wapgw.cryptengine", "..\lemon.wapgw.cryptengine\lemon.wapgw.cryptengine.csproj", "{9B5F7206-F6E5-48AB-9C8F-B911D8E63022}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{998A9C21-EC1D-44C4-8069-506197AF0656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998A9C21-EC1D-44C4-8069-506197AF0656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998A9C21-EC1D-44C4-8069-506197AF0656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998A9C21-EC1D-44C4-8069-506197AF0656}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B5F7206-F6E5-48AB-9C8F-B911D8E63022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5F7206-F6E5-48AB-9C8F-B911D8E63022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5F7206-F6E5-48AB-9C8F-B911D8E63022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5F7206-F6E5-48AB-9C8F-B911D8E63022}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

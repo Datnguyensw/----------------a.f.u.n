@@ -1,0 +1,50 @@
+﻿@using Newtonsoft.Json.Linq;
+@model aFun.Models.InfoAccModel
+@{
+    string Fullname, Birthday, Sex, PhoneMobile, TopLevel, Point, TXURLCATION;
+    Fullname = Birthday = Sex = PhoneMobile = "";
+    TXURLCATION = "/";
+    Point = TopLevel = "0";
+    if (Model != null)
+    {
+        Point = Model.Point;
+        TopLevel = Model.TopLevel;
+        if (Session["LoginName"]!=null)
+        {
+        PhoneMobile = Session["LoginName"].ToString();
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = "Thông tin người chơi - aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Description = "aFun";
+    ViewBag.Images = "";
+    ViewBag.UrlWeb = aFun.Models.MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = aFun.Models.MakeLink.DefaultURLWap() + TXURLCATION;
+                                ///////////////////////////////////////////////////////////////////////////////
+    
+}
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="tab">
+            <div><a href="/trac-nghiem/the-le.html"><i class="icon-coffee"></i>Thể lệ</a></div>
+            <div class="active"><a href="#"><i class="icon-info-sign"></i>Thông tin</a></div>
+            <div><a href="/trac-nghiem/danh-sach-trung-thuong.html"><i class="icon-sitemap"></i>Ds trúng thưởng</a></div>
+        </div>
+        <div class="content_box">
+            <div class="tin">
+                <div class="nd_cn">
+                    <div class="dangky">
+                        <div class="dk_wifi">
+                            <span>Bạn đang sử dụng sđt : @PhoneMobile -
+                                            Điểm số : @Point điểm 
+                                            @*- Bạn đang đứng thứ : @TopLevel*@</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

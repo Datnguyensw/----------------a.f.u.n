@@ -1,0 +1,263 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    Layout = null;
+    ///////////////////////////////////////////////////////////////////////////////
+    int i = 0;
+    JObject info = (JObject)ViewBag.info;
+    string BOOK_ID, BOOK_CODE, TXNAME, SEO_NAME, AVATAR, AUTHOR_NAME, PUB_NAME, PRICE, PRICE_COVER, CONTENT, STAR, STAR1, STAR2, STAR3, STAR4, STAR5, TOTAL_STAR, ISVIEW, KEYWORKS, TXURLCATION, CATE_NAME, contentsms;
+    if (info != null)
+    {
+        BOOK_ID = info["BOOK_ID"].ToString();
+        BOOK_CODE = info["BOOK_CODE"].ToString();
+        TXNAME = info["TXNAME"].ToString();
+        SEO_NAME = info["SEO_NAME"].ToString();
+        AVATAR = info["AVATAR"].ToString();
+        AUTHOR_NAME = info["AUTHOR_NAME"].ToString();
+        PUB_NAME = info["PUB_NAME"].ToString();
+        PRICE_COVER = Common.formatCuryment(info["PRICE_COVER"].ToString());
+        PRICE = Common.formatCuryment(info["PRICE"].ToString());
+        CONTENT = info["CONTENT"].ToString();
+        STAR = info["STAR"].ToString();
+        STAR1 = info["TOTAL_STAR1"].ToString();
+        STAR2 = info["TOTAL_STAR2"].ToString();
+        STAR3 = info["TOTAL_STAR3"].ToString();
+        STAR4 = info["TOTAL_STAR4"].ToString();
+        STAR5 = info["TOTAL_STAR5"].ToString();
+        TOTAL_STAR = Convert.ToInt32(info["TOTAL_STAR1"].ToString()) + Convert.ToInt32(info["TOTAL_STAR2"].ToString()) + Convert.ToInt32(info["TOTAL_STAR3"].ToString()) + Convert.ToInt32(info["TOTAL_STAR4"].ToString()) + Convert.ToInt32(info["TOTAL_STAR5"].ToString()).ToString();
+        TXURLCATION = MakeLink.MakeLinkEREADBook_video(TXNAME, BOOK_ID);
+        KEYWORKS = info["KEYWORKS"].ToString();
+        ISVIEW = info["ISVIEW"].ToString();
+        CATE_NAME = info["CATE_NAME"].ToString();
+    }
+    else
+    {
+        BOOK_ID = BOOK_CODE = TXNAME = AVATAR = AUTHOR_NAME = PUB_NAME = PRICE = PRICE_COVER = CONTENT = SEO_NAME = KEYWORKS = CATE_NAME = TOTAL_STAR = "";
+        STAR = STAR1 = STAR2 = STAR3 = STAR4 = STAR5 = "0";
+
+        TXURLCATION = "/";
+        ISVIEW = "0";
+    }
+    contentsms = "[mBook] Gioi thieu cuon sach (" + SEO_NAME + "), chi tiet xem tai: " + TXURLCATION;
+    //////////////////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + "- afun.vn";
+    ViewBag.Description = KEYWORKS;
+    ViewBag.Keywords = KEYWORKS;
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURLCATION;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURLCATION;
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    JArray ma_cate = (JArray)ViewBag.ma_cate;
+    JArray ma_author = (JArray)ViewBag.ma_author;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="MobileOptimized" content="100" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    @*
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">*@
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="<apple-to></apple-to>uch-fullscreen" content="yes">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="title" content="@ViewBag.Title">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="ROBOTS" content="index, follow">
+    <meta http-equiv="refresh" content="900">
+    <meta property="og:image" content="@ViewBag.Images">
+    <meta property="og:description" content="@ViewBag.Description">
+    <link rel="image_src" href="@ViewBag.Images">
+    @*
+    <link rel="canonical" href="@ViewBag.UrlWeb">*@
+    <link rel="alternate" media="handheld" href="@ViewBag.UrlWap">
+    <meta property="fb:admins" content="100000">
+    <meta name="author" content="afun.vn">
+    <link rel="author" href="https://plus.google.com/u/0/11011">
+    <meta name="copyright" content="Copyright © 2010 by afun.vn">
+    <meta name="abstract" content="Đọc sách online">
+    <meta name="distribution" content="Global">
+    <meta name="revisit-after" content="1 days">
+    <meta name="rating" content="general">
+    <script src="/Content/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/Content/css/style.css" />
+    <link rel="stylesheet" href="/Content/css/docsach.css" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="breadcum">
+            <div class="p5">
+                <a href="/">
+                    <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/book">video shách</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">@CATE_NAME</span>
+            </div>
+        </div>
+        <div class="docsach">
+            <div class="book_view">
+                <div class="book">
+                    <div class="nd_view">
+                        <div class="title_a title_audio">[Audio] @TXNAME</div>
+                    </div>
+                    <div class="book_detail">
+                       
+                        <div class="audio1">
+                           @*<audio preload></audio>
+                            <ol>*@
+
+                                @{  string urlaudio = "/";
+                                    JArray ma = new JArray();
+                                    try
+                                    {
+                                        string pathres = "/";
+                                       
+                                        string urlaudio2 = "/";
+                                        int j = 0;
+                                        info = (JObject)ViewBag.info;
+                                        ma = (JArray)ViewBag.ma;
+                                        if (ViewBag.Linkres != null)
+                                        {
+                                            pathres = (string)ViewBag.Linkres;
+                                        }
+                                        if (ViewBag.Full != null)
+                                        {
+                                            foreach (JObject item in ma)
+                                            {
+                                                urlaudio = pathres + item["CPATH"].ToString();
+                                                
+                                    <li><a href="#" data-src="@urlaudio">@item["CNAME"].ToString()</a></li>
+                                            }
+                                            urlaudio2 = urlaudio;
+                                        }
+                                        else
+                                        {
+                                            urlaudio = pathres + ma[0]["CPATH"].ToString();
+                                  //          foreach (JObject item in ma)
+                                  //          {
+                                  //              if (j == 0)
+                                  //              {
+                                  //                  urlaudio = pathres + item["CPATH"].ToString();
+                                  //                  urlaudio2 = urlaudio;
+                                  //  ////<li><a href="#" data-src="@urlaudio">@item["CNAME"].ToString()</a></li>
+                                  //              }
+                                  //              else
+                                  //              {
+                                  //                  urlaudio = "#";
+                                  //////  <li><a href="javascript:msgbox(@BOOK_ID);" data-src="@urlaudio">@item["CNAME"].ToString() (*)</a></li>
+                                  //              }
+
+                                  //              j++;
+                                  //          }
+                                        }
+                                        //log mlogstream
+                                        JObject mlogstream = new JObject();
+                                        string LoginName = "UNKNOW";
+                                        if (Session["LoginName"] != null)
+                                        {
+                                            LoginName = Session["LoginName"].ToString();
+                                        }
+                                        if (System.Configuration.ConfigurationManager.AppSettings["ConfigLogStreaming"].ToString() == "1")
+                                        {
+                                            mlogstream = MyControllers.Log_Streaming(LoginName, pathres, "A");
+                                            //if (Common.Check_HttpWebRequest(urlaudio2))
+                                            //{
+                                            //    mlogstream = MyControllers.Log_Streaming(LoginName, urlaudio, "A");
+                                            //}
+                                            //else
+                                            //{
+                                            //    mlogstream = MyControllers.Log_Streaming(LoginName, urlaudio, "F");
+                                            //}
+                                        }
+
+
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Response.Redirect(TXURLCATION);
+                                    }
+        
+            
+                                }
+
+                           @* </ol>*@
+                             <div class="video_player">
+                            <video controls="controls" style="width: 100%">
+                                <source id="v_video_source" type="video/mp4" src="@urlaudio">
+                            </video>
+                        </div>
+                        </div>
+                        @if (Session["LoginName"] == null && PRICE != "Miễn phí" && PRICE != "0")
+                        {
+                            <div style="float: left; font-weight: normal; color: Green; clear: both; width: 90%; line-height: 25px; margin: 10px 0; padding: 5px 10px; text-align: justify;">(*) Quý khách chưa đăng nhập, hãy nhanh tay đăng nhập (hoặc đăng kí MIỄN PHÍ) để được nghe nhiều hơn! (MIỄN PHÍ 100%)</div>
+                        }
+                        else if (ViewBag.Packge !=null)
+                        {
+                            <div style="float: left; font-weight: normal; color: Green; clear: both; width: 90%; line-height: 25px; margin: 10px 0; padding: 5px 10px; text-align: justify;">(*) Gói cước sử dụng của quý khách hiện đã hết hạn. Để nghe nhiều hơn quý khách vui lòng mua sách hoặc gia hạn gói cước.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+    </div>
+
+    <script src="/Content/audiojs/audio.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            // Setup the player to autoplay the next track
+            var a = audiojs.createAll({
+                trackEnded: function () {
+                    var next = $('ol li.playing').next();
+                    if (!next.length) next = $('ol li').first();
+                    next.addClass('playing').siblings().removeClass('playing');
+                    audio.load($('a', next).attr('data-src'));
+                    audio.play();
+                }
+            });
+
+            // Load in the first track
+            var audio = a[0];
+            first = $('ol a').attr('data-src');
+            $('ol li').first().addClass('playing');
+            audio.load(first);
+
+            // Load in a track on click
+            $('ol li').click(function (e) {
+                e.preventDefault();
+                $(this).addClass('playing').siblings().removeClass('playing');
+                audio.load($('a', this).attr('data-src'));
+                audio.play();
+            });
+            // Keyboard shortcuts
+            $(document).keydown(function (e) {
+                var unicode = e.charCode ? e.charCode : e.keyCode;
+                // right arrow
+                if (unicode == 39) {
+                    var next = $('li.playing').next();
+                    if (!next.length) next = $('ol li').first();
+                    next.click();
+                    // back arrow
+                } else if (unicode == 37) {
+                    var prev = $('li.playing').prev();
+                    if (!prev.length) prev = $('ol li').last();
+                    prev.click();
+                    // spacebar
+                } else if (unicode == 32) {
+                    audio.playPause();
+                }
+            })
+        });
+        function msgbox(bookid) {
+            alert('ok');
+            var comfirmBox;
+            comfirmBox = confirm('Quý khách nghe đọc thử. Để nghe tiếp cuốn sách quý khách vui lòng đăng nhập hoặc mua cuốn sách. ');
+            if (comfirmBox == true) {
+                window.location = '/acc/buybox/' + bookid;
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>

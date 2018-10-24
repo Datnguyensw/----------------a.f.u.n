@@ -1,0 +1,116 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    ViewBag.Title = "Sách yêu thích - afun.vn";
+    ViewBag.Description = "Sách yêu thích - afun.vn";
+    ViewBag.Keywords = "Sách yêu thích, afun.vn";
+    ViewBag.Images = "http://m.afun.vn/Content/images/logo_600x600.png";
+    ViewBag.UrlWeb = "http://afun.vn/";
+    ViewBag.UrlWap = "http://m.afun.vn/";
+    ///////////////////////////////////////////////////////////////////////////////
+    int i = 0;
+    string cls_active = "";
+    string tbnTitle = "";
+    JArray ma = (JArray)ViewBag.ma;
+}
+<div class="hello">
+        <div class="breadcum">
+            <div class="p5">
+                <a href="/"><img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/thu-vien">Thư viện</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><span class="active">Sách yêu thích</span>
+            </div>
+        </div>
+    </div>
+
+<div class="tab3 cate_tab">
+    <ul>
+        <li><a href="/thu-vien/sach-dang-doc" class="">Sách đang đọc</a></li>
+        <li><a href="/thu-vien/tu-sach" class="active">Tủ sách</a></li>
+        <li><a href="/thu-vien/sach-yeu-thich" class="">Sách yêu thích</a></li>
+    </ul>
+</div>
+<div class="content_dv content-book"  style="display: block;">
+          
+          		<div class="box_dv">
+                	<div class="title_box_dv">
+                    	<a href="" id="icon_clip">Tủ sách cá nhân</a>
+                       
+                    </div>
+                    <div class="content_box">
+                    	<div class="p10">
+                                <div class="content_main" id="contentbook_0" style="">
+    @if (ma != null && ma.Count > 0)
+    {
+       
+            <ul>
+                @foreach (var item in ma)
+                {
+                    string BOOK_ID, TXNAME, TXURL, TXURL_READ, TXURL_BUY, AVATAR, AUTHOR_NAME, PUBLISHER_NAME, PRICE, BTYPE;
+                    BOOK_ID = item["BOOK_ID"].ToString();
+                    TXNAME = item["TXNAME"].ToString();
+                    AVATAR = item["AVATAR"].ToString();
+                    PRICE = item["PRICE"].ToString();
+                    AUTHOR_NAME = item["AUTHOR_NAME"].ToString();
+                    PUBLISHER_NAME = item["PUB_NAME"].ToString();
+                    BTYPE = item["BTYPE"].ToString();
+                    tbnTitle = "Đọc tiếp";
+                    if (BTYPE == "TEXT")
+                    {
+                        TXURL = MakeLink.MakeLinkEBook(TXNAME, BOOK_ID,"1");
+                        TXURL_READ = MakeLink.MakeLinkERead(TXNAME, BOOK_ID);
+                    }
+                    else if (BTYPE == "AUDIO")
+                    {
+                        TXURL = MakeLink.MakeLinkAudioBook(TXNAME, BOOK_ID);
+                        TXURL_READ = MakeLink.MakeLinkAudioRead(TXNAME, BOOK_ID);
+                        tbnTitle = "Nghe tiếp";
+                    }
+                    else if (BTYPE == "IMAGE")
+                    {
+                        TXURL = MakeLink.MakeLinkPicturebook(TXNAME, BOOK_ID);
+                        TXURL_READ = MakeLink.MakeLinkPictureRead(TXNAME, BOOK_ID);
+                    }
+                    else
+                    {
+                        TXURL = "/";
+                        TXURL_READ = "/";
+                    }
+                    TXURL_BUY = "/acc/buybox/" + BOOK_ID;
+                    <li>
+                        <a href="@TXURL" title="@TXNAME">
+                            <span class="thumb_img">
+                                <img src="@AVATAR" alt="@TXNAME"></span>
+                            <div class="info_book">
+                                <div class="title_book">@TXNAME</div>
+                                 <div class="price_book"> <br /></div>
+                    @*            <div class="loading"><span></span>100%</div>*@
+                                <div class="author_book">Tác giả: <span class="red">@AUTHOR_NAME</span></div>
+                            </div>
+                        </a>
+
+                        <div class="button_book">
+                            <a href="@TXURL_READ" title="@tbnTitle">
+                                <input type="button" class="yellow_btn btn_read" value="@tbnTitle">
+                            </a>
+                        </div>
+
+                    </li>
+                }
+            </ul>
+        
+    }
+    else
+    {
+        <div class="content_main">
+           <p style="height: 50px; line-height: 50px;clear:both;">Nội dung đang cập nhật...</p>
+        </div>
+    }
+
+@if (ViewBag.ma != null && ViewBag.TotalRecord > 10)
+{
+    @Html.Partial("_Pager", new aFun.Models.MyPage { NameURL = "/thu-vien/sach-yeu-thich", PageParameter = "trang", PageCurrent = Convert.ToInt32(ViewBag.CurrentPage), TotalRecord = (int)ViewBag.TotalRecord })
+}
+</div>
+                            </div>
+                        </div>
+                      </div>
+          		</div>

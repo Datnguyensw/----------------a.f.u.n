@@ -1,0 +1,33 @@
+﻿.lean_overlay {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,.9);
+  display: block;
+}
+.bok_face {
+    left:200px;
+    top:20%;
+    height:auto;
+}
+.fb_dialog {
+  background: rgba(82, 82, 82, .7);
+  position: absolute;
+  top: -10000px;
+  z-index: 10001;
+}
+.heder_fce {
+  background-color: #6d84b4;
+  border: 1px solid #3a5795;
+}
+.face_icon {
+    background: #6D84B4 url(http://fbstatic-a.akamaihd.net/rsrc.php/v2/yd/r/Cou7n-nqK52.gif) no-repeat scroll center;
+    float: left;
+    height: 16px;
+    margin: 5px;
+    width: 16px;
+}
+

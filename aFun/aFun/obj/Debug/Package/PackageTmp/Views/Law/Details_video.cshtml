@@ -1,0 +1,204 @@
+﻿@using Newtonsoft.Json.Linq;
+@using aFun.Models;
+@{
+    string useragent = Request.UserAgent;
+    string AUTO_ID, TXNAME, AVATAR, SHORT_DESC, CONTENTS, LAST_DATE, CATE_NAME, CATE_CODE, TXURL, TXRES, PURL, ISVIEW, isservice, lbl_ishot;
+    int i = 0;
+    AUTO_ID = TXNAME = CATE_NAME = CATE_CODE = SHORT_DESC = TXURL = AVATAR = LAST_DATE = TXRES = PURL =isservice= lbl_ishot= "";
+    ISVIEW = "0";
+    JObject mo = (JObject)ViewBag.info;
+    AUTO_ID = mo["LAW_ID"].ToString();
+    TXNAME = mo["TXNAME"].ToString();
+    if (TXNAME.Length > 65)
+    {
+        TXNAME = TXNAME.Substring(0, 65).ToString() + "...";
+    }
+    CATE_NAME = mo["CATE_NAME"].ToString();
+    CATE_CODE = mo["CATE_CODE"].ToString();
+    AVATAR = mo["AVATAR"].ToString();
+    SHORT_DESC = mo["CONTENT"].ToString();
+    //LAST_DATE = mo["CREATE_DATE"].ToString();
+    ISVIEW = mo["ISVIEW"].ToString();
+    TXURL = MakeLink.MakeLinkVideo(CATE_NAME, TXNAME, AUTO_ID);
+    PURL = MakeLink.MakeCateVideo(CATE_NAME, CATE_CODE);
+    TXRES = "/";
+    JArray ma_other = (JArray)ViewBag.ma_other;
+    JObject res = (JObject)ViewBag.res;
+    if (res!=null)
+    {
+        TXRES = res["PPATH"].ToString();
+        if (res["RPATH"].ToString() != "[]")
+        {
+            try{
+        res = JObject.Parse(JArray.Parse(res["RPATH"].ToString())[0].ToString());
+        string m=res.ToString();
+        TXRES = TXRES + res["CPATH"].ToString();
+            }catch(Exception){
+                TXRES = TXRES + res["RPATH"].ToString();
+            }
+        }
+    }
+    JObject mlogstream = new JObject();
+    string LoginName = "UNKNOW";
+    if (Session["LoginName"] != null)
+    {
+        LoginName = Session["LoginName"].ToString();
+    }
+    if (System.Configuration.ConfigurationManager.AppSettings["ConfigLogStreaming"].ToString() == "1")
+    {
+        mlogstream = MyControllers.Log_Streaming(LoginName, TXRES, "A");
+       
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
+    ViewBag.Title = TXNAME + " - aFun";
+    ViewBag.Description = TXNAME + " - aFun";
+    ViewBag.Images = AVATAR;
+    ViewBag.UrlWeb = MakeLink.DefaultURLWeb() + TXURL;
+    ViewBag.UrlWap = MakeLink.DefaultURLWap() + TXURL;
+                        ///////////////////////////////////////////////////////////////////////////////
+}
+<div class="breadcum">
+    <div class="p5">
+        <a href="/">
+            <img src="/Content/images/home.png" alt="icon home" class="ico_home" /></a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="/van-ban">Pháp Luật</a><img src="/Content/images/icon_arrow.png" alt="arrow" class="arrow" /><a href="@PURL">@CATE_NAME</a>
+
+    </div>
+</div>
+<div class="content_dv">
+    <div class="box_dv">
+        <div class="content_box">
+            <div class="tin">
+                <div class="video_play">
+                    <h1><span class="title_tin">@TXNAME</span></h1>
+                    <span class="detail_video">@Html.Raw(HttpUtility.HtmlDecode(HttpUtility.HtmlDecode(SHORT_DESC)))</span>
+                 
+                    @if (CheckDevice.IsMobileDevice(useragent) || CheckDevice.IsWindowphone(useragent) || CheckDevice.IsMAC(useragent))
+                    {
+                        //TXRES = TXRES.Replace("watch?v=", "embed/");
+                        
+                        <div class="boxplayer">
+
+                            <div id="videoWarp">
+                                <script type="text/javascript" src="../Scripts/jwplayer/mobile.js"></script>
+                                <div id="playclip">
+                                    <video autoplay="autoplay" controls="" class="video123" id="video123" src="@TXRES" type="video/mp4" style="z-index: 999;">
+                                    </video>
+                                    @*<iframe class="video123" id="video123" width="100%" height="315" src="@TXRES" frameborder="0" allowfullscreen></iframe>*@
+                                </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        var h23 = ($("#playclip").width() * 552) / 984;
+                                        $(".video123").attr("width", $("#playclip").width()).attr("height", h23);
+                                    });
+                                    $(window).resize(function () {
+                                        var h23 = ($("#playclip").width() * 552) / 984;
+                                        $(".video123").attr("width", $("#playclip").width()).attr("height", h23);
+                                    });
+                                </script>
+                            </div>
+                            @*<div class="box_screen" style="display: none;">
+                                <iframe src="#" width="100%" height="100%" frameborder="0"></iframe>
+                            </div>*@
+                  
+                        </div>
+                    }
+                    else
+                    {
+                           <div class="video_player">
+                        <video controls="controls" style="width: 100%">
+                            <source id="v_video_source" type="video/mp4" src="@TXRES">
+                        </video>
+                    </div>
+                        <!--<div class="boxplayer">
+                            <div id="videoWarp">
+                                <div id="myElement"></div>
+                                <script type="text/javascript">var responseText = "@TXRES";</script>
+                                <script src="../Scripts/jwplayer/jwplayer.js" type="text/javascript"></script>
+                                <script>jwplayer.key = "f+Wss9Mq3asJ+95/nKrSoFEMc5KrHGD/lrgBJLO50GY=";</script>
+                                <script type="text/javascript" src="../Scripts/jwplayer/player.js"></script>
+                            </div>
+                        </div>-->
+                    }
+                </div>
+                <div class="btn_4btn btn_baihat">
+                    <table style="width: 100%" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="/video/tai-video-@AUTO_ID" title=""><i class="icon-cloud-download"></i>Tải </a>
+                                </td>
+                                <td>
+                                    <a onclick="share_facebook();"><i class="icon-share"></i>Chia sẻ </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function (e) {
+                        // Get First Item Tab
+                        var id_first_item = $('.tabs ul li a.active').attr('tab-content');
+                        $('#' + id_first_item).show();
+                        $('.tabs ul li a').click(function () {
+                            $('.tab-content').hide();
+                            var id_tab_content = $(this).attr('tab-content');
+                            $('#' + id_tab_content).show();
+                        })
+                    });
+                </script>
+                <div class="tabs">
+                    <ul class="tab-nav">
+                        <li><a tab-content="suggestedBox" class="fn-tab active">Video khác</a> </li>
+                        <li><a tab-content="commentBox" class="fn-tab color_2">Bình luận</a></li>
+                    </ul>
+                    <div class="tab-content fn-autoload" id="suggestedBox" style="display: block;">
+                        @if (ma_other != null)
+                        {
+                            <ul>
+                                @foreach (var item in ma_other)
+                                {
+                                    AUTO_ID = item["LAW_ID"].ToString();
+                                    TXNAME = item["TXNAME"].ToString();
+                                    if (TXNAME.Length > 45)
+                                    {
+                                        TXNAME = TXNAME.Substring(0, 42).ToString() + "...";
+                                    }
+                                    CATE_NAME = item["CATE_NAME"].ToString();
+                                    CATE_CODE = item["CATE_CODE"].ToString();
+                                    AVATAR = item["AVATAR"].ToString();
+                                    LAST_DATE = item["CREATE_DATE"].ToString();
+                                    ISVIEW = item["ISVIEW"].ToString();
+                                    TXURL = MakeLink.Make_go_Video_law(CATE_NAME, TXNAME, AUTO_ID);
+                                    isservice = item["ISSERVICE"].ToString();
+                                    if (isservice == "1")
+                                    {
+                                        lbl_ishot = @"<img src=""/Content/images/icon_hot.gif"" alt=""hot"" class=""is_hot""/>";
+                                    }
+                                    else
+                                    {
+                                        lbl_ishot = "";
+                                    }
+                                    <li>
+                                        <a href="@TXURL" title="@TXNAME">
+                                            <div class="round_img">
+                                                <img class="tin_clip" src="@AVATAR" alt="@TXNAME" />
+                                            </div>
+                                        </a>
+                                        <a href="@TXURL" title="@TXNAME"><span class="title_tin">@TXNAME @Html.Raw(HttpUtility.HtmlDecode(lbl_ishot))</span></a>
+                                        <span class="detail_tin">
+                                            <span class="date"><i class="icon-time"></i>Ngày đăng: @LAST_DATE</span>
+                                            <span class="time"><i class="icon-play-circle"></i>@ISVIEW lượt xem</span>
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    @Html.Partial("_CommentTH")
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_Link")
+</div>

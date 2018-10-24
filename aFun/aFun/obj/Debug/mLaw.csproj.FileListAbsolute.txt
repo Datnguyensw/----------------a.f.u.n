@@ -1,0 +1,80 @@
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\mLaw.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\mLaw.pdb
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\Antlr3.Runtime.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\EntityFramework.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\lemon.wapgw.cryptengine.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\log4net.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\Microsoft.Web.Infrastructure.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\Newtonsoft.Json.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.Formatting.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.WebRequest.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Http.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Http.WebHost.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Mvc.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Optimization.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Providers.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Razor.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Deployment.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Razor.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\WebGrease.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\RSAx.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\lemon.wapgw.cryptengine.pdb
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\log4net.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\EntityFramework.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\Newtonsoft.Json.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.Formatting.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Net.Http.WebRequest.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Http.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Http.WebHost.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Mvc.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.Razor.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Deployment.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Razor.xml
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\obj\Debug\mLaw.csprojResolveAssemblyReference.cache
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\obj\Debug\mLaw.dll
+E:\Du an\ProjectBook\Mobifone\mLaw\mLaw\mLaw\obj\Debug\mLaw.pdb
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\mLaw.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\mLaw.pdb
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\Antlr3.Runtime.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\EntityFramework.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\lemon.wapgw.cryptengine.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\log4net.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\Microsoft.Web.Infrastructure.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\Newtonsoft.Json.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.Formatting.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.WebRequest.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Http.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Http.WebHost.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Mvc.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Optimization.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Providers.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Razor.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Deployment.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Razor.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\WebGrease.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\RSAx.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\lemon.wapgw.cryptengine.pdb
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\log4net.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\EntityFramework.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\Newtonsoft.Json.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.Formatting.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Net.Http.WebRequest.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Http.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Http.WebHost.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Mvc.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.Razor.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Deployment.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\bin\System.Web.WebPages.Razor.xml
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\obj\Debug\mLaw.csprojResolveAssemblyReference.cache
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\obj\Debug\mLaw.dll
+E:\Telco\Mobifone\Mlaw\SOURCE\mLaw\mLaw\mLaw\obj\Debug\mLaw.pdb
